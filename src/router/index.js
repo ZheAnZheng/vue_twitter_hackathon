@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "root",
     redirect: "/signin",
   },
   {
@@ -25,6 +25,11 @@ const routes = [
     path: "/admin",
     name: "admin",
     component: AdminLoginPage,
+  },
+  {
+    path: "/main",
+    name: "main",
+    component: () => import("../views/MainPage.vue"),
   },
 ];
 
