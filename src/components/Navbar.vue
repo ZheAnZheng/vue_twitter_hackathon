@@ -2,7 +2,7 @@
   <div class="container">
     <img src="../assets/Logo@X2.png" />
     <div class="navbar">
-      <router-link to="/main">
+      <router-link :to="isAdmin ? '/admin/tweets' : '/main'">
         <svg
           width="24"
           height="22"
@@ -15,9 +15,9 @@
             fill="#1C1C1C"
           />
         </svg>
-        <span>首頁</span>
+        <span>{{ isAdmin ? "推文清單" : "首頁" }}</span>
       </router-link>
-      <router-link to="/users/1">
+      <router-link :to="isAdmin ? '/admin/users' : '/users/1'">
         <svg
           width="18"
           height="21"
@@ -30,9 +30,9 @@
             fill="black"
           />
         </svg>
-        <span>個人資料</span>
+        <span>{{ isAdmin ? "使用者列表" : "個人資料" }}</span>
       </router-link>
-      <router-link to="/setting">
+      <router-link v-show="!isAdmin" to="/setting">
         <svg
           width="22"
           height="22"
@@ -52,7 +52,7 @@
 
         <span>設定</span>
       </router-link>
-      <div class="button-wrapper">
+      <div v-show="!isAdmin" class="button-wrapper">
         <base-button :mode="'action'">推文</base-button>
       </div>
     </div>
@@ -82,6 +82,26 @@ import BaseButton from "./UI/BaseButton.vue";
 export default {
   components: {
     BaseButton,
+  },
+  created() {
+    const routePath = this.$route.path;
+    if (routePath.includes("/admin")) {
+      this.isAdmin = true;
+    }
+  },
+  data() {
+    return {
+      isAdmin: false,
+    };
+  },
+  methods: {
+    handleRoute() {
+      // if(this.isAdmin===true){
+      //   return '/admin/users'
+      // }else{
+      //   return '/users/1'
+      // }
+    },
   },
 };
 </script>
