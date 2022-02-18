@@ -18,7 +18,7 @@
       <div class="name">UserName</div>
       <div class="info">1.4萬 推文</div>
     </div>
-    <span v-else>{{ title }}</span>
+    <span v-else>{{ titleName }}</span>
   </header>
 </template>
 <script>
@@ -33,6 +33,16 @@ export default {
       isShowArrow: false,
       isUser: false,
     };
+  },
+  watch: {
+    $route(to) {
+      this.handleTitleByRoute(to.name);
+    },
+  },
+  computed: {
+    titleName() {
+      return this.title;
+    },
   },
   methods: {
     handleTitleByRoute(route) {
