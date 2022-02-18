@@ -2,7 +2,7 @@
   <form>
     <div v-for="item in formItems" :key="item.id" class="input-group">
       <label :for="item.name">{{ item.name }}</label>
-      <input :id="item.name"/>
+      <input :id="item.name" />
     </div>
   </form>
 </template>
@@ -18,14 +18,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-form{
-    width: 100%;
-    flex:2;
-    margin-bottom:40px;
+form {
+  width: 100%;
+  flex: 2;
+  margin-bottom: 40px;
 }
 .input-group {
   width: 100%;
   margin-bottom: 20px;
+  background-color: var(--input-bg-color);
   &:last-child {
     margin-bottom: 0;
   }

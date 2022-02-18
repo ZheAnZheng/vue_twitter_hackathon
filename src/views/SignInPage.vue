@@ -2,7 +2,11 @@
   <div class="container">
     <LogoTitle :title="'登入Alphitter'" />
     <BaseInput :formItems="formItems" />
-    <BaseButton :mode="'signIn'" />
+    <div class="button-group">
+      <base-button :mode="'action'" :position="'center'">登入</base-button>
+      <base-button :position="'right'">後台登入</base-button>
+      <base-button :position="'right'">註冊Alpitter．</base-button>
+    </div>
   </div>
 </template>
 
@@ -33,5 +37,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../assets/scss/alphitterContainer.scss";
+@import "../assets/scss/extends.scss";
+.container {
+  @extend %alphitterContainer;
+}
+.button-group {
+  @extend %button-group;
+}
 </style>
