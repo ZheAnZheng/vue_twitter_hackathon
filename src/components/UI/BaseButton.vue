@@ -27,7 +27,7 @@ export default {
       if (this.mode === "action") {
         return "action";
       } else if (this.mode === "actionOutline") {
-        return "outline";
+        return "actionOutline";
       } else {
         return "default";
       }
@@ -53,6 +53,12 @@ export default {
   @extend %button-style;
   background-color: var(--primary-color);
   color: var(--white-text-color);
+}
+.actionOutline {
+  @extend %button-style;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
 }
 .default {
   @extend %button-style;
