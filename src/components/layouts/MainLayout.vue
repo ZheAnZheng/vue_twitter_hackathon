@@ -2,8 +2,8 @@
   <div>
     <MobileNavbar />
     <Navbar />
-    <PopularList />
     <Header />
+    <PopularList />
     <div class="slot">
       <slot></slot>
     </div>

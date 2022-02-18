@@ -1,6 +1,6 @@
 <template>
   <header>
-    <span v-show="isShowArrow">
+    <div class="arrow" v-show="isShowArrow">
       <svg
         width="17"
         height="14"
@@ -13,8 +13,12 @@
           fill="black"
         />
       </svg>
-    </span>
-    <span>{{ title }}</span>
+    </div>
+    <div v-if="isUser" class="user-wrapper">
+      <div class="name">UserName</div>
+      <div class="info">1.4萬 推文</div>
+    </div>
+    <span v-else>{{ title }}</span>
   </header>
 </template>
 <script>
@@ -27,14 +31,27 @@ export default {
     return {
       title: "",
       isShowArrow: false,
+      isUser: false,
     };
   },
   methods: {
     handleTitleByRoute(route) {
-      if (route === "main") {
-        this.title = "首頁";
-      } else if (route === "tweet") {
-        this.title === "推文";
+      switch (route) {
+        case "main":
+          return (this.title = "首頁");
+        case "tweet":
+          this.isShowArrow = true;
+          return (this.title = "推文");
+        case "setting":
+          return (this.title = "帳戶設定");
+        case "admin-users":
+          return (this.title = "使用者列表");
+        case "admin-tweets":
+          return (this.title = "推文清單");
+        case "user":
+          this.isShowArrow = true;
+          this.isUser = true;
+          return (this.title = "user");
       }
     },
   },
@@ -43,15 +60,38 @@ export default {
 <style lang="scss" scoped>
 header {
   position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   height: 55px;
   width: 100%;
-  padding: 0 15px;
-  line-height: 55px;
   background-color: var(--white-text-color);
+}
+.user-wrapper {
+  display: block;
+  height: 55px;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+
+  .name {
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 30px;
+  }
+  .info {
+    font-size: 13px;
+    color: var(--mute-color);
+    line-height: 10px;
+  }
+}
+.arrow {
+  display: inline-block;
+  margin-right: 25px;
 }
 @media (min-width: 865px) {
   header {
-    width: 50%;
+    width: 75%;
 
     margin-left: 25%;
   }

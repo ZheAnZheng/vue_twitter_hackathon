@@ -17,7 +17,7 @@
         </svg>
         <span>首頁</span>
       </router-link>
-      <router-link to="#">
+      <router-link to="/users/1">
         <svg
           width="18"
           height="21"
