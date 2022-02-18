@@ -32,7 +32,7 @@
         </svg>
         <span>個人資料</span>
       </router-link>
-      <router-link to="#">
+      <router-link to="/setting">
         <svg
           width="22"
           height="22"

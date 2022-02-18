@@ -6,7 +6,9 @@
       <base-button :mode="'action'" @handleClick="handleClick"
         >登入</base-button
       >
-      <base-button :position="'right'">前台登入</base-button>
+      <base-button :position="'right'">
+        <router-link to="/signin">前台登入</router-link>
+      </base-button>
     </div>
   </div>
 </template>
@@ -37,7 +39,7 @@ export default {
   },
   methods: {
     handleClick() {
-      console.log("click");
+      this.$router.replace("/admin/users");
     },
   },
 };

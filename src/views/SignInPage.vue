@@ -3,9 +3,18 @@
     <LogoTitle :title="'登入Alphitter'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :mode="'action'" :position="'center'">登入</base-button>
-      <base-button :position="'right'">後台登入</base-button>
-      <base-button :position="'right'">註冊Alpitter．</base-button>
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="postSignin"
+        >登入</base-button
+      >
+      <base-button :position="'right'">
+        <router-link to="/admin">後台登入</router-link>
+      </base-button>
+      <base-button :position="'right'"
+        ><router-link to="/signup">註冊Alpitter．</router-link></base-button
+      >
     </div>
   </div>
 </template>
@@ -33,6 +42,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    postSignin() {
+      this.$router.replace("/main");
+    },
   },
 };
 </script>

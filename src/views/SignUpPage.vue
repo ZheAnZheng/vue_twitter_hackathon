@@ -4,7 +4,12 @@
     <BaseInput :formItems="formItems" />
 
     <div class="button-group">
-      <base-button :mode="'action'" :position="'center'">註冊</base-button>
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="postSignup"
+        >註冊</base-button
+      >
       <base-button :position="'center'">取消</base-button>
     </div>
   </div>
@@ -45,6 +50,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    postSignup() {
+      this.$router.push("/signin");
+    },
   },
 };
 </script>

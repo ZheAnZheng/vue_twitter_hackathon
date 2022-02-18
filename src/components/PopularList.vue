@@ -14,10 +14,18 @@
           <div>@{{ user.account }}</div>
         </div>
         <div class="button-wrapper">
-          <base-button v-if="user.isFollowed" :mode="'action'"
+          <base-button
+            v-if="user.isFollowed"
+            :mode="'action'"
+            @handleClick="deleteFollowing(user.id)"
             >正在跟隨</base-button
           >
-          <base-button v-else :mode="'actionOutline'">跟隨</base-button>
+          <base-button
+            v-else
+            :mode="'actionOutline'"
+            @handleClick="addFollowing(user.id)"
+            >跟隨</base-button
+          >
         </div>
       </div>
       <div class="listItem tail" v-show="!isShowAll" @click="showAll">
@@ -119,6 +127,30 @@ export default {
     },
     showAll() {
       this.isShowAll = true;
+    },
+    addFollowing(userId) {
+      this.users = this.users.map((user) => {
+        if (user.id === userId) {
+          return {
+            ...user,
+            isFollowed: true,
+          };
+        } else {
+          return user;
+        }
+      });
+    },
+    deleteFollowing(userId) {
+      this.users = this.users.map((user) => {
+        if (user.id === userId) {
+          return {
+            ...user,
+            isFollowed: false,
+          };
+        } else {
+          return user;
+        }
+      });
     },
   },
 };
