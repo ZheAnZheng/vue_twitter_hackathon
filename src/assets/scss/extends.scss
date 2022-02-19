@@ -1,0 +1,30 @@
+//繼承的scss放這裡
+//在需要的components style scoped
+//@import extends.scss
+//@extend %xxx 即可繼承
+
+//button基本樣式
+%button-style {
+  display: block;
+  height: 46px;
+  font-size: 18px;
+  font-weight: 800;
+  width: 100%;
+  font-weight: 800;
+  border-radius: 50px;
+}
+%button-group {
+  width: 100%;
+}
+//登入介面container style
+%alphitterContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 65px auto;
+  width: 37.5%;
+  min-width: 300px;
+  height: 50%;
+  background-color: var(--primary-bg-color);
+}

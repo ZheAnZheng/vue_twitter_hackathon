@@ -2,7 +2,20 @@
   <div class="container">
     <LogoTitle :title="'登入Alphitter'" />
     <BaseInput :formItems="formItems" />
-    <BaseButton :mode="'signIn'" />
+    <div class="button-group">
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="postSignin"
+        >登入</base-button
+      >
+      <base-button :position="'right'">
+        <router-link to="/admin">後台登入</router-link>
+      </base-button>
+      <base-button :position="'right'"
+        ><router-link to="/signup">註冊Alpitter．</router-link></base-button
+      >
+    </div>
   </div>
 </template>
 
@@ -30,8 +43,19 @@ export default {
       ],
     };
   },
+  methods: {
+    postSignin() {
+      this.$router.replace("/main");
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "../assets/scss/alphitterContainer.scss";
+@import "../assets/scss/extends.scss";
+.container {
+  @extend %alphitterContainer;
+}
+.button-group {
+  @extend %button-group;
+}
 </style>

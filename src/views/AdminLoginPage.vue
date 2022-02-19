@@ -2,7 +2,14 @@
   <div class="container">
     <LogoTitle :title="'後台登入'" />
     <BaseInput :formItems="formItems" />
-    <BaseButton :mode="'admin'" />
+    <div class="button-group">
+      <base-button :mode="'action'" @handleClick="handleClick"
+        >登入</base-button
+      >
+      <base-button :position="'right'">
+        <router-link to="/signin">前台登入</router-link>
+      </base-button>
+    </div>
   </div>
 </template>
 
@@ -30,8 +37,19 @@ export default {
       ],
     };
   },
+  methods: {
+    handleClick() {
+      this.$router.replace("/admin/users");
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "../assets/scss/alphitterContainer.scss";
+@import "../assets/scss/extends.scss";
+.container {
+  @extend %alphitterContainer;
+}
+.button-group {
+  @extend %button-group;
+}
 </style>

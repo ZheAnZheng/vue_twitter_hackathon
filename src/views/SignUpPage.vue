@@ -2,7 +2,16 @@
   <div class="container">
     <LogoTitle :title="'建立你的帳號'" />
     <BaseInput :formItems="formItems" />
-    <BaseButton :mode="'signUp'" />
+
+    <div class="button-group">
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="postSignup"
+        >註冊</base-button
+      >
+      <base-button :position="'center'">取消</base-button>
+    </div>
   </div>
 </template>
 
@@ -42,8 +51,19 @@ export default {
       ],
     };
   },
+  methods: {
+    postSignup() {
+      this.$router.push("/signin");
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "../assets/scss/alphitterContainer.scss";
+@import "../assets/scss/extends.scss";
+.container {
+  @extend %alphitterContainer;
+}
+.button-group {
+  @extend %button-group;
+}
 </style>
