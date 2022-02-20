@@ -18,9 +18,10 @@
       <div class="name">UserName</div>
       <div class="info">1.4萬 推文</div>
     </div>
-    <span v-else>{{ titleName }}</span>
+    <span v-else class="title">{{ titleName }}</span>
   </header>
 </template>
+
 <script>
 export default {
   created() {
@@ -67,43 +68,54 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
-header {
-  position: fixed;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 55px;
-  width: 100%;
-  background-color: var(--white-text-color);
-}
-.user-wrapper {
-  display: block;
-  height: 55px;
-  width: 100px;
-  display: flex;
-  flex-direction: column;
-
-  .name {
-    font-size: 19px;
-    font-weight: 800;
-    line-height: 30px;
-  }
-  .info {
-    font-size: 13px;
-    color: var(--mute-color);
-    line-height: 10px;
-  }
-}
-.arrow {
-  display: inline-block;
-  margin-right: 25px;
-}
-@media (min-width: 865px) {
   header {
-    width: 75%;
-
-    margin-left: 25%;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 55px;
+    width: 100%;
+    background-color: var(--white-text-color);
+    border-bottom: 1px solid var(--share-border-color);
   }
-}
+
+  .user-wrapper {
+    display: block;
+    height: 55px;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 30px;
+    }
+
+    .info {
+      font-size: 13px;
+      color: var(--mute-color);
+      line-height: 10px;
+    }
+  }
+
+  .arrow {
+    display: inline-block;
+    margin-right: 25px;
+  }
+
+  // 標題的排版
+  .title {
+    padding-left: 1rem;
+  }
+
+  @media (min-width: 865px) {
+    header {
+      width: 75%;
+
+      margin-left: 25%;
+    }
+  }
 </style>
