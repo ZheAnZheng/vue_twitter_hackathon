@@ -1,3 +1,3 @@
 <template>
-    <div>adminUsers</div>
+  <div>adminUsers</div>
 </template>

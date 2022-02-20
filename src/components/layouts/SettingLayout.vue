@@ -1,22 +1,21 @@
 <template>
-    
-    <div>
-        <Navbar/>
-        <Header/>
-        <div class="slot">
-            <slot></slot>
-        </div>
+  <div>
+    <Navbar />
+    <Header />
+    <div class="slot">
+      <slot></slot>
     </div>
+  </div>
 </template>
 <script>
-import Navbar from '../Navbar.vue';
-import Header from '../Header.vue';
+import Navbar from "../Navbar.vue";
+import Header from "../Header.vue";
 export default {
-    components:{
-        Navbar,
-        Header
-    }
-}
+  components: {
+    Navbar,
+    Header,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

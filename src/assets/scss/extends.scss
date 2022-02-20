@@ -6,6 +6,7 @@
 //button基本樣式
 %button-style {
   display: block;
+  padding: 0 15px;
   height: 46px;
   font-size: 18px;
   font-weight: 800;
@@ -26,5 +27,5 @@
   width: 37.5%;
   min-width: 300px;
   height: 50%;
-  background-color: var(--primary-bg-color);
+  background-color: var(--white-text-color);
 }

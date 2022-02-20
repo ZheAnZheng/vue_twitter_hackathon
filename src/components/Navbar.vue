@@ -135,15 +135,30 @@ a {
   width: 100%;
   align-items: center;
   justify-content: flex-start;
+
+  &:hover {
+    span {
+      color: var(--primary-color);
+    }
+    path[fill] {
+      fill: var(--primary-color);
+    }
+    path[stroke] {
+      stroke: var(--primary-color);
+    }
+  }
   span {
     margin-left: 1rem;
     color: var(--primary-text-color);
+    transition: all 0.2s ease-in;
   }
   path[fill] {
     fill: var(--primary-text-color);
+    transition: all 0.2s ease-in;
   }
   path[stroke] {
     stroke: var(--primary-text-color);
+    transition: all 0.2s ease-in;
   }
 }
 a.router-link-active {

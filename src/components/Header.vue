@@ -74,8 +74,9 @@ header {
   flex-direction: row;
   align-items: center;
   height: 55px;
-  width: 100%;
+  width: 50%;
   background-color: var(--white-text-color);
+  border: 1px solid var(--border-stroke-color);
 }
 .user-wrapper {
   display: block;
@@ -101,9 +102,9 @@ header {
 }
 @media (min-width: 865px) {
   header {
-    width: 75%;
-
+    width: 50%;
     margin-left: 25%;
+    padding: 0 15px;
   }
 }
 </style>
