@@ -2,17 +2,21 @@
   <div class="container">
     <ul class="tab-head">
       <li class="tab-item">
-        <router-link :class="getClass('user')" :to="{ name: 'user' }"
+        <router-link :class="getClass('ownTweets')" :to="{ name: 'ownTweets' }"
           >推文</router-link
         >
       </li>
       <li class="tab-item">
-        <router-link :class="getClass('tweets')" to="/tw"
+        <router-link
+          :class="getClass('replyTweets')"
+          :to="{ name: 'replyTweets' }"
           >推文與回覆</router-link
         >
       </li>
       <li class="tab-item">
-        <router-link :class="getClass('like')" to="/like"
+        <router-link
+          :class="getClass('likeTweets')"
+          :to="{ name: 'likeTweets' }"
           >喜歡的內容</router-link
         >
       </li>

@@ -27,9 +27,26 @@ const routes = [
     component: () => import("../views/ProfilePage.vue"),
     children: [
       {
-        path: "",
-        name: "user",
+        path: "/",
         component: () => import("../components/UserProfile.vue"),
+        redirect: "/users/:id/tweets",
+        children: [
+          {
+            path: "tweets",
+            name: "ownTweets",
+            component: () => import("../components/TweetList.vue"),
+          },
+          {
+            path: "reply",
+            name: "replyTweets",
+            component: () => import("../components/ReplyList.vue"),
+          },
+          {
+            path: "like",
+            name: "likeTweets",
+            component: () => import("../components/TweetList.vue"),
+          },
+        ],
       },
     ],
   },

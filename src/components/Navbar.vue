@@ -53,7 +53,7 @@
         <span>設定</span>
       </router-link>
       <div v-show="!isAdmin" class="button-wrapper">
-        <base-button :mode="'action'">推文</base-button>
+        <base-button class="tweet-button" :mode="'action'">推文</base-button>
       </div>
     </div>
     <router-link class="logOut" to="/signin">
@@ -179,6 +179,10 @@ a.logOut {
 
 .button-wrapper {
   width: 100%;
+}
+.tweet-button {
+  height: 38px;
+  font-size: 18px;
 }
 
 @media screen and (min-width: 865px) {

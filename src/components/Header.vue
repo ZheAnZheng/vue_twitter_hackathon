@@ -58,7 +58,7 @@ export default {
           return (this.title = "使用者列表");
         case "admin-tweets":
           return (this.title = "推文清單");
-        case "user":
+        case "ownTweets":
           this.isShowArrow = true;
           this.isUser = true;
           return (this.title = "user");
@@ -71,10 +71,11 @@ export default {
 header {
   position: fixed;
   display: flex;
+  z-index: 99999;
   flex-direction: row;
   align-items: center;
   height: 55px;
-  width: 50%;
+  width: 100%;
   background-color: var(--white-text-color);
   border: 1px solid var(--border-stroke-color);
 }
@@ -102,9 +103,14 @@ header {
 }
 @media (min-width: 865px) {
   header {
-    width: 50%;
+    width: 75%;
     margin-left: 25%;
-    padding: 0 15px;
+    padding-left: 15px;
+  }
+}
+@media (min-width: 1085px) {
+  header {
+    width: 50%;
   }
 }
 </style>

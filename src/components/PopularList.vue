@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <ul class="popularList">
-      <li class="listItem head">Popular</li>
+      <li class="list-item head">Popular</li>
       <transition-group name="list">
-        <li v-for="user in users" :key="user.id" class="listItem">
+        <li v-for="user in users" :key="user.id" class="list-item">
           <img class="image" :src="user.image" />
           <div class="user-info">
             <div class="name">{{ user.name }}</div>
@@ -11,12 +11,14 @@
           </div>
           <div class="button-wrapper">
             <base-button
+              class="popularList-button"
               v-if="user.isFollowed"
               :mode="'action'"
               @handleClick="deleteFollowing(user.id)"
               >正在跟隨</base-button
             >
             <base-button
+              class="popularList-button"
               v-else
               :mode="'actionOutline'"
               @handleClick="addFollowing(user.id)"
@@ -27,7 +29,7 @@
       </transition-group>
       <transition name="list" @afterLeave="showAll">
         <li
-          class="listItem tail"
+          class="list-item tail"
           key="tail"
           v-show="tailShow"
           @click="tailShow = false"
@@ -186,14 +188,16 @@ export default {
   max-width: 350px;
   min-width: 270px;
 }
-.listItem {
+.list-item {
   width: 100%;
+  max-width: 350px;
   height: 61px;
   display: flex;
   column-gap: 10px;
   flex-direction: row;
   align-items: center;
   padding: 10px;
+  font-size: 15px;
   background-color: var(--input-bg-color);
   border-bottom: 1px solid var(--popular-line-color);
   .image {
@@ -204,7 +208,6 @@ export default {
   }
   .user-info {
     flex: 2;
-    font-size: 15px;
     .name {
       color: var(--primary-text-color);
     }
@@ -224,6 +227,10 @@ export default {
   &:hover {
     color: var(--primary-text-color);
   }
+}
+.popularList-button {
+  height: 35px;
+  font-size: 15px;
 }
 .list-leave {
   opacity: 1;
@@ -249,7 +256,7 @@ export default {
   transform: translateX(0);
 }
 
-@media screen and (min-width: 865px) {
+@media screen and (min-width: 1085px) {
   .container {
     display: block;
   }

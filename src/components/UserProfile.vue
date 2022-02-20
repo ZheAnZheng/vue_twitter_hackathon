@@ -115,7 +115,9 @@
         <div class="follow">59位<span>跟隨者</span></div>
       </div>
     </div>
-    <profile-tabs></profile-tabs>
+    <profile-tabs>
+      <router-view />
+    </profile-tabs>
   </div>
 </template>
 
