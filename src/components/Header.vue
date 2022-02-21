@@ -88,6 +88,9 @@ export default {
         this.title = "使用者列表";
       } else if (routeName === "admin-tweets") {
         this.title = "推文清單";
+      } else if (routeName === "tweetStory") {
+        this.isShowArrow = true;
+        this.title = "推文";
       }
     },
     handleBackArrow() {

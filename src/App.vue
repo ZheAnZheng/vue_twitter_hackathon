@@ -5,7 +5,7 @@
 <style lang="scss">
 @import "./assets/scss/color.scss";
 @import "./assets/scss/reset.scss";
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap");
 html,
 body {
   height: 100%;

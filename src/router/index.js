@@ -67,6 +67,11 @@ const routes = [
     ],
   },
   {
+    path: "/tweets/:id",
+    name: "tweetStory",
+    component: () => import("../views/TweetPage.vue"),
+  },
+  {
     path: "/admin",
     name: "admin",
     component: AdminLoginPage,
