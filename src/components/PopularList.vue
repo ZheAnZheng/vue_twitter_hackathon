@@ -4,7 +4,7 @@
       <li class="list-item head">Popular</li>
       <transition-group name="list">
         <li v-for="user in users" :key="user.id" class="list-item">
-          <img class="image" :src="user.image" />
+          <img class="image" :src="user.image | imageFilter" />
           <div class="user-info">
             <div class="name">{{ user.name }}</div>
             <div class="account">@{{ user.account }}</div>
@@ -41,83 +41,15 @@
   </div>
 </template>
 <script>
+import { emptyImageFilter } from "../utils/mixins.js";
 import BaseButton from "../components/UI/BaseButton.vue";
-const dummyData = [
-  {
-    id: 1,
-    name: "John Doe",
-    account: "heyjohn",
-    image: require("../assets/Photo.png"),
-    isFollowed: true,
-  },
-  {
-    id: 2,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 3,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 4,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 5,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 6,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 7,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 8,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 9,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-  {
-    id: 10,
-    name: "apple",
-    account: "apple",
-    image: "",
-    isFollowed: false,
-  },
-];
+import dummyCreater from "../utils/dummyCreater.js";
+const dummyData = dummyCreater.createTopUser();
 export default {
   components: {
     BaseButton,
   },
+  mixins: [emptyImageFilter],
   created() {
     this.fetchTopUser();
   },
@@ -203,7 +135,6 @@ export default {
   .image {
     width: 50px;
     height: 50px;
-    background-color: var(--avatar-bg-color);
     border-radius: 50%;
   }
   .user-info {

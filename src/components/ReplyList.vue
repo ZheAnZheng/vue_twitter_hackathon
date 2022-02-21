@@ -23,26 +23,16 @@
   </ul>
 </template>
 <script>
-import emptyImage from "../assets/Logo@X2.png";
-const dummyData = [
-  {
-    id: 1,
-    content:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-    createAt: "2022-1",
-    user: {
-      id: 2,
-      name: "ammy",
-      account: "heyammy",
-    },
-  },
-];
+import { emptyImageFilter } from "../utils/mixins.js";
+import dummyCreater from "../utils/dummyCreater.js";
+const dummyData = dummyCreater.createReplys(10);
 const dummyUser = {
   id: 1,
   name: "John Doe",
   account: "heyjohn",
 };
 export default {
+  mixins: [emptyImageFilter],
   data() {
     return {
       replys: [],
@@ -65,13 +55,6 @@ export default {
     emptyFilter(val) {
       if (!val) {
         return 0;
-      } else {
-        return val;
-      }
-    },
-    imageFilter(val) {
-      if (!val) {
-        return emptyImage;
       } else {
         return val;
       }

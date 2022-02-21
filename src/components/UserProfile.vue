@@ -111,8 +111,12 @@
         Champion with the French ZooEU Champion with the French Zoo
       </div>
       <div class="profile-follow">
-        <div class="follow">24個<span>追隨中</span></div>
-        <div class="follow">59位<span>跟隨者</span></div>
+        <div class="follow">
+          24個<router-link to="/users/1/followed">追隨中</router-link>
+        </div>
+        <div class="follow">
+          59位<router-link to="/users/1/following">跟隨者</router-link>
+        </div>
       </div>
     </div>
     <profile-tabs>
@@ -120,6 +124,17 @@
     </profile-tabs>
   </div>
 </template>
+
+<script>
+import BaseButton from "./UI/BaseButton.vue";
+import ProfileTabs from "./ProfileTabs.vue";
+export default {
+  components: {
+    BaseButton,
+    ProfileTabs,
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 .container {
@@ -190,20 +205,9 @@
       margin-right: 20px;
       width: max-content;
     }
-    span {
+    a {
       color: var(--mute-color);
     }
   }
 }
 </style>
-
-<script>
-import BaseButton from "./UI/BaseButton.vue";
-import ProfileTabs from "./ProfileTabs.vue";
-export default {
-  components: {
-    BaseButton,
-    ProfileTabs,
-  },
-};
-</script>

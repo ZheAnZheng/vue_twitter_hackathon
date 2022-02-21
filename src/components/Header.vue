@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="arrow" v-show="isShowArrow">
+    <div class="arrow" v-show="isShowArrow" @click="handleBackArrow">
       <svg
         width="17"
         height="14"
@@ -22,6 +22,29 @@
   </header>
 </template>
 <script>
+const userRouteName = [
+  "ownTweets",
+  "replyTweets",
+  "likeTweets",
+  "following",
+  "followed",
+];
+const indexRouteName = ["main"];
+const settingRouteName = ["setting"];
+// const adminRouteName = [
+//   {
+//     name: "admin-users",
+//     value: "使用者列表",
+//   },
+//   {
+//     name: "admin-tweets",
+//     value: "推文清單",
+//   },
+// ];
+// const tweetRouteName=[
+
+// ]
+
 export default {
   created() {
     const currentRouteName = this.$route.name;
@@ -45,24 +68,22 @@ export default {
     },
   },
   methods: {
-    handleTitleByRoute(route) {
-      switch (route) {
-        case "main":
-          return (this.title = "首頁");
-        case "tweet":
-          this.isShowArrow = true;
-          return (this.title = "推文");
-        case "setting":
-          return (this.title = "帳戶設定");
-        case "admin-users":
-          return (this.title = "使用者列表");
-        case "admin-tweets":
-          return (this.title = "推文清單");
-        case "ownTweets":
-          this.isShowArrow = true;
-          this.isUser = true;
-          return (this.title = "user");
+    handleTitleByRoute(routeName) {
+      if (userRouteName.includes(routeName)) {
+        this.isUser = true;
+        this.isShowArrow = true;
+      } else if (indexRouteName.includes(routeName)) {
+        this.title = "首頁";
+      } else if (settingRouteName.includes(routeName)) {
+        this.title = "帳戶設定";
+      } else if (routeName === "admin-users") {
+        this.title = "使用者列表";
+      } else if (routeName === "admin-tweets") {
+        this.title = "推文清單";
       }
+    },
+    handleBackArrow() {
+      this.$router.back();
     },
   },
 };
@@ -76,6 +97,7 @@ header {
   align-items: center;
   height: 55px;
   width: 100%;
+  padding-left: 15px;
   background-color: var(--white-text-color);
   border: 1px solid var(--border-stroke-color);
 }
@@ -100,12 +122,12 @@ header {
 .arrow {
   display: inline-block;
   margin-right: 25px;
+  cursor: pointer;
 }
 @media (min-width: 865px) {
   header {
     width: 75%;
     margin-left: 25%;
-    padding-left: 15px;
   }
 }
 @media (min-width: 1085px) {

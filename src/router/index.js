@@ -51,12 +51,27 @@ const routes = [
     ],
   },
   {
+    path: "/users/:id",
+    component: () => import("../views/FollowPage.vue"),
+    children: [
+      {
+        path: "following",
+        name: "following",
+        component: () => import("../components/FollowList.vue"),
+      },
+      {
+        path: "followed",
+        name: "followed",
+        component: () => import("../components/FollowList.vue"),
+      },
+    ],
+  },
+  {
     path: "/admin",
     name: "admin",
     component: AdminLoginPage,
   },
   {
-    // TODO路由問題
     path: "/admin",
     name: "admin-main",
     component: AdminMainPage,
