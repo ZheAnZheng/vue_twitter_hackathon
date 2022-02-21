@@ -15,15 +15,15 @@
       </svg>
     </div>
     <div v-if="isUser" class="user-wrapper">
-      <div class="name">UserName</div>
-      <div class="info">1.4萬 推文</div>
+      <div class="name">{{ profileUser.data.name }}</div>
+      <div class="info">{{ profileUser.data.tweetsCount }} 推文</div>
     </div>
     <span v-else>{{ titleName }}</span>
   </header>
 </template>
 <script>
 const userRouteName = [
-  "ownTweets",
+  "userTweets",
   "replyTweets",
   "likeTweets",
   "following",
@@ -49,6 +49,14 @@ export default {
   created() {
     const currentRouteName = this.$route.name;
     this.handleTitleByRoute(currentRouteName);
+  },
+  inject: {
+    profileUser: {
+      from: "profileUser",
+      default: {
+        id: -1,
+      },
+    },
   },
   data() {
     return {

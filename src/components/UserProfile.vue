@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <img class="cover-image" src="../assets/CoverPhoto.png" />
+    <img class="cover-image" :src="user.data.coverImage" />
     <div class="user-info">
-      <img class="avatar" src="../assets/Photo.png" />
+      <img class="avatar" :src="user.data.image" />
       <div class="button-wrapper" v-if="true">
         <base-button
           class="profile-button"
@@ -104,18 +104,21 @@
           </svg>
         </base-button>
       </div>
-      <div class="profile-name">John Doe</div>
-      <div class="profile-account">@heyjohn</div>
+      <div class="profile-name">{{ user.data.name }}</div>
+      <div class="profile-account">@{{ user.data.account }}</div>
       <div class="profile-description">
-        EU Champion with the French ZooEU Champion with the French ZooEU
-        Champion with the French ZooEU Champion with the French Zoo
+        {{ user.data.description }}
       </div>
       <div class="profile-follow">
         <div class="follow">
-          24個<router-link to="/users/1/followed">追隨中</router-link>
+          {{ user.data.followed }}個<router-link to="/users/1/followed"
+            >追隨中</router-link
+          >
         </div>
         <div class="follow">
-          59位<router-link to="/users/1/following">跟隨者</router-link>
+          {{ user.data.following }}位<router-link to="/users/1/following"
+            >跟隨者</router-link
+          >
         </div>
       </div>
     </div>
@@ -128,10 +131,19 @@
 <script>
 import BaseButton from "./UI/BaseButton.vue";
 import ProfileTabs from "./ProfileTabs.vue";
+
 export default {
   components: {
     BaseButton,
     ProfileTabs,
+  },
+  inject: {
+    user: {
+      from: "profileUser",
+      default: {
+        id: -1,
+      },
+    },
   },
 };
 </script>

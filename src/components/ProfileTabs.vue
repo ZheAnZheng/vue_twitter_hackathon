@@ -2,7 +2,9 @@
   <div class="container">
     <ul class="tab-head">
       <li class="tab-item">
-        <router-link :class="getClass('ownTweets')" :to="{ name: 'ownTweets' }"
+        <router-link
+          :class="getClass('userTweets')"
+          :to="{ name: 'userTweets' }"
           >推文</router-link
         >
       </li>

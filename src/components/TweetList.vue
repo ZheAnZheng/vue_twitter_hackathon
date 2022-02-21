@@ -4,10 +4,14 @@
       <img class="image" :src="tweet.user.image | imageFilter" />
       <div class="tweet-context">
         <div class="tweet-info">
-          <div class="name">{{ tweet.user.name }}</div>
+          <router-link
+            class="name"
+            :to="{ name: 'userTweets', params: { id: tweet.user.id } }"
+            >{{ tweet.user.name }}</router-link
+          >
           <div class="account">@{{ tweet.user.account }}</div>
           <div class="dot">．</div>
-          <div class="time">3小時</div>
+          <div class="time">{{ tweet.createAt | fromNow }}</div>
         </div>
         <div class="tweet-content">
           {{ tweet.content }}
@@ -66,11 +70,11 @@
 </template>
 
 <script>
-import { emptyImageFilter } from "../utils/mixins.js";
+import { emptyImageFilter, dateFilter } from "../utils/mixins.js";
 import dummyCreater from "../utils/dummyCreater.js";
 const dummyData = dummyCreater.createTweets(10);
 export default {
-  mixins: [emptyImageFilter],
+  mixins: [emptyImageFilter, dateFilter],
   data() {
     return {
       tweets: [],

@@ -7,11 +7,13 @@
           <div class="name">{{ currentUser.name }}</div>
           <div class="account">@{{ currentUser.account }}</div>
           <div class="dot">．</div>
-          <div class="time">3小時</div>
+          <div class="time">{{ reply.createAt | fromNow }}</div>
         </div>
         <div class="reply-info">
           <span class="reply-text">回覆</span>
-          <router-link class="link" to="#"
+          <router-link
+            class="link"
+            :to="{ name: 'userTweets', params: { id: reply.user.id } }"
             >@{{ reply.user.account }}</router-link
           >
         </div>
@@ -23,7 +25,7 @@
   </ul>
 </template>
 <script>
-import { emptyImageFilter } from "../utils/mixins.js";
+import { emptyImageFilter, dateFilter } from "../utils/mixins.js";
 import dummyCreater from "../utils/dummyCreater.js";
 const dummyData = dummyCreater.createReplys(10);
 const dummyUser = {
@@ -32,7 +34,7 @@ const dummyUser = {
   account: "heyjohn",
 };
 export default {
-  mixins: [emptyImageFilter],
+  mixins: [emptyImageFilter, dateFilter],
   data() {
     return {
       replys: [],

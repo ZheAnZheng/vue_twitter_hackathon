@@ -13,6 +13,7 @@
             <base-button
               class="popularList-button"
               v-if="user.isFollowed"
+              key="followed"
               :mode="'action'"
               @handleClick="deleteFollowing(user.id)"
               >正在跟隨</base-button
@@ -21,6 +22,7 @@
               class="popularList-button"
               v-else
               :mode="'actionOutline'"
+              key="follow"
               @handleClick="addFollowing(user.id)"
               >跟隨</base-button
             >

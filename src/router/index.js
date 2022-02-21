@@ -33,7 +33,7 @@ const routes = [
         children: [
           {
             path: "tweets",
-            name: "ownTweets",
+            name: "userTweets",
             component: () => import("../components/TweetList.vue"),
           },
           {
