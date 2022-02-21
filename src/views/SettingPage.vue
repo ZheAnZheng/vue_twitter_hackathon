@@ -50,13 +50,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .setting-container {
-    margin: 1rem;
-    > .setting-link > .setting-button {
-      color: var(--white-text-color);
-      width: 5rem;
-      height: 100%;
-      padding: 0.5rem 0 ;
-    }
+.setting-container {
+  margin: 1rem;
+  > .setting-link > .setting-button {
+    color: var(--white-text-color);
+    width: 5rem;
+    height: 100%;
+    padding: 0.5rem 0 ;
   }
+}
 </style>

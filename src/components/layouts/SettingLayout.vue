@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar/>
-    <Header/>
+    <Header class="setting-layout-header"/>
     <div class="slot">
         <slot></slot>
     </div>
@@ -20,15 +20,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .slot {
-    padding-top: 55px;
-  }
+.slot {
+  padding-top: 55px;
+}
 
-  @media screen and (min-width: 865px) {
-    .slot {
-      margin-left: 25%;
-      padding-top: 55px;
-      width: 50%;
-    }
+@media screen and (min-width: 865px) {
+  .slot {
+    margin-left: 25%;
+    padding-top: 55px;
+    width: 50%;
   }
+}
 </style>

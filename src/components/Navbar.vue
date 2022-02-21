@@ -109,81 +109,81 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  display: none;
+  position: fixed;
+  left: 0;
+  width: 25%;
+  height: 100%;
+  padding-left: 2%;
+  padding-right: 1%;
+  background-color: var(--white-text-color);
+  border-right: 1px solid var(--share-border-color);
+}
+
+.navbar {
+  display: flex;
+  width: 100%;
+  max-width: 235px;
+  margin: 0;
+  flex-direction: column;
+}
+
+img {
+  width: 30px;
+  height: 30px;
+  margin: 14px 0 24px 8px;
+}
+
+// router-link
+a {
+  padding: 16px 10px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  span {
+    margin-left: 1rem;
+    color: var(--primary-text-color);
+  }
+  path[fill] {
+    fill: var(--primary-text-color);
+  }
+  path[stroke] {
+    stroke: var(--primary-text-color);
+  }
+}
+
+a.router-link-active {
+  span {
+    color: var(--primary-color);
+  }
+  path[fill] {
+    fill: var(--primary-color);
+  }
+  path[stroke] {
+    stroke: var(--primary-color);
+  }
+}
+
+a.logOut {
+  position: absolute;
+  bottom: 17px;
+}
+
+.button-wrapper {
+  width: 100%;
+}
+
+@media screen and (min-width: 865px) {
   .container {
-    display: none;
-    position: fixed;
-    left: 0;
-    width: 25%;
-    height: 100%;
-    padding-left: 2%;
-    padding-right: 1%;
-    background-color: var(--white-text-color);
-    border-right: 1px solid var(--share-border-color);
+    display: block;
   }
+}
 
-  .navbar {
-    display: flex;
-    width: 100%;
-    max-width: 235px;
-    margin: 0;
-    flex-direction: column;
+@media screen and (min-width: 1100px) {
+  .container {
+    padding-left: calc(100% - 93%);
   }
-
-  img {
-    width: 30px;
-    height: 30px;
-    margin: 14px 0 24px 8px;
-  }
-
-  // router-link
-  a {
-    padding: 16px 10px;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: flex-start;
-    span {
-      margin-left: 1rem;
-      color: var(--primary-text-color);
-    }
-    path[fill] {
-      fill: var(--primary-text-color);
-    }
-    path[stroke] {
-      stroke: var(--primary-text-color);
-    }
-  }
-
-  a.router-link-active {
-    span {
-      color: var(--primary-color);
-    }
-    path[fill] {
-      fill: var(--primary-color);
-    }
-    path[stroke] {
-      stroke: var(--primary-color);
-    }
-  }
-
-  a.logOut {
-    position: absolute;
-    bottom: 17px;
-  }
-
-  .button-wrapper {
-    width: 100%;
-  }
-
-  @media screen and (min-width: 865px) {
-    .container {
-      display: block;
-    }
-  }
-
-  @media screen and (min-width: 1100px) {
-    .container {
-      padding-left: calc(100% - 93%);
-    }
-  }
+}
 </style>
