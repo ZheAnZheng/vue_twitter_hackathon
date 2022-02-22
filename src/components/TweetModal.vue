@@ -4,7 +4,7 @@
       <img src="../assets/icon_close.png" alt="close-image">
     </div>
     <form :class="tweetModalClass[1]" @submit.prevent.stop="addTweet">
-      <img :class="tweetModalClass[2]" :src="user.image" alt="user-image">
+      <img :class="tweetModalClass[2]" :src="currentUser.image" alt="user-image">
       <textarea v-model="text" :class="tweetModalClass[3]" name="new-tweet" id="new-tweet" placeholder="有什麼新鮮事？"></textarea>
       <BaseButton class="button" :position="'right'" :mode="'action'" >推文</BaseButton>
     </form>
@@ -42,7 +42,7 @@ export default {
       type: Boolean,
       default: true
     },
-    user: {
+    currentUser: {
       type: Object,
       required: true
     }
@@ -117,7 +117,7 @@ export default {
       position: absolute;
       bottom: 1rem;
       right: 1rem;
-      width: 10%;
+      width: 5rem;
       color: var(--white-text-color);
     }
   }

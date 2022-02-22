@@ -12,5 +12,6 @@ body {
   font-size: 16px;
   font-family: "Noto Sans TC", sans-serif;
   background-color: var(--primary-bg-color);
+  color: var(--primary-text-color);
 }
 </style>

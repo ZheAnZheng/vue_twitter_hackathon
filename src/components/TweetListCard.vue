@@ -13,11 +13,11 @@
       </div>
       <div class="icon">
         <div class="icon-reply">
-          <img src="../assets/icon_reply.png" alt="">
+          <i class="far fa-comment"></i>
           <span>{{ tweet.replyCount }}</span>
         </div>
         <div class="icon-like">
-          <img src="../assets/icon_like.png" alt="">
+          <i class="far fa-heart" @click="addLike(tweet.id)"></i>
           <span>{{ tweet.likeCount }}</span>
         </div>
       </div>
@@ -36,11 +36,20 @@ export default {
       type: Object,
       required: true
     }
+  },
+  methods: {
+    addLike(tweetId) {
+      // 將點擊喜歡事件傳遞至父元件
+      this.$emit('after-add-like', tweetId)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+// 載入extend的file
+@import '../assets/scss/extends.scss';
+
 // 卡片樣式設定
 .card-wrapper {
   display: flex;
@@ -49,17 +58,14 @@ export default {
   margin-top: 1rem;
   // 圖像樣式設定
   > img {
-    height: 3rem;
-    width: 3rem;
-    border-radius: 50%;
+    @extend %share-avatar-style;
   }
   > .user-wrapper {
     margin-left: 0.5rem;
     // 帳號資訊樣式設定
     > .user-info {
       > .account, .dot, .created-time {
-        padding-left: 0.2rem;
-        color: var(--mute-color);
+        @extend %share-user-info-style;
       }
     }
     > .user-tweet {
@@ -71,12 +77,13 @@ export default {
       margin-top: 0.5rem;
       margin-bottom: 1rem;
       justify-content: space-between;
-      width: 20%;
+      width: 10rem;
       > .icon-reply, .icon-like {
         display: flex;
         align-items: center;
-        > img {
-          height: 1rem;
+        > i {
+          color: var(--mute-color);
+          cursor: pointer;
         }
         > span {
           padding-left: 0.5rem;
