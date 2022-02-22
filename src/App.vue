@@ -12,5 +12,8 @@ body {
   font-size: 16px;
   font-family: "Noto Sans TC", sans-serif;
   background-color: var(--white-text-color);
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

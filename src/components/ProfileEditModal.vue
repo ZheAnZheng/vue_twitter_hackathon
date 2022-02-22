@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="edit-modal">
+    <div key="edit-modal" class="edit-modal">
       <div class="modal-head">
         <div class="close" @click="closeModal">
           <svg

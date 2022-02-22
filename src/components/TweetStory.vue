@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <ReplyModal v-show="modalSwitch" @handleCloseModal="closeModal" />
     <div class="tweet-info">
       <div class="user-info">
         <img src="../assets/Photo.png" />
@@ -18,7 +19,7 @@
         <div>34<span>回覆</span></div>
         <div>808<span>喜歡次數</span></div>
       </div>
-      <div class="icon">
+      <div class="icon" @click="openModal">
         <svg
           width="30"
           height="30"
@@ -72,10 +73,14 @@
   </div>
 </template>
 <script>
+import ReplyModal from "../components/ReplyModal.vue";
+import { modalController } from "../utils/mixins.js";
 import ReplyList from "../components/ReplyList.vue";
 export default {
+  mixins: [modalController],
   components: {
     ReplyList,
+    ReplyModal,
   },
   data() {
     return {
@@ -147,7 +152,7 @@ export default {
   }
   .icon {
     display: inline-block;
-    margin-right: 150px;
+    margin-right: 100px;
     cursor: pointer;
   }
 }
@@ -155,7 +160,17 @@ export default {
 .like-enter-active {
   animation: heartPomp 0.6s ease-in;
 }
-
+.show-enter {
+  transform: scale(0) translate(50px, -10px);
+  opacity: 0;
+}
+.show-enter-active {
+  transition: all 2s ease;
+}
+.show-enter-to {
+  transform: scale(1) translate(0, 0);
+  opacity: 1;
+}
 @keyframes heartPomp {
   0% {
     opacity: 1;
@@ -173,6 +188,13 @@ export default {
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+@media screen and (min-width: 865px) {
+  .icon {
+    display: inline-block;
+    margin-right: 150px;
+    cursor: pointer;
   }
 }
 </style>

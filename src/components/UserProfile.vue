@@ -5,6 +5,7 @@
       @handleCloseModal="closeModal"
       :user="user.data"
     />
+
     <img class="cover-image" :src="user.data.coverImage" />
     <div class="user-info">
       <img class="avatar" :src="user.data.image" />

@@ -41,19 +41,28 @@ export default {
   height: 100%;
 }
 .tab-head {
+  display: flex;
   width: 100%;
   height: 54px;
   border-left: 1px solid var(--border-stroke-color);
   border-right: 1px solid var(--border-stroke-color);
   .tab-item {
-    display: inline-block;
-    width: 130px;
-    height: 100%;
+    flex: 1;
   }
 }
 
 .slot {
   width: 100%;
   height: 100%;
+}
+@media screen and (min-width: 865px) {
+  .tab-head {
+    display: block;
+  }
+  .tab-item {
+    display: inline-block;
+    width: 130px;
+    height: 100%;
+  }
 }
 </style>

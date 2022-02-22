@@ -67,10 +67,12 @@ export const modalController = {
     },
     unlickView() {
       const body = document.querySelector("body");
+
       body.style.overflow = "auto";
     },
     lockView() {
       const body = document.querySelector("body");
+
       body.style.overflow = "hidden";
     },
   },

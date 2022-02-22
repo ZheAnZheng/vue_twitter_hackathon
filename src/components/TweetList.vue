@@ -108,6 +108,7 @@ export default {
 a {
   color: var(--primary-text-color);
 }
+
 .tweet-relative {
   margin-bottom: 10px;
   display: flex;
