@@ -103,7 +103,7 @@ export default {
 header {
   position: fixed;
   display: flex;
-  z-index: 99999;
+  z-index: 999;
   flex-direction: row;
   align-items: center;
   height: 55px;

@@ -46,3 +46,32 @@ export const userProvider = {
     };
   },
 };
+
+//API
+//<Modal v-show="modalSwitch" @handleCloseModal="closeModal"/>
+//控制modal開關與畫面鎖定
+export const modalController = {
+  data() {
+    return {
+      modalSwitch: false,
+    };
+  },
+  methods: {
+    openModal() {
+      this.modalSwitch = true;
+      this.lockView();
+    },
+    closeModal() {
+      this.modalSwitch = false;
+      this.unlickView();
+    },
+    unlickView() {
+      const body = document.querySelector("body");
+      body.style.overflow = "auto";
+    },
+    lockView() {
+      const body = document.querySelector("body");
+      body.style.overflow = "hidden";
+    },
+  },
+};

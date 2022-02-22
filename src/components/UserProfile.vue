@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+    <ProfileEditModal
+      v-show="modalSwitch"
+      @handleCloseModal="closeModal"
+      :user="user.data"
+    />
     <img class="cover-image" :src="user.data.coverImage" />
     <div class="user-info">
       <img class="avatar" :src="user.data.image" />
@@ -8,6 +13,7 @@
           class="profile-button"
           :mode="'actionOutline'"
           :position="'right'"
+          @handleClick="openModal"
           >編輯個人資料</base-button
         >
       </div>
@@ -122,6 +128,7 @@
         </div>
       </div>
     </div>
+
     <profile-tabs>
       <router-view />
     </profile-tabs>
@@ -131,11 +138,14 @@
 <script>
 import BaseButton from "./UI/BaseButton.vue";
 import ProfileTabs from "./ProfileTabs.vue";
-
+import { modalController } from "../utils/mixins.js";
+import ProfileEditModal from "./ProfileEditModal.vue";
 export default {
+  mixins: [modalController],
   components: {
     BaseButton,
     ProfileTabs,
+    ProfileEditModal,
   },
   inject: {
     user: {
@@ -152,7 +162,6 @@ export default {
 .container {
   width: 100%;
   height: 100%;
-  background: var(--white-text-color);
 }
 .cover-image {
   width: 100%;
