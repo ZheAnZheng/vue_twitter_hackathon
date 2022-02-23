@@ -6,6 +6,8 @@
     <form :class="tweetModalClass[1]" @submit.prevent.stop="addTweet">
       <img :class="tweetModalClass[2]" :src="currentUser.image" alt="user-image">
       <textarea v-model="text" :class="tweetModalClass[3]" name="new-tweet" id="new-tweet" placeholder="有什麼新鮮事？"></textarea>
+      <div class="alert-message-limit" v-show="isLimited">字數不可超過140字</div>
+      <div class="alert-message-blank" v-show="isBlank">內容不可空白</div>
       <BaseButton class="button" :position="'right'" :mode="'action'" >推文</BaseButton>
     </form>
   </div>
@@ -13,7 +15,6 @@
 
 <script>
 import BaseButton from '../components/UI/BaseButton.vue'
-import { Toast } from '../utils/helper'
 
 export default {
   name: 'TweetModal',
@@ -49,19 +50,20 @@ export default {
   },
   data() {
     return {
-      text: ''
+      text: '',
+      isLimited: false,
+      isBlank: false
     }
   },
   methods: {
     // 新增tweet的函式
     addTweet() {
-      
+      // 當輸入文字為空白或沒有輸入任何文字的提示訊息
       if (!this.text.trim()) {
-        Toast.fire({
-          icon: 'warning',
-          title: '請輸入文字!!'
-        })
-
+        this.isBlank = true
+        return
+      } else if (this.text.trim().length > 140) { // 當輸入文字超過140字的提示訊息
+        this.isLimited = true
         return
       }
 
@@ -69,11 +71,23 @@ export default {
       this.$emit('after-add-tweet', this.text)
       this.text = ''
     }
+  },
+  watch: {
+    // 利用watch監控text中文字的長度，達成提示訊息的開關
+    text(word) {
+      if (word.trim().length > 0) {
+        this.isBlank =  false
+      } else if (word.trim().length < 140) {
+        this.isLimited = false
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/scss/extends.scss';
+
 .modal-container {
   border: 1px solid var(--share-border-color);
   border-radius: 10px;
@@ -111,6 +125,10 @@ export default {
         font-size: 1rem;
         color: var(--share-placeholder-color);
       }
+    }
+
+    > .alert-message-limit, .alert-message-blank {
+      @extend %share-alert-message-style;
     }
 
     > .button {
