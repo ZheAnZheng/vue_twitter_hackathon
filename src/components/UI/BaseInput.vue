@@ -2,10 +2,11 @@
   <form>
     <div v-for="item in formItems" :key="item.id" class="input-group">
       <label :for="item.name">{{ item.name }}</label>
-      <input :id="item.name" />
+      <input :id="item.name" :value="item.value" />
     </div>
   </form>
 </template>
+
 <script>
 export default {
   props: {

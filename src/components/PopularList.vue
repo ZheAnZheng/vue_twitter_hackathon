@@ -115,10 +115,11 @@ export default {
   width: 25%;
   height: 100%;
   background-color: var(--white-text-color);
+  border-left: 1px solid var(--share-border-color);
 }
 .popularList {
-  margin-top: 5%;
-  margin-left: 3%;
+  margin-top: 4%;
+  margin-left: 6%;
   max-width: 350px;
   min-width: 270px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <setting-layout>
+  <setting-layout class="admin-slot">
     <router-view />
   </setting-layout>
 </template>

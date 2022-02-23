@@ -22,6 +22,7 @@ export default {
 .slot {
   padding-top: 55px;
 }
+
 @media screen and (min-width: 865px) {
   .slot {
     margin-left: 25%;

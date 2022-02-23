@@ -13,9 +13,11 @@
   font-weight: 800;
   border-radius: 50px;
 }
+
 %button-group {
   width: 100%;
 }
+
 //登入介面container style
 %alphitterContainer {
   display: flex;
@@ -29,3 +31,24 @@
   background-color: var(--white-text-color);
 }
 
+// 人像共用樣式
+%share-avatar-style {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+}
+
+// 使用者資訊共用樣式
+%share-user-info-style {
+  padding-left: 0.2rem;
+  color: var(--mute-color);
+}
+
+// 提示訊息共用樣式
+%share-alert-message-style {
+  position: absolute;
+  bottom: 1.7rem;
+  right: 7rem;
+  
+  color: var(--alert-message-color);
+}

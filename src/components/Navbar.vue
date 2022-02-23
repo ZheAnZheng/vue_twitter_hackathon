@@ -77,8 +77,10 @@
     </router-link>
   </div>
 </template>
+
 <script>
 import BaseButton from "./UI/BaseButton.vue";
+
 export default {
   components: {
     BaseButton,
@@ -105,6 +107,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .container {
   display: none;
@@ -115,7 +118,9 @@ export default {
   padding-left: 2%;
   padding-right: 1%;
   background-color: var(--white-text-color);
+  border-right: 1px solid var(--share-border-color);
 }
+
 .navbar {
   display: flex;
   width: 100%;
@@ -123,11 +128,13 @@ export default {
   margin: 0;
   flex-direction: column;
 }
+
 img {
   width: 30px;
   height: 30px;
   margin: 14px 0 24px 8px;
 }
+
 // router-link
 a {
   padding: 16px 10px;
@@ -161,6 +168,7 @@ a {
     transition: all 0.2s ease-in;
   }
 }
+
 a.router-link-active {
   span {
     color: var(--primary-color);
@@ -172,6 +180,7 @@ a.router-link-active {
     stroke: var(--primary-color);
   }
 }
+
 a.logOut {
   position: absolute;
   bottom: 17px;
@@ -190,6 +199,7 @@ a.logOut {
     display: block;
   }
 }
+
 @media screen and (min-width: 1100px) {
   .container {
     padding-left: calc(100% - 93%);

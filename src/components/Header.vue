@@ -18,9 +18,10 @@
       <div class="name">{{ profileUser.data.name }}</div>
       <div class="info">{{ profileUser.data.tweetsCount }} 推文</div>
     </div>
-    <span v-else>{{ titleName }}</span>
+    <span v-else class="title">{{ titleName }}</span>
   </header>
 </template>
+
 <script>
 const userRouteName = [
   "userTweets",
@@ -99,6 +100,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 header {
   position: fixed;
@@ -112,6 +114,7 @@ header {
   background-color: var(--white-text-color);
   border: 1px solid var(--border-stroke-color);
 }
+
 .user-wrapper {
   display: block;
   height: 55px;
@@ -124,17 +127,25 @@ header {
     font-weight: 800;
     line-height: 30px;
   }
+
   .info {
     font-size: 13px;
     color: var(--mute-color);
     line-height: 10px;
   }
 }
+
 .arrow {
   display: inline-block;
   margin-right: 25px;
   cursor: pointer;
 }
+
+// 標題的排版
+.title {
+  padding-left: 1rem;
+}
+
 @media (min-width: 865px) {
   header {
     width: 75%;
