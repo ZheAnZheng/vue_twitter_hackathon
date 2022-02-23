@@ -1,13 +1,12 @@
 <template>
   <main-layout>
-    <router-view />
+    <router-view></router-view>
   </main-layout>
 </template>
 <script>
 import MainLayout from "../components/layouts/MainLayout.vue";
-
-import dummyCreater from "../utils/dummyCreater.js";
 import { userProvider } from "../utils/mixins.js";
+import dummyCreater from "../utils/dummyCreater.js";
 const dummyUser = dummyCreater.createCurrentUser();
 export default {
   mixins: [userProvider],
@@ -19,7 +18,6 @@ export default {
       user: {},
     };
   },
-
   created() {
     this.fetchUser();
   },

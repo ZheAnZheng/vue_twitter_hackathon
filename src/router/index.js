@@ -27,11 +27,49 @@ const routes = [
     component: () => import("../views/ProfilePage.vue"),
     children: [
       {
-        path: "",
-        name: "user",
+        path: "/",
         component: () => import("../components/UserProfile.vue"),
+        redirect: "/users/:id/tweets",
+        children: [
+          {
+            path: "tweets",
+            name: "userTweets",
+            component: () => import("../components/TweetList.vue"),
+          },
+          {
+            path: "reply",
+            name: "replyTweets",
+            component: () => import("../components/ReplyList.vue"),
+          },
+          {
+            path: "like",
+            name: "likeTweets",
+            component: () => import("../components/TweetList.vue"),
+          },
+        ],
       },
     ],
+  },
+  {
+    path: "/users/:id",
+    component: () => import("../views/FollowPage.vue"),
+    children: [
+      {
+        path: "following",
+        name: "following",
+        component: () => import("../components/FollowList.vue"),
+      },
+      {
+        path: "followed",
+        name: "followed",
+        component: () => import("../components/FollowList.vue"),
+      },
+    ],
+  },
+  {
+    path: "/tweets/:id",
+    name: "tweetStory",
+    component: () => import("../views/TweetPage.vue"),
   },
   {
     path: "/admin",
@@ -39,7 +77,6 @@ const routes = [
     component: AdminLoginPage,
   },
   {
-    // TODO路由問題
     path: "/admin",
     name: "admin-main",
     component: AdminMainPage,

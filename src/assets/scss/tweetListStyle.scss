@@ -1,0 +1,49 @@
+//tweetList與replyList共用樣式
+.container {
+  width: 100%;
+  height: 100%;
+}
+.tweet-item {
+  width: 100%;
+  height: 100%;
+  padding: 10px 15px 0 15px;
+  border: 1px solid var(--border-stroke-color);
+  .image {
+    float: left;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+}
+.tweet-context {
+  margin-bottom: 6px;
+  margin-left: 60px;
+  font-size: 13px;
+  color: var(--priamry-text-color);
+  .name {
+    color: var(--primary-text-color);
+  }
+  .account {
+    color: var(--mute-color);
+  }
+  .time {
+    @extend .account;
+  }
+  .dot {
+    @extend .account;
+  }
+  .tweet-info {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    margin-bottom: 10px;
+  }
+  .tweet-content {
+    margin-bottom: 10px;
+  }
+}
+@media screen and (min-width: 865px) {
+  .tweet-context {
+    font-size: 15px;
+  }
+}

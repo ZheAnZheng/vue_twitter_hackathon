@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="arrow" v-show="isShowArrow">
+    <div class="arrow" v-show="isShowArrow" @click="handleBackArrow">
       <svg
         width="17"
         height="14"
@@ -15,17 +15,48 @@
       </svg>
     </div>
     <div v-if="isUser" class="user-wrapper">
-      <div class="name">UserName</div>
-      <div class="info">1.4萬 推文</div>
+      <div class="name">{{ profileUser.data.name }}</div>
+      <div class="info">{{ profileUser.data.tweetsCount }} 推文</div>
     </div>
     <span v-else>{{ titleName }}</span>
   </header>
 </template>
 <script>
+const userRouteName = [
+  "userTweets",
+  "replyTweets",
+  "likeTweets",
+  "following",
+  "followed",
+];
+const indexRouteName = ["main"];
+const settingRouteName = ["setting"];
+// const adminRouteName = [
+//   {
+//     name: "admin-users",
+//     value: "使用者列表",
+//   },
+//   {
+//     name: "admin-tweets",
+//     value: "推文清單",
+//   },
+// ];
+// const tweetRouteName=[
+
+// ]
+
 export default {
   created() {
     const currentRouteName = this.$route.name;
     this.handleTitleByRoute(currentRouteName);
+  },
+  inject: {
+    profileUser: {
+      from: "profileUser",
+      default: {
+        id: -1,
+      },
+    },
   },
   data() {
     return {
@@ -45,24 +76,25 @@ export default {
     },
   },
   methods: {
-    handleTitleByRoute(route) {
-      switch (route) {
-        case "main":
-          return (this.title = "首頁");
-        case "tweet":
-          this.isShowArrow = true;
-          return (this.title = "推文");
-        case "setting":
-          return (this.title = "帳戶設定");
-        case "admin-users":
-          return (this.title = "使用者列表");
-        case "admin-tweets":
-          return (this.title = "推文清單");
-        case "user":
-          this.isShowArrow = true;
-          this.isUser = true;
-          return (this.title = "user");
+    handleTitleByRoute(routeName) {
+      if (userRouteName.includes(routeName)) {
+        this.isUser = true;
+        this.isShowArrow = true;
+      } else if (indexRouteName.includes(routeName)) {
+        this.title = "首頁";
+      } else if (settingRouteName.includes(routeName)) {
+        this.title = "帳戶設定";
+      } else if (routeName === "admin-users") {
+        this.title = "使用者列表";
+      } else if (routeName === "admin-tweets") {
+        this.title = "推文清單";
+      } else if (routeName === "tweetStory") {
+        this.isShowArrow = true;
+        this.title = "推文";
       }
+    },
+    handleBackArrow() {
+      this.$router.back();
     },
   },
 };
@@ -71,11 +103,14 @@ export default {
 header {
   position: fixed;
   display: flex;
+  z-index: 999;
   flex-direction: row;
   align-items: center;
   height: 55px;
   width: 100%;
+  padding-left: 15px;
   background-color: var(--white-text-color);
+  border: 1px solid var(--border-stroke-color);
 }
 .user-wrapper {
   display: block;
@@ -98,12 +133,17 @@ header {
 .arrow {
   display: inline-block;
   margin-right: 25px;
+  cursor: pointer;
 }
 @media (min-width: 865px) {
   header {
     width: 75%;
-
     margin-left: 25%;
+  }
+}
+@media (min-width: 1085px) {
+  header {
+    width: 50%;
   }
 }
 </style>

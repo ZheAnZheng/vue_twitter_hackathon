@@ -53,7 +53,7 @@
         <span>設定</span>
       </router-link>
       <div v-show="!isAdmin" class="button-wrapper">
-        <base-button :mode="'action'">推文</base-button>
+        <base-button class="tweet-button" :mode="'action'">推文</base-button>
       </div>
     </div>
     <router-link class="logOut" to="/signin">
@@ -135,15 +135,30 @@ a {
   width: 100%;
   align-items: center;
   justify-content: flex-start;
+
+  &:hover {
+    span {
+      color: var(--primary-color);
+    }
+    path[fill] {
+      fill: var(--primary-color);
+    }
+    path[stroke] {
+      stroke: var(--primary-color);
+    }
+  }
   span {
     margin-left: 1rem;
     color: var(--primary-text-color);
+    transition: all 0.2s ease-in;
   }
   path[fill] {
     fill: var(--primary-text-color);
+    transition: all 0.2s ease-in;
   }
   path[stroke] {
     stroke: var(--primary-text-color);
+    transition: all 0.2s ease-in;
   }
 }
 a.router-link-active {
@@ -164,6 +179,10 @@ a.logOut {
 
 .button-wrapper {
   width: 100%;
+}
+.tweet-button {
+  height: 38px;
+  font-size: 18px;
 }
 
 @media screen and (min-width: 865px) {
