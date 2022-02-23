@@ -1,11 +1,11 @@
 <template>
-  <div class="modal-container" :class="tweetModalClass[0]">
+  <div class="modal-container" :class="{'main-new-tweet':!isModal}">
     <div v-if="isModal" class="close-button">
       <img src="../assets/icon_close.png" alt="close-image">
     </div>
-    <form :class="tweetModalClass[1]" @submit.prevent.stop="addTweet">
-      <img :class="tweetModalClass[2]" :src="currentUser.image" alt="user-image">
-      <textarea v-model="text" :class="tweetModalClass[3]" name="new-tweet" id="new-tweet" placeholder="有什麼新鮮事？"></textarea>
+    <form :class="{'main-form':!isModal}" @submit.prevent.stop="addTweet">
+      <img :class="{ 'main-image':isModal}" :src="currentUser.image" alt="user-image">
+      <textarea v-model="text" :class="{'main-textarea':!isModal}" name="new-tweet" id="new-tweet" placeholder="有什麼新鮮事？"></textarea>
       <div class="alert-message-limit" v-show="isLimited">字數不可超過140字</div>
       <div class="alert-message-blank" v-show="isBlank">內容不可空白</div>
       <BaseButton class="button" :position="'right'" :mode="'action'" >推文</BaseButton>
@@ -136,7 +136,7 @@ export default {
       bottom: 1rem;
       right: 1rem;
       width: 5rem;
-      color: var(--white-text-color);
+      
     }
   }
 }
@@ -144,18 +144,19 @@ export default {
 .main-new-tweet {
   border-style: none;
   > .main-form {
+    border:1px solid var(--share-border-color);
+    border-bottom: 0.6rem solid var(--share-border-color);
     > .main-image {
       top: 0.5rem;
     }
 
     > .main-textarea {
       padding: 1.5rem 0 0 5rem;
-      border-bottom: 0.6rem solid var(--share-border-color);
       height: 10rem;
     }
 
     > button {
-      bottom: 1.5rem;
+      bottom: 1rem;
     }
   }
 }

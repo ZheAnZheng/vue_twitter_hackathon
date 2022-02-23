@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <TweetModal :tweet-modal-class="tweetModalClass" :is-modal="isModal" @after-add-tweet="handleAddTweet" :current-user="currentUser"/>
-    <TweetList :tweets="tweets" @delivery-add-like="handleAddLike"/>
+    <TweetList />
   </div>
 </template>
 

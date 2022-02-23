@@ -1,22 +1,21 @@
 <template>
   <div>
-    <Navbar/>
-    <Header class="setting-layout-header"/>
+    <Navbar />
+    <Header />
     <div class="slot">
-        <slot></slot>
+      <slot></slot>
     </div>
   </div>
 </template>
 <script>
-import Navbar from '../Navbar.vue';
-import Header from '../Header.vue';
-
+import Navbar from "../Navbar.vue";
+import Header from "../Header.vue";
 export default {
-  components:{
+  components: {
     Navbar,
-    Header
-  }
-}
+    Header,
+  },
+};
 </script>
 
 <style lang="scss" scoped>

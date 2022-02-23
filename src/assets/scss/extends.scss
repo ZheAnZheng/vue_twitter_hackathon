@@ -28,7 +28,7 @@
   width: 37.5%;
   min-width: 300px;
   height: 50%;
-  background-color: var(--primary-bg-color);
+  background-color: var(--white-text-color);
 }
 
 // 人像共用樣式
@@ -47,7 +47,8 @@
 // 提示訊息共用樣式
 %share-alert-message-style {
   position: absolute;
-  bottom: 2.3rem;
+  bottom: 1.7rem;
   right: 7rem;
+  
   color: var(--alert-message-color);
 }

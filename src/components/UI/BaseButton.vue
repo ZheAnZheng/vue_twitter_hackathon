@@ -53,25 +53,53 @@ export default {
   @extend %button-style;
   background-color: var(--primary-color);
   color: var(--white-text-color);
+  padding: 0 15px;
+  transition: all 0.2s ease-in;
+  path[fill] {
+    fill: var(--white-text-color);
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    path[fill] {
+      fill: var(--primary-color);
+    }
+  }
 }
 .actionOutline {
   @extend %button-style;
   background-color: rgba(0, 0, 0, 0);
   border: 2px solid var(--primary-color);
   color: var(--primary-color);
+  padding: 0 15px;
+  transition: all 0.2s ease-in;
+  path[fill] {
+    fill: var(--primary-color);
+  }
+  &:hover {
+    background-color: var(--primary-color);
+    color: var(--white-text-color);
+    path[fill] {
+      fill: var(--white-text-color);
+    }
+  }
 }
 .default {
   @extend %button-style;
   background-color: rgba(0, 0, 0, 0);
   color: var(--blue-text-color);
+
+  :visited {
+    color: var(--blue-text-color);
+  }
+  :hover {
+    color: var(--primary-color);
+  }
 }
 .positionRight {
   display: inline;
   width: max-content;
   float: right;
-}
-.positionRight {
-  @extend %button-style;
-  color: var(--blue-text-color);
 }
 </style>
