@@ -2,20 +2,21 @@
   <ul class="container">
     <li v-for="tweet in tweets" :key="tweet.id" class="tweet-item">
       <router-link :to="{ name: 'tweetStory', params: { id: tweet.id } }">
-        <img class="image" :src="tweet.user.image | imageFilter" />
+        <!-- tweets.user.avatar -->
+        <img class="image" :src="'' | imageFilter" />
         <div class="tweet-context">
           <div class="tweet-info">
             <router-link
               class="name"
-              :to="{ name: 'userTweets', params: { id: tweet.user.id } }"
-              >{{ tweet.user.name }}</router-link
+              :to="{ name: 'userTweets', params: { id: tweet.id } }"
+              >{{ tweet.name }}</router-link
             >
-            <div class="account">@{{ tweet.user.account }}</div>
+            <div class="account">@{{ "tweet.user.account" }}</div>
             <div class="dot">．</div>
-            <div class="time">{{ tweet.createAt | fromNow }}</div>
+            <div class="time">{{ tweet.createdAt | fromNow }}</div>
           </div>
           <div class="tweet-content">
-            {{ tweet.content }}
+            {{ tweet.description }}
           </div>
           <div class="tweet-relative">
             <div class="message">
@@ -31,9 +32,11 @@
                   fill="#657786"
                 />
               </svg>
-              <span>{{ tweet.replys.length | emptyFilter }}</span>
+              <!-- tweet.replys.length -->
+              <span>{{ "" | emptyFilter }}</span>
             </div>
-            <div class="like" v-if="!tweet.isLiked">
+            <!-- !tweet.isLiked -->
+            <div class="like" v-if="false">
               <svg
                 width="13"
                 height="13"
@@ -46,7 +49,7 @@
                   fill="#657786"
                 />
               </svg>
-              <span>{{ tweet.like.length | emptyFilter }}</span>
+              <span>{{ tweet.likedCount | emptyFilter }}</span>
             </div>
             <div class="like" v-else>
               <svg
@@ -63,7 +66,7 @@
               </svg>
 
               <span class="like-text">{{
-                tweet.like.length | emptyFilter
+                tweet.likedCount | emptyFilter
               }}</span>
             </div>
           </div>
@@ -76,7 +79,7 @@
 <script>
 import { emptyImageFilter, dateFilter } from "../utils/mixins.js";
 import dummyCreater from "../utils/dummyCreater.js";
-const dummyData = dummyCreater.createTweets(10);
+const dummyData = dummyCreater.getUsersIdTweets();
 export default {
   mixins: [emptyImageFilter, dateFilter],
   data() {

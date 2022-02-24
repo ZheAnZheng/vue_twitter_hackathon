@@ -7,7 +7,7 @@
 import MainLayout from "../components/layouts/MainLayout.vue";
 import { userProvider } from "../utils/mixins.js";
 import dummyCreater from "../utils/dummyCreater.js";
-const dummyUser = dummyCreater.createCurrentUser();
+const dummyUser = dummyCreater.getUsersId();
 export default {
   mixins: [userProvider],
   components: {

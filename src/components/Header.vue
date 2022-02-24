@@ -16,7 +16,7 @@
     </div>
     <div v-if="isUser" class="user-wrapper">
       <div class="name">{{ profileUser.data.name }}</div>
-      <div class="info">{{ profileUser.data.tweetsCount }} 推文</div>
+      <div class="info">{{ profileUser.data.Tweets.length }} 推文</div>
     </div>
     <span v-else class="title">{{ titleName }}</span>
   </header>

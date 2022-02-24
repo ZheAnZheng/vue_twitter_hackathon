@@ -28,7 +28,7 @@
       <form>
         <!-- 背景圖 -->
         <div class="coverImage-group">
-          <img class="cover-image" :src="editUser.coverImage" />
+          <img class="cover-image" :src="editUser.cover" />
           <label class="cover-label" for="cover"
             ><svg
               width="20"
@@ -90,7 +90,7 @@
                 />
               </svg>
             </label>
-            <img class="avatar" :src="editUser.image" />
+            <img class="avatar" :src="editUser.avatar" />
             <input
               id="avatar"
               type="file"
@@ -110,7 +110,7 @@
             <textarea
               rows="6"
               id="description"
-              v-model="editUser.description"
+              v-model="editUser.introduction"
             />
             <div class="text-count">0/160</div>
           </div>

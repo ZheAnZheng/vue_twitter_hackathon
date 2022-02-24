@@ -7,18 +7,19 @@
           <div class="name">{{ currentUser.name }}</div>
           <div class="account">@{{ currentUser.account }}</div>
           <div class="dot">．</div>
-          <div class="time">{{ reply.createAt | fromNow }}</div>
+          <div class="time">{{ reply.createdAt | fromNow }}</div>
         </div>
         <div class="reply-info">
           <span class="reply-text">回覆</span>
+          <!--  reply.user.account  -->
           <router-link
             class="link"
-            :to="{ name: 'userTweets', params: { id: reply.user.id } }"
-            >@{{ reply.user.account }}</router-link
+            :to="{ name: 'userTweets', params: { id: reply.UserId } }"
+            >@{{ "john" }}</router-link
           >
         </div>
         <div class="tweet-content">
-          {{ reply.content }}
+          {{ reply.comment }}
         </div>
       </div>
     </li>
@@ -27,7 +28,7 @@
 <script>
 import { emptyImageFilter, dateFilter } from "../utils/mixins.js";
 import dummyCreater from "../utils/dummyCreater.js";
-const dummyData = dummyCreater.createReplys(10);
+const dummyData = dummyCreater.getUsersIdRepliedTweets();
 const dummyUser = {
   id: 1,
   name: "John Doe",

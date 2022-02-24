@@ -2,6 +2,16 @@
   <router-view />
 </template>
 
+<script>
+import dummyCreater from "./utils/dummyCreater.js";
+const dummyUser = dummyCreater.getUsersId();
+export default {
+  created() {
+    this.$store.dispatch("setCurrentUser", { currentUser: dummyUser });
+  },
+};
+</script>
+
 <style lang="scss">
 @import "./assets/scss/color.scss";
 @import "./assets/scss/reset.scss";

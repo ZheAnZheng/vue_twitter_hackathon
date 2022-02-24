@@ -2,22 +2,28 @@
   <div class="container">
     <ul class="tab-head">
       <li class="tab-item">
-        <router-link :class="getClass('followed')" :to="{ name: 'followed' }">
+        <router-link
+          :class="getClass('followed')"
+          :to="{ name: 'followed', params: { id: 3 } }"
+        >
           跟隨者</router-link
         >
       </li>
       <li class="tab-item">
-        <router-link :class="getClass('following')" :to="{ name: 'following' }"
+        <router-link
+          :class="getClass('following')"
+          :to="{ name: 'following', params: { id: 3 } }"
           >正在跟隨</router-link
         >
       </li>
     </ul>
     <ul class="followList">
-      <li v-for="user in users" :key="user.id" class="list-item">
+      <li v-for="user in followList" :key="user.id" class="list-item">
         <img class="image" :src="user.image | imageFilter" />
         <div class="user-info">
+          <!-- user.isFollowed -->
           <base-button
-            v-if="user.isFollowed"
+            v-if="true"
             class="follow-button"
             :mode="'action'"
             :position="'right'"
@@ -30,10 +36,13 @@
             :position="'right'"
             >跟隨</base-button
           >
-          <div class="name">{{ user.name }}</div>
-          <div class="account">@{{ user.account }}</div>
-          <div class="description">
-            {{ user.description }}
+          <!-- user.name -->
+          <!-- user.account -->
+          <!-- user.introduction -->
+          <div class="name">{{ " user.name " }}</div>
+          <div class="account">@{{ "user.account" }}</div>
+          <div class="introduction">
+            {{ "user.introduction" }}
           </div>
         </div>
       </li>
@@ -42,24 +51,44 @@
 </template>
 <script>
 import { activeLinkHandler, emptyImageFilter } from "../utils/mixins.js";
+import { mapState } from "vuex";
 import BaseButton from "./UI/BaseButton.vue";
 import dummyCreater from "../utils/dummyCreater.js";
-const dummyData = dummyCreater.createFollow(10);
+const dummyFollowers = dummyCreater.getUsersIdFollowers();
+const dummyFollowings = dummyCreater.getUsersIdFollowings();
 export default {
   components: { BaseButton },
   mixins: [activeLinkHandler, emptyImageFilter],
   data() {
     return {
-      users: [],
+      followList: [],
     };
   },
-  created() {
-    this.fetchUsers();
+  computed: {
+    ...mapState(["currentUser"]),
+  },
+  watch: {
+    $route(val) {
+      const { params, name } = val;
+
+      if (params.id === this.currentUser.id && name === "followeing") {
+        this.followList = [...this.currentUser.Followings];
+      } else if (params.id === this.currentUser.id && name === "followed") {
+        this.followList = [...this.currentUser.Followers];
+      } else if (name === "following") {
+        this.followList = [...dummyFollowings];
+      } else {
+        this.followList = [...dummyFollowers];
+      }
+    },
   },
   methods: {
-    fetchUsers() {
-      this.users = [...dummyData];
-    },
+    // fetchFollowings() {
+    //   this.followList = [...dummyFollowings];
+    // },
+    // fetchFollowers() {
+    //   this.followList = [...dummyFollowers];
+    // },
   },
 };
 </script>

@@ -6,12 +6,12 @@
 
 <script>
 import MainLayout from "../components/layouts/MainLayout.vue";
-import TweetOverview from '../components/TweetOverview.vue'
+import TweetOverview from "../components/TweetOverview.vue";
 
 export default {
   components: {
     MainLayout,
-    TweetOverview
+    TweetOverview,
   },
 };
 </script>

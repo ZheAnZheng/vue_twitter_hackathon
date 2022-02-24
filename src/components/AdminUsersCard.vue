@@ -1,7 +1,7 @@
 <template>
   <div class="card-wrapper">
     <div class="background-image" :style="user.backgroundImage">
-      <img :src="user.image" alt="user-image">
+      <img :src="user.image" alt="user-image" />
     </div>
     <div class="user-info">
       <div class="name">{{ user.name }}</div>
@@ -25,23 +25,22 @@
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
 <script>
-import { Filters } from '../utils/mixins'
+import { Filters } from "../utils/mixins";
 
 export default {
-  name: 'AdminUsersCard',
+  name: "AdminUsersCard",
   mixins: [Filters],
   props: {
     user: {
       type: Array,
-      required: true
-    }
-  }
-}
+      required: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -86,7 +85,8 @@ export default {
       > .icon-like {
         margin-left: 1rem;
       }
-      > .icon-like, .icon-reply {
+      > .icon-like,
+      .icon-reply {
         > i {
           color: var(--mute-color);
         }
@@ -102,12 +102,12 @@ export default {
       > .follower {
         margin-left: 1rem;
       }
-      > .follower, .following {
+      > .follower,
+      .following {
         > span {
           color: var(--mute-color);
         }
       }
-      
     }
   }
 }
