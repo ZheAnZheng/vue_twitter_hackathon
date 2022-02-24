@@ -46,7 +46,7 @@
 import { emptyImageFilter } from "../utils/mixins.js";
 import BaseButton from "../components/UI/BaseButton.vue";
 import dummyCreater from "../utils/dummyCreater.js";
-const dummyData = dummyCreater.createTopUser();
+const dummyData = dummyCreater.getUsersTop();
 export default {
   components: {
     BaseButton,
