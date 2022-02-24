@@ -1,6 +1,6 @@
 <template>
   <div class="card-wrapper">
-    <img :src="tweet.image" alt="user-image">
+    <img :src="tweet.image" alt="user-image" />
     <div class="user-info">
       <span class="name">{{ tweet.name }}</span>
       <span class="account">{{ tweet.account | addAtFilter }}</span>
@@ -17,29 +17,29 @@
 </template>
 
 <script>
-import { Filters } from '../utils/mixins'
+import { Filters } from "../utils/mixins";
 
 export default {
-  name: 'adminTweetListCard',
+  name: "adminTweetListCard",
   mixins: [Filters],
   props: {
     tweet: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     deleteTweet(tweetId) {
       // 將刪除推文事件傳遞至父元件
-      this.$emit('after-delete-tweet', tweetId)
-    }
-  }
-}
+      this.$emit("after-delete-tweet", tweetId);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 // 載入extend的file
-@import '../assets/scss/extends.scss';
+@import "../assets/scss/extends.scss";
 
 .card-wrapper {
   position: relative;
@@ -54,7 +54,9 @@ export default {
   // 使用者資訊樣式設定
   > .user-info {
     margin-left: 1rem;
-    > .account, .dot, .created-time {
+    > .account,
+    .dot,
+    .created-time {
       @extend %share-user-info-style;
     }
     > .user-tweet {

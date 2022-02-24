@@ -13,20 +13,20 @@ import TweetList from '../components/TweetList.vue'
 const dummyUser = {
   currentUser: {
     id: 0,
-    name: 'william',
-    account: 'william',
-    image: 'https://randomuser.me/api/portraits/men/88.jpg',
-    isAdmin: false
+    name: "william",
+    account: "william",
+    image: "https://randomuser.me/api/portraits/men/88.jpg",
+    isAdmin: false,
   },
   isauthenticated: true
 }
 
 
 export default {
-  name: 'TweetOverview',
+  name: "TweetOverview",
   components: {
     TweetList,
-    TweetModal
+    TweetModal,
   },
   data() {
     return {
@@ -34,17 +34,17 @@ export default {
       isModal: false,
       currentUser: {
         id: -1,
-        name: '',
-        account: '',
-        image: '',
-        isAdmin: false
+        name: "",
+        account: "",
+        image: "",
+        isAdmin: false,
       },
       isauthenticated: false
     }
   },
   created() {
-    this.fetchTweets()
-    this.fetchCurrentUser()
+    this.fetchTweets();
+    this.fetchCurrentUser();
   },
   methods: {
     // 向伺服器取得推文的函式
@@ -57,7 +57,7 @@ export default {
     handleAddTweet(text) {
       // TODO：向伺服器傳送貼文
 
-      console.log(text)
+      console.log(text);
     },
     // 向伺服器取得登入者資料的函式
     fetchCurrentUser() {
@@ -74,17 +74,17 @@ export default {
     handleAddLike(tweetId) {
       // TODO：向伺服器新增推文加入喜歡
 
-      this.tweets = this.tweets.map( tweet => {
+      this.tweets = this.tweets.map((tweet) => {
         if (tweet.id === tweetId) {
           return {
             ...tweet,
-            likeCount: tweet.likeCount + 1
-          }
+            likeCount: tweet.likeCount + 1,
+          };
         } else {
-          return tweet
+          return tweet;
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>

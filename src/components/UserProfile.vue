@@ -3,12 +3,12 @@
     <ProfileEditModal
       v-show="modalSwitch"
       @handleCloseModal="closeModal"
-      :user="user.data"
+      :user="currentUser"
     />
 
-    <img class="cover-image" :src="user.data.coverImage" />
+    <img class="cover-image" :src="user.data.cover" />
     <div class="user-info">
-      <img class="avatar" :src="user.data.image" />
+      <img class="avatar" :src="user.data.avatar" />
       <div class="button-wrapper" v-if="true">
         <base-button
           class="profile-button"
@@ -114,16 +114,16 @@
       <div class="profile-name">{{ user.data.name }}</div>
       <div class="profile-account">@{{ user.data.account }}</div>
       <div class="profile-description">
-        {{ user.data.description }}
+        {{ user.data.introduction }}
       </div>
       <div class="profile-follow">
         <div class="follow">
-          {{ user.data.followed }}個<router-link to="/users/1/followed"
+          {{ user.data.followerCount }}個<router-link to="/users/1/followed"
             >追隨中</router-link
           >
         </div>
         <div class="follow">
-          {{ user.data.following }}位<router-link to="/users/1/following"
+          {{ user.data.followingCount }}位<router-link to="/users/1/following"
             >跟隨者</router-link
           >
         </div>
@@ -140,6 +140,7 @@
 import BaseButton from "./UI/BaseButton.vue";
 import ProfileTabs from "./ProfileTabs.vue";
 import { modalController } from "../utils/mixins.js";
+import { mapState } from "vuex";
 import ProfileEditModal from "./ProfileEditModal.vue";
 export default {
   mixins: [modalController],
@@ -155,6 +156,9 @@ export default {
         id: -1,
       },
     },
+  },
+  computed: {
+    ...mapState(["currentUser"]),
   },
 };
 </script>
