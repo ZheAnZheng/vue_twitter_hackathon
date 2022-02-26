@@ -1,11 +1,11 @@
 <template>
   <div class="card-wrapper">
-    <img :src="tweet.image" alt="user-image" />
+    <img :src="tweet.image | imageFilter" alt="user-image" />
     <div class="user-info">
       <span class="name">{{ tweet.name }}</span>
       <span class="account">{{ tweet.account | addAtFilter }}</span>
       <span class="dot">·</span>
-      <span class="created-time">{{ tweet.createdAt }}</span>
+      <span class="created-time">{{ tweet.createdAt | fromNow }}</span>
       <div class="user-tweet">
         {{ tweet.tweetContent }}
       </div>
@@ -18,10 +18,11 @@
 
 <script>
 import { Filters } from "../utils/mixins";
+import { emptyImageFilter, dateFilter } from "../utils/mixins"
 
 export default {
   name: "adminTweetListCard",
-  mixins: [Filters],
+  mixins: [Filters, emptyImageFilter, dateFilter],
   props: {
     tweet: {
       type: Object,

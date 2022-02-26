@@ -73,7 +73,7 @@
           stroke-linejoin="round"
         />
       </svg>
-      <span>登出</span>
+      <span @click="logout">登出</span>
     </router-link>
   </div>
 </template>
@@ -104,6 +104,10 @@ export default {
       //   return '/users/1'
       // }
     },
+    logout () {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    }
   },
 };
 </script>

@@ -1,89 +1,26 @@
 <template>
   <div class="admin-users-card">
+    <BaseSpinner v-if="isLoading"/>
     <AdminUsersCard v-for="user in users" :key="user.id" :user="user" />
   </div>
 </template>
 
 <script>
 import AdminUsersCard from "../components/AdminUsersCard.vue";
-
-// 模擬使用者資料
-const dummyData = [
-  {
-    id: 0,
-    name: "John Doe",
-    account: "heyjohn",
-    image: "https://randomuser.me/api/portraits/men/88.jpg",
-    backgroundImage: {
-      background: "no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')",
-    },
-    replyCount: "1.5k",
-    likeCount: "20k",
-    following: "34",
-    follower: "59",
-  },
-  {
-    id: 1,
-    name: "John Doe",
-    account: "heyjohn",
-    image: "https://randomuser.me/api/portraits/men/88.jpg",
-    backgroundImage: {
-      background: "no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')",
-    },
-    replyCount: "1k",
-    likeCount: "2k",
-    following: "346",
-    follower: "559",
-  },
-  {
-    id: 2,
-    name: "John Doe",
-    account: "heyjohn",
-    image: "https://randomuser.me/api/portraits/men/88.jpg",
-    backgroundImage: {
-      background: "no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')",
-    },
-    replyCount: "1k",
-    likeCount: "2k",
-    following: "346",
-    follower: "559",
-  },
-  {
-    id: 3,
-    name: "John Doe",
-    account: "heyjohn",
-    image: "https://randomuser.me/api/portraits/men/88.jpg",
-    backgroundImage: {
-      background: "no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')",
-    },
-    replyCount: "1k",
-    likeCount: "2k",
-    following: "346",
-    follower: "559",
-  },
-  {
-    id: 4,
-    name: "John Doe",
-    account: "heyjohn",
-    image: "https://randomuser.me/api/portraits/men/88.jpg",
-    backgroundImage: {
-      background: "no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')",
-    },
-    replyCount: "1k",
-    likeCount: "2k",
-    following: "346",
-    follower: "559",
-  },
-];
+import adminAPI from "../apis/admin"
+import { toast } from "../utils/helper"
+import BaseSpinner from "../components/UI/BaseSpinner.vue"
 
 export default {
   name: "AdminUsers",
   components: {
     AdminUsersCard,
+    BaseSpinner,
   },
   data() {
     return {
       users: [],
+      isLoading: true
     };
   },
   created() {
@@ -91,10 +28,33 @@ export default {
   },
   methods: {
     // 向伺服器取得所有使用者的資料
-    fetchUsers() {
-      // TODO：向伺服器取得所有使用者的資訊
+    async fetchUsers() {
+      try {
+        // 透過API向伺服器取得管理者的資訊
+        const { data } = await adminAPI.users.getAll()
 
-      this.users = dummyData;
+        this.users = data.map( user => {
+          return {
+            ...user,
+            id: user.id,
+            name: user.account,
+            image: user.avatar,
+            backgroundImage: {
+              background: `no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')`,
+            },
+            replyCount: user.repliedCount,
+            likeCount: user.likedCount,
+            following: user.followingCount,
+            follower: user.followerCount,
+          }
+        })
+
+        this.isLoading = false
+      } catch(error) {
+        console.log('Error', error)
+        toast.fireError('目前無法取得所有使用者，請稍後再試')
+      }
+      
     },
   },
 };

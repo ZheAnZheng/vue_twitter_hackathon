@@ -18,7 +18,7 @@ const dummyUser = {
     image: "https://randomuser.me/api/portraits/men/88.jpg",
     isAdmin: false,
   },
-  isauthenticated: true
+  isAuthenticated: true
 }
 
 

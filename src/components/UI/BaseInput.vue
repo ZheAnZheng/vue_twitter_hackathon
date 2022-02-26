@@ -2,7 +2,7 @@
   <form>
     <div v-for="item in formItems" :key="item.id" class="input-group">
       <label :for="item.name">{{ item.name }}</label>
-      <input :id="item.name" :value="item.value" :class="{ 'error-color': isError }" />
+      <input :id="item.name" v-model="item.value" :value="item.value" :type="item.type" :class="{ 'error-color': isError }" />
       <div v-show="isError && item.name === '帳號'" class="account-alert-message">帳號不存在</div>
       <div v-show="isError && item.name === '帳號'" class="account-alert-message">帳號重覆</div>
       <div v-show="isError && item.name === '名稱'" class="name-alert-message">字數超出上限</div>
