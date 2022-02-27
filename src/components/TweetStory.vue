@@ -68,8 +68,8 @@
         </div>
       </transition>
     </div>
-    <!-- replies尚未完成 -->
-    <ReplyList />
+
+    <ReplyList :tweetReplies="replies" />
   </div>
 </template>
 <script>
@@ -95,6 +95,7 @@ export default {
       replies: [],
     };
   },
+
   methods: {
     async fetchTweet(tweetId) {
       try {
@@ -103,15 +104,28 @@ export default {
           throw new Error(response.data.message);
         }
         console.log(response.data);
-        const { User, Replies, ...tweet } = response.data;
-        console.log(Replies);
+        const { User: tweetUser, Replies, ...tweet } = response.data;
+
         this.tweet = {
-          userAvatar: User.avatar,
-          userName: User.name,
-          userAccount: User.account,
+          userAvatar: tweetUser.avatar,
+          userName: tweetUser.name,
+          userAccount: tweetUser.account,
           ...tweet,
         };
-        this.replies = [...Replies];
+        this.replies = Replies.map((reply) => {
+          const { User: replyOwner, UserId: replyOwnerId } = reply;
+          return {
+            ...reply,
+            tweetOwnerId: tweet.UserId,
+            tweetOwnerAvatar: tweetUser.avatar,
+            tweetOwnerName: tweetUser.name,
+            tweetOwnerAccount: tweetUser.account,
+            userName: replyOwner.name,
+            userAvatar: replyOwner.avatar,
+            userAccount: replyOwner.account,
+            userId: replyOwnerId,
+          };
+        });
       } catch (e) {
         console.log(e);
         toast.fireError("無法讀取推文");
