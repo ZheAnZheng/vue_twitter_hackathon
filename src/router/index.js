@@ -111,7 +111,13 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  store.dispatch("fetchCurrentUser");
+  const isAdmin = store.getters["isAuthenticated"];
+
+  console.log(typeof isAdmin);
+  if (isAdmin === "false") {
+    console.log("in");
+    store.dispatch("fetchCurrentUser");
+  }
   next();
 });
 

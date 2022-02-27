@@ -12,7 +12,7 @@ export default new Vuex.Store({
       name: "",
       account: "",
       avatar: "",
-      role: "user"
+      role: "user",
     },
     isAuthenticated: "false",
     token: "",
@@ -24,15 +24,15 @@ export default new Vuex.Store({
     setAdminUser(state, adminUser) {
       state.adminUser = {
         ...state.adminUser,
-        ...adminUser
-      }
+        ...adminUser,
+      };
 
-      state.isAuthenticated = true
-      state.token = localStorage.getItem("token")
+      state.isAuthenticated = true;
+      state.token = localStorage.getItem("token");
     },
     revokeAuthentication(state) {
-      state.adminUser = {}
-      localStorage.removeItem('token')
+      state.adminUser = {};
+      localStorage.removeItem("token");
     },
   },
   actions: {
@@ -45,6 +45,11 @@ export default new Vuex.Store({
         console.log(e);
         toast.fireError("無法讀取...");
       }
+    },
+  },
+  getters: {
+    isAuthenticated(state) {
+      return state.isAuthenticated;
     },
   },
   modules: {},

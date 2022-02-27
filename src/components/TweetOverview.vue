@@ -6,6 +6,7 @@
       @closeModal="closeModal('reply')"
       :tweet="modalTweets"
     />
+    
     <TweetList @openReplyModal="handleOpenModal" />
   </div>
 </template>
