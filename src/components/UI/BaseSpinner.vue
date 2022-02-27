@@ -12,21 +12,21 @@
   </div>
 </template>
 <style lang="scss" scoped>
-@mixin setDelay(){
-    $delay:-0.04s;
-    @for $i from 1 through 8{
-        &:nth-child(#{$i}){
-            animation-delay: $delay;
-        }
-        $delay:$delay - 0.04s;
+@mixin setDelay() {
+  $delay: -0.04s;
+  @for $i from 1 through 8 {
+    &:nth-child(#{$i}) {
+      animation-delay: $delay;
     }
+    $delay: $delay - 0.04s;
+  }
 }
 .spinner {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top:10%;
+  height: 300px;
 }
 .ball-box {
   display: inline-block;

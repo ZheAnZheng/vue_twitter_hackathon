@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="reply-modal">
-      <div class="close" @click="closeModal">
+      <div class="close" @click="$emit('closeModal')">
         <svg
           width="16"
           height="16"
@@ -16,29 +16,39 @@
         </svg>
       </div>
       <div class="tweet-block">
-        <img class="avatar" src="../assets/Photo.png" />
+        <img class="avatar" :src="tweet.userAvatar" />
         <div class="tweet-info">
           <div class="tweet-owner">
-            <div>Apple</div>
-            <div>@apple</div>
-            <div>。</div>
-            <div>3小時</div>
+            <div>{{ tweet.userName }}</div>
+            <div>@{{ tweet.userAccount }}</div>
+            <div>．</div>
+            <div>{{ tweet.createdAt | fromNow }}</div>
           </div>
           <div class="tweet-content">
-            Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco
-            cillum dolor. Voluptate exercitation incididunt aliquip deserunt
-            reprehenderit elit laborum.
+            {{ tweet.description }}
           </div>
-          <div class="reply">回覆給<span>@apple</span></div>
+          <div class="reply">
+            回覆給<span>@{{ tweet.userAccount }}</span>
+          </div>
         </div>
       </div>
+      <span class="connect-line"></span>
       <div class="reply-block">
-        <img class="avatar" src="../assets/Photo.png" />
+        <img class="avatar" :src="currentUser.avatar" />
         <div class="reply-content">
-          <input id="reply" class="reply-input" placeholder="推你的回覆" />
+          <input
+            id="reply"
+            class="reply-input"
+            v-model="reply"
+            placeholder="推你的回覆"
+          />
         </div>
       </div>
-      <base-button class="reply-button" :mode="'action'" :position="'right'"
+      <base-button
+        class="reply-button"
+        :mode="'action'"
+        :position="'right'"
+        @handleClick="submitReply(tweet.id)"
         >回覆</base-button
       >
     </div>
@@ -46,13 +56,51 @@
 </template>
 <script>
 import BaseButton from "./UI/BaseButton.vue";
+import { dateFilter } from "../utils/mixins.js";
+import { toast } from "../utils/helper.js";
+import { mapState } from "vuex";
+import tweetsAPI from "../apis/tweets.js";
 export default {
+  mixins: [dateFilter],
   components: {
     BaseButton,
   },
+  data() {
+    return {
+      reply: "",
+    };
+  },
+  props: {
+    tweet: {
+      type: Object,
+      required: true,
+    },
+  },
   methods: {
-    closeModal() {
-      this.$emit("handleCloseModal");
+    async submitReply(tweetId) {
+      try {
+        if (this.isReplyValid) {
+          const response = await tweetsAPI.createReply({
+            tweetId,
+            comment: this.reply,
+          });
+          console.log(response);
+          if (response.statusText !== "OK") {
+            throw Error(response.data.message);
+          }
+          this.$emit("closeModal");
+          toast.fireSuccess("回覆成功");
+        }
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法發送回覆");
+      }
+    },
+  },
+  computed: {
+    ...mapState(["currentUser"]),
+    isReplyValid() {
+      return this.reply.trim() !== "";
     },
   },
 };
@@ -70,6 +118,10 @@ export default {
   bottom: 0;
   right: 0;
 }
+.close {
+  cursor: pointer;
+  display: inline;
+}
 .reply-modal {
   padding: 15px;
   width: 600px;
@@ -85,7 +137,8 @@ export default {
 }
 .tweet-block {
   margin-top: 35px;
-
+  min-height: 150px;
+  font-size: 15px;
   .tweet-info {
     margin-left: 60px;
   }
@@ -96,16 +149,42 @@ export default {
     justify-content: flex-start;
     column-gap: 5px;
     margin-bottom: 5px;
+    :nth-of-type(2) {
+      color: var(--mute-color);
+    }
+    :nth-of-type(3) {
+      color: var(--mute-color);
+    }
+    :nth-of-type(4) {
+      color: var(--mute-color);
+    }
   }
   .tweet-content {
     margin-bottom: 15px;
+    min-height: 66px;
   }
   .reply {
+    font-size: 13px;
     color: var(--mute-color);
     margin-bottom: 20px;
     span {
       color: var(--primary-color);
     }
+  }
+}
+.connect-line {
+  position: relative;
+  display: block;
+  &::before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: -90px;
+    left: 22px;
+    height: 80px;
+    transform: translate(50%, 0);
+    width: 2px;
+    background: var(--border-stroke-color);
   }
 }
 .reply-content {

@@ -6,8 +6,8 @@
 <script>
 import MainLayout from "../components/layouts/MainLayout.vue";
 import { userProvider } from "../utils/mixins.js";
-import dummyCreater from "../utils/dummyCreater.js";
-const dummyUser = dummyCreater.getUsersId();
+import usersAPI from "../apis/users.js";
+import { toast } from "../utils/helper";
 export default {
   mixins: [userProvider],
   components: {
@@ -19,11 +19,21 @@ export default {
     };
   },
   created() {
-    this.fetchUser();
+    const { id } = this.$route.params;
+    this.fetchUser(id);
   },
   methods: {
-    fetchUser() {
-      this.user = dummyUser;
+    async fetchUser(userId) {
+      try {
+        const response = await usersAPI.get({ userId });
+        if (response.statusText !== "OK") {
+          throw Error(response.date.message);
+        }
+        this.user = { ...response.data };
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法讀取用戶");
+      }
     },
   },
 };

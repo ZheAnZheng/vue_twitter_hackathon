@@ -1,8 +1,14 @@
 import { apiHelper } from "../utils/helper";
 
-export const usersAPI = {
+export default {
+  getCurrentUser() {
+    return apiHelper.get("/users/get-current-user");
+  },
   get({ userId }) {
     return apiHelper.get(`/users/${userId}`);
+  },
+  getTop() {
+    return apiHelper.get("/users/top");
   },
   getTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`);
@@ -10,7 +16,12 @@ export const usersAPI = {
   getReplied({ userId }) {
     return apiHelper.get(`/users/${userId}/replied_tweets`);
   },
-  getlikedTweets({ userId }) {
+  getlikeTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/likes`);
+  },
+  update({ userId, formData }) {
+    return apiHelper.put(`/users/${userId}`, {
+      formData,
+    });
   },
 };

@@ -2,7 +2,11 @@
   <form>
     <div v-for="item in formItems" :key="item.id" class="input-group">
       <label :for="item.name">{{ item.name }}</label>
-      <input :id="item.name" :value="item.value" />
+      <input
+        :id="item.name"
+        v-model="item.value"
+        :type="handleType(item.name)"
+      />
     </div>
   </form>
 </template>
@@ -13,6 +17,15 @@ export default {
     formItems: {
       type: Array,
       required: true,
+    },
+  },
+  methods: {
+    handleType(name) {
+      if (name === "密碼" || name === "確認密碼") {
+        return "password";
+      } else {
+        return "text";
+      }
     },
   },
 };

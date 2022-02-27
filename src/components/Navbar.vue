@@ -17,7 +17,8 @@
         </svg>
         <span>{{ isAdmin ? "推文清單" : "首頁" }}</span>
       </router-link>
-      <router-link :to="isAdmin ? '/admin/users' : '/users/1'">
+      <!-- 需修正 -->
+      <router-link :to="isAdmin ? '/admin/users' : `/users/${currentUser.id}`">
         <svg
           width="18"
           height="21"
@@ -53,7 +54,12 @@
         <span>設定</span>
       </router-link>
       <div v-show="!isAdmin" class="button-wrapper">
-        <base-button class="tweet-button" :mode="'action'">推文</base-button>
+        <base-button
+          class="tweet-button"
+          :mode="'action'"
+          @handleClick="openModal"
+          >推文</base-button
+        >
       </div>
     </div>
     <router-link class="logOut" to="/signin">
@@ -80,7 +86,7 @@
 
 <script>
 import BaseButton from "./UI/BaseButton.vue";
-
+import { mapState } from "vuex";
 export default {
   components: {
     BaseButton,
@@ -91,18 +97,17 @@ export default {
       this.isAdmin = true;
     }
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   data() {
     return {
       isAdmin: false,
     };
   },
   methods: {
-    handleRoute() {
-      // if(this.isAdmin===true){
-      //   return '/admin/users'
-      // }else{
-      //   return '/users/1'
-      // }
+    openModal() {
+      this.$emit("openModal");
     },
   },
 };
@@ -111,6 +116,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   display: none;
+  z-index: 100;
   position: fixed;
   left: 0;
   width: 25%;
