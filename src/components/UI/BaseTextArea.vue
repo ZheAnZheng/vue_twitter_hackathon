@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: 'BaseTextArea',
-}
+  name: "BaseTextArea",
+};
 </script>
 
 <style lang="scss" scoped>

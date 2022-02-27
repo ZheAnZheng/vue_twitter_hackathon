@@ -2,31 +2,26 @@
   <div class="container">
     <ul class="tab-head">
       <li class="tab-item">
-        <router-link
-          :class="getClass('followed')"
-          :to="{ name: 'followed', params: { id: 3 } }"
-        >
+        <router-link :class="getClass('followed')" :to="{ name: 'followed' }">
           跟隨者</router-link
         >
       </li>
       <li class="tab-item">
-        <router-link
-          :class="getClass('following')"
-          :to="{ name: 'following', params: { id: 3 } }"
+        <router-link :class="getClass('following')" :to="{ name: 'following' }"
           >正在跟隨</router-link
         >
       </li>
     </ul>
     <ul class="followList">
-      <li v-for="user in followList" :key="user.id" class="list-item">
+      <li v-for="user in currentList" :key="user.id" class="list-item">
         <img class="image" :src="user.image | imageFilter" />
         <div class="user-info">
-          <!-- user.isFollowed -->
           <base-button
-            v-if="true"
+            v-if="user.isFollowed"
             class="follow-button"
             :mode="'action'"
             :position="'right'"
+            @handleClick="addFollowing(user.id, 'followList')"
             >正在跟隨</base-button
           >
           <base-button
@@ -34,15 +29,14 @@
             class="follow-button"
             :mode="'actionOutline'"
             :position="'right'"
+            @handleClick="deleteFollowing(user.id, 'followList')"
             >跟隨</base-button
           >
-          <!-- user.name -->
-          <!-- user.account -->
-          <!-- user.introduction -->
-          <div class="name">{{ " user.name " }}</div>
-          <div class="account">@{{ "user.account" }}</div>
+          <div class="name">{{ user.name }}</div>
+          <div class="account">@{{ user.account }}</div>
+
           <div class="introduction">
-            {{ "user.introduction" }}
+            {{ user.introduction }}
           </div>
         </div>
       </li>
@@ -50,45 +44,35 @@
   </div>
 </template>
 <script>
-import { activeLinkHandler, emptyImageFilter } from "../utils/mixins.js";
+import {
+  activeLinkHandler,
+  emptyImageFilter,
+  followshipHandler,
+} from "../utils/mixins.js";
 import { mapState } from "vuex";
 import BaseButton from "./UI/BaseButton.vue";
-import dummyCreater from "../utils/dummyCreater.js";
-const dummyFollowers = dummyCreater.getUsersIdFollowers();
-const dummyFollowings = dummyCreater.getUsersIdFollowings();
+
 export default {
   components: { BaseButton },
-  mixins: [activeLinkHandler, emptyImageFilter],
+  mixins: [activeLinkHandler, emptyImageFilter, followshipHandler],
+  inject: ["profileUser"],
   data() {
     return {
-      followList: [],
+      users: [],
     };
   },
   computed: {
     ...mapState(["currentUser"]),
-  },
-  watch: {
-    $route(val) {
-      const { params, name } = val;
-
-      if (params.id === this.currentUser.id && name === "followeing") {
-        this.followList = [...this.currentUser.Followings];
-      } else if (params.id === this.currentUser.id && name === "followed") {
-        this.followList = [...this.currentUser.Followers];
-      } else if (name === "following") {
-        this.followList = [...dummyFollowings];
+    //透過路由顯示對應 跟隨列表資料
+    currentList() {
+      const routeName = this.$route.name;
+      if (routeName === "following") {
+        return this.profileUser.data.Followings;
       } else {
-        this.followList = [...dummyFollowers];
+        console.log(this.profileUser.data);
+        return this.profileUser.data.Followers;
       }
     },
-  },
-  methods: {
-    // fetchFollowings() {
-    //   this.followList = [...dummyFollowings];
-    // },
-    // fetchFollowers() {
-    //   this.followList = [...dummyFollowers];
-    // },
   },
 };
 </script>

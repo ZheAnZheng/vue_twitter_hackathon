@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header :class="{ 'setting-layout-header': isSettingLayout }">
     <div class="arrow" v-show="isShowArrow" @click="handleBackArrow">
       <svg
         width="17"
@@ -16,13 +16,14 @@
     </div>
     <div v-if="isUser" class="user-wrapper">
       <div class="name">{{ profileUser.data.name }}</div>
-      <div class="info">{{ profileUser.data.Tweets.length }} 推文</div>
+      <div class="info">{{ handleLength(profileUser.data.Tweets) }} 推文</div>
     </div>
     <span v-else class="title">{{ titleName }}</span>
   </header>
 </template>
 
 <script>
+import { mapState } from "vuex";
 const userRouteName = [
   "userTweets",
   "replyTweets",
@@ -32,19 +33,6 @@ const userRouteName = [
 ];
 const indexRouteName = ["main"];
 const settingRouteName = ["setting"];
-// const adminRouteName = [
-//   {
-//     name: "admin-users",
-//     value: "使用者列表",
-//   },
-//   {
-//     name: "admin-tweets",
-//     value: "推文清單",
-//   },
-// ];
-// const tweetRouteName=[
-
-// ]
 
 export default {
   created() {
@@ -64,6 +52,7 @@ export default {
       title: "",
       isShowArrow: false,
       isUser: false,
+      isSettingLayout: false,
     };
   },
   watch: {
@@ -72,6 +61,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(["currentUser"]),
     titleName() {
       return this.title;
     },
@@ -85,10 +75,13 @@ export default {
         this.title = "首頁";
       } else if (settingRouteName.includes(routeName)) {
         this.title = "帳戶設定";
+        this.isSettingLayout = true;
       } else if (routeName === "admin-users") {
         this.title = "使用者列表";
+        this.isSettingLayout = true;
       } else if (routeName === "admin-tweets") {
         this.title = "推文清單";
+        this.isSettingLayout = true;
       } else if (routeName === "tweetStory") {
         this.isShowArrow = true;
         this.title = "推文";
@@ -96,6 +89,20 @@ export default {
     },
     handleBackArrow() {
       this.$router.back();
+    },
+    //錯誤處理，tweets無資料時，.length會報錯
+    handleLength(value) {
+      try {
+        if (value.join("") === "") {
+          // console.log('nothing')
+          return 0;
+        } else {
+          return value.length;
+        }
+      } catch (e) {
+        console.log(e);
+        console.clear();
+      }
     },
   },
 };
@@ -153,6 +160,9 @@ header {
   }
 }
 @media (min-width: 1085px) {
+  .setting-layout-header {
+    width: 75%;
+  }
   header {
     width: 50%;
   }

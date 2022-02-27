@@ -5,10 +5,9 @@
 </template>
 <script>
 import MainLayout from "../components/layouts/MainLayout.vue";
-
-import dummyCreater from "../utils/dummyCreater.js";
 import { userProvider } from "../utils/mixins.js";
-const dummyUser = dummyCreater.getUsersId();
+import usersAPI from "../apis/users.js";
+import { toast } from "../utils/helper.js";
 export default {
   mixins: [userProvider],
   components: {
@@ -19,12 +18,24 @@ export default {
       user: {},
     };
   },
+
   created() {
-    this.fetchUser();
+    const { id } = this.$route.params;
+    this.fetchProfileUser(id);
   },
   methods: {
-    fetchUser() {
-      this.user = dummyUser;
+    async fetchProfileUser(userId) {
+      try {
+        const response = await usersAPI.get({ userId });
+
+        if (response.statusText !== "OK") {
+          throw Error(response.data.message);
+        }
+        this.user = { ...response.data };
+      } catch (e) {
+        console.log(e);
+        toast.fireError("讀取用戶失敗");
+      }
     },
   },
 };

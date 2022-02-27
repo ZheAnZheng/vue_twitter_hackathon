@@ -4,8 +4,8 @@ export default {
   getAll() {
     return apiHelper.get("/tweets");
   },
-  createTweet({ formData }) {
-    return apiHelper.post("/tweets", { formData });
+  createTweet({ description }) {
+    return apiHelper.post("/tweets", { description });
   },
   get({ tweetId }) {
     return apiHelper.get(`/tweets/${tweetId}`);
@@ -13,13 +13,13 @@ export default {
   getReplies({ tweetId }) {
     return apiHelper.get(`/tweets/${tweetId}/replies`);
   },
-  createReply({ tweetId, formData }) {
-    return apiHelper.post(`/tweets/${tweetId}`, { formData });
+  createReply({ tweetId, comment }) {
+    return apiHelper.post(`/tweets/${tweetId}/replies`, { comment });
   },
   addLike({ tweetId }) {
-    return apiHelper.post(`/tweets/${tweetId}`, null);
+    return apiHelper.post(`/tweets/${tweetId}/like`, null);
   },
   deleteLike({ tweetId }) {
-    return apiHelper.post(`/tweets/${tweetId}`, null);
+    return apiHelper.post(`/tweets/${tweetId}/unlike`, null);
   },
 };

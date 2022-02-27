@@ -3,10 +3,7 @@
     <LogoTitle :title="'登入Alphitter'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button
-        :mode="'action'"
-        :position="'center'"
-        @handleClick="postSignin"
+      <base-button :mode="'action'" :position="'center'" @handleClick="signin"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -20,6 +17,8 @@
 </template>
 
 <script>
+import authirozationAPI from "../apis/authirozation.js";
+import { toast } from "../utils/helper.js";
 import LogoTitle from "../components/UI/LogoTile.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
 import BaseButton from "../components/UI/BaseButton.vue";
@@ -35,17 +34,40 @@ export default {
         {
           id: 0,
           name: "帳號",
+          value: "",
+          type:'text'
         },
         {
           id: 1,
           name: "密碼",
+          value: "",
+          type:'password'
         },
       ],
     };
   },
   methods: {
-    postSignin() {
-      this.$router.replace("/main");
+    async signin() {
+      try {
+        const { data } = await authirozationAPI.signIn({
+          email: this.formItems[0].value,
+          password: this.formItems[1].value,
+        });
+        if (data.status !== "success") {
+          throw Error(data.message);
+        }
+        const user = data.data.user;
+        if (user.role !== "user") {
+          toast.fireWarning("管理員請由後台登入");
+        } else {
+          localStorage.setItem("token", `${data.data.token}`);
+          toast.fireSuccess("登入成功");
+          this.$router.replace("/main");
+        }
+      } catch (e) {
+        console.log(e);
+        toast.fireError("登入失敗");
+      }
     },
   },
 };

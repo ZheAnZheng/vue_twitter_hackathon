@@ -3,27 +3,30 @@
     <ul class="popularList">
       <li class="list-item head">Popular</li>
       <transition-group name="list">
-        <li v-for="user in users" :key="user.id" class="list-item">
+        <li v-for="user in showedUsers" :key="user.id" class="list-item">
           <img class="image" :src="user.image | imageFilter" />
           <div class="user-info">
             <div class="name">{{ user.name }}</div>
             <div class="account">@{{ user.account }}</div>
           </div>
-          <div class="button-wrapper">
+          <div class="button-wrapper" v-show="user.id !== currentUser.id">
             <base-button
               class="popularList-button"
               v-if="user.isFollowed"
               key="followed"
               :mode="'action'"
-              @handleClick="deleteFollowing(user.id)"
+              @handleClick="deleteFollowing(user.id, 'popular')"
+              :disabled="isProcessing"
               >正在跟隨</base-button
             >
             <base-button
               class="popularList-button"
+              :class="{ disabled: isProcessing }"
               v-else
               :mode="'actionOutline'"
               key="follow"
-              @handleClick="addFollowing(user.id)"
+              @handleClick="addFollowing(user.id, 'popular')"
+              :disabled="isProcessing"
               >跟隨</base-button
             >
           </div>
@@ -33,7 +36,7 @@
         <li
           class="list-item tail"
           key="tail"
-          v-show="tailShow"
+          v-show="tailShow && notOverSix"
           @click="tailShow = false"
         >
           顯示更多
@@ -43,65 +46,70 @@
   </div>
 </template>
 <script>
-import { emptyImageFilter } from "../utils/mixins.js";
+import { emptyImageFilter, followshipHandler } from "../utils/mixins.js";
 import BaseButton from "../components/UI/BaseButton.vue";
-import dummyCreater from "../utils/dummyCreater.js";
-const dummyData = dummyCreater.getUsersTop();
+import usersAPI from "../apis/users.js";
+import { mapState } from "vuex";
+import { toast } from "../utils/helper.js";
+
 export default {
   components: {
     BaseButton,
   },
-  mixins: [emptyImageFilter],
+  mixins: [emptyImageFilter, followshipHandler],
   created() {
     this.fetchTopUser();
   },
   data() {
     return {
+      showedUsers: [],
       users: [],
       tailShow: true,
     };
   },
+  computed: {
+    ...mapState(["currentUser"]),
+
+    notOverSix() {
+      if (this.users.length > 6) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
   methods: {
-    fetchTopUser() {
-      for (let i = 0; i < 6; i++) {
-        this.users.push(dummyData[i]);
+    async fetchTopUser() {
+      try {
+        const response = await usersAPI.getTop();
+
+        if (response.statusText !== "OK") {
+          throw Error(response.data.message);
+        }
+        this.users = [...response.data];
+        this.showSixUsers();
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法熱門用戶失敗");
+      }
+    },
+    showSixUsers() {
+      let maxLength = this.users.length > 6 ? 6 : this.users.length;
+      for (let i = 0; i < maxLength; i++) {
+        this.showedUsers.push(this.users[i]);
       }
     },
     showAll() {
-      for (let i = 6; i < 10; i++) {
-        this.users.push(dummyData[i]);
+      for (let i = 7; i < this.users.length; i++) {
+        this.showedUsers.push(this.users[i]);
       }
-    },
-    addFollowing(userId) {
-      this.users = this.users.map((user) => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            isFollowed: true,
-          };
-        } else {
-          return user;
-        }
-      });
-    },
-    deleteFollowing(userId) {
-      this.users = this.users.map((user) => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            isFollowed: false,
-          };
-        } else {
-          return user;
-        }
-      });
     },
   },
 };
 </script>
 <style lang="scss" scoped>
 @mixin setDelay($num, $delay) {
-  @for $i from 6 to 11 {
+  @for $i from 0 to 11 {
     &:nth-of-type(#{$i}) {
       transition-delay: $num;
     }
@@ -188,6 +196,9 @@ export default {
 .list-enter-to {
   opacity: 1;
   transform: translateX(0);
+}
+.disabled {
+  cursor: default;
 }
 
 @media screen and (min-width: 1085px) {

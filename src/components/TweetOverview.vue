@@ -1,11 +1,27 @@
 <template>
   <div class="container">
+<<<<<<< HEAD
+    <TweetModal :is-modal="false" />
+    <ReplyModal
+      v-show="replyModalSwitch"
+      @closeModal="closeModal('reply')"
+      :tweet="modalTweets"
+    />
+    <TweetList @openReplyModal="handleOpenModal" />
+=======
     <TweetModal :is-modal="isModal" @after-add-tweet="handleAddTweet" :current-user="currentUser"/>
     <TweetList />
+>>>>>>> origin/main
   </div>
 </template>
 
 <script>
+<<<<<<< HEAD
+import TweetModal from "../components/TweetModal.vue";
+import TweetList from "../components/TweetList.vue";
+import { modalController } from "../utils/mixins.js";
+import ReplyModal from "../components/ReplyModal.vue";
+=======
 import TweetModal from '../components/TweetModal.vue'
 import TweetList from '../components/TweetList.vue'
 
@@ -21,13 +37,20 @@ const dummyUser = {
   isAuthenticated: true
 }
 
+>>>>>>> origin/main
 
 export default {
   name: "TweetOverview",
+  mixins: [modalController],
   components: {
     TweetList,
     TweetModal,
+    ReplyModal,
   },
+<<<<<<< HEAD
+
+  methods: {},
+=======
   data() {
     return {
       tweets: [],
@@ -86,5 +109,6 @@ export default {
       });
     },
   },
+>>>>>>> origin/main
 };
 </script>

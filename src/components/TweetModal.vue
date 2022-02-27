@@ -1,67 +1,59 @@
 <template>
-  <div class="modal-container" :class="{ 'main-new-tweet': !isModal }">
-    <div v-if="isModal" class="close-button">
-      <img src="../assets/icon_close.png" alt="close-image" />
-    </div>
-    <form :class="{ 'main-form': !isModal }" @submit.prevent.stop="addTweet">
-      <img
-        :class="{ 'main-image': isModal }"
-        :src="currentUser.image"
-        alt="user-image"
-      />
-      <textarea
-        v-model="text"
-        :class="{ 'main-textarea': !isModal }"
-        name="new-tweet"
-        id="new-tweet"
-        placeholder="有什麼新鮮事？"
-      ></textarea>
-      <div class="alert-message-limit" v-show="isLimited">
-        字數不可超過140字
+  <div :class="{ container: isModal }">
+    <div class="modal-container" :class="{ 'main-new-tweet': !isModal }">
+      <div v-if="isModal" class="close-button">
+        <img
+          src="../assets/icon_close.png"
+          alt="close-image"
+          @click="$emit('closeModal')"
+        />
       </div>
-      <div class="alert-message-blank" v-show="isBlank">內容不可空白</div>
-      <BaseButton class="button" :position="'right'" :mode="'action'"
-        >推文</BaseButton
-      >
-    </form>
+      <form :class="{ 'main-form': !isModal }">
+        <img
+          :class="{ 'main-image': isModal }"
+          :src="currentUser.avatar"
+          alt="user-image"
+        />
+        <textarea
+          v-model="text"
+          :class="{ 'main-textarea': !isModal }"
+          name="new-tweet"
+          id="new-tweet"
+          placeholder="有什麼新鮮事？"
+        ></textarea>
+        <div class="alert-message-limit" v-show="isLimited">
+          字數不可超過140字
+        </div>
+        <div class="alert-message-blank" v-show="isBlank">內容不可空白</div>
+        <BaseButton
+          class="button"
+          :position="'right'"
+          :mode="'action'"
+          @handleClick="addTweet"
+          >推文</BaseButton
+        >
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import BaseButton from "../components/UI/BaseButton.vue";
-
+import { mapState } from "vuex";
+import { toast } from "../utils/helper.js";
+import tweetsAPI from "../apis/tweets.js";
 export default {
   name: "TweetModal",
   components: {
     BaseButton,
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   props: {
-    tweetModalClass: {
-      type: Array,
-      default: function () {
-        return [
-          {
-            "main-new-tweet": false,
-          },
-          {
-            "main-form": false,
-          },
-          {
-            "main-image": false,
-          },
-          {
-            "main-textarea": false,
-          },
-        ];
-      },
-    },
     isModal: {
       type: Boolean,
       default: true,
-    },
-    currentUser: {
-      type: Object,
-      required: true,
     },
   },
   data() {
@@ -73,20 +65,33 @@ export default {
   },
   methods: {
     // 新增tweet的函式
-    addTweet() {
-      // 當輸入文字為空白或沒有輸入任何文字的提示訊息
-      if (!this.text.trim()) {
-        this.isBlank = true;
-        return;
-      } else if (this.text.trim().length > 140) {
-        // 當輸入文字超過140字的提示訊息
-        this.isLimited = true;
-        return;
-      }
+    //TODO重構 provide inject
+    async addTweet() {
+      try {
+        // 當輸入文字為空白或沒有輸入任何文字的提示訊息
+        if (!this.text.trim()) {
+          this.isBlank = true;
+          return;
+        } else if (this.text.trim().length > 140) {
+          // 當輸入文字超過140字的提示訊息
+          this.isLimited = true;
+          return;
+        }
+        const response = await tweetsAPI.createTweet({
+          description: this.text,
+        });
+        if (response.statusText !== "OK") {
+          throw new Error(response.data.message);
+        }
 
-      // 將事件傳至母元件
-      this.$emit("after-add-tweet", this.text);
-      this.text = "";
+        this.text = "";
+        this.$emit("closeModal");
+        this.$router.go(0);
+        toast.fireSuccess("推文成功");
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法推文，請稍後再試");
+      }
     },
   },
   watch: {
@@ -104,10 +109,24 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/scss/extends.scss";
+.container {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-contents: center;
+  align-items: center;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
 
+  background: rgba(0, 0, 0, 0.5);
+}
 .modal-container {
   border: 1px solid var(--share-border-color);
+  margin: auto;
   border-radius: 10px;
+  background-color: var(--primary-bg-color);
+  width: 50%;
   > .close-button {
     width: 100%;
     padding: 0.5rem;
@@ -160,6 +179,7 @@ export default {
 
 .main-new-tweet {
   border-style: none;
+  width: 100%;
   > .main-form {
     border: 1px solid var(--share-border-color);
     border-bottom: 0.6rem solid var(--share-border-color);

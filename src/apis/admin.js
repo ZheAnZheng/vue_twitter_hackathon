@@ -2,8 +2,14 @@ import { apiHelper } from "../utils/helper";
 
 export default {
   users: {
-    signUp({ fromData }) {
-      return apiHelper.post("/users", { fromData });
+    signUp({ account, email, name, password, checkPassword }) {
+      return apiHelper.post("/users", {
+        account,
+        email,
+        name,
+        password,
+        checkPassword,
+      });
     },
     getAll() {
       return apiHelper.get("/admin/users");

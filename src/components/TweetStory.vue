@@ -1,25 +1,27 @@
 <template>
   <div class="container">
-    <ReplyModal v-show="modalSwitch" @handleCloseModal="closeModal" />
+    <ReplyModal
+      v-show="replyModalSwitch"
+      @closeModal="closeModal('reply')"
+      :tweet="tweet"
+    />
     <div class="tweet-info">
       <div class="user-info">
         <img src="../assets/Photo.png" />
         <div class="name-wrapper">
-          <div>Apple</div>
-          <div>@apple</div>
+          <div>{{ tweet.userName }}</div>
+          <div>@{{ tweet.userAccount }}</div>
         </div>
       </div>
       <div class="content">
-        Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco
-        cillum dolor. Voluptate exercitation incididunt aliquip deserunt
-        reprehenderit elit laborum.
+        {{ tweet.description }}
       </div>
-      <div class="date">上午 10:15。 2020年6月10日</div>
+      <div class="date">{{ tweet.createdAt | fromNow }}</div>
       <div class="tweet-relative">
-        <div>34<span>回覆</span></div>
-        <div>808<span>喜歡次數</span></div>
+        <div>{{ tweet.repliedCount }}<span>回覆</span></div>
+        <div>{{ tweet.likedCount }}<span>喜歡次數</span></div>
       </div>
-      <div class="icon" @click="openModal">
+      <div class="icon" @click="openModal('reply')">
         <svg
           width="30"
           height="30"
@@ -34,26 +36,9 @@
         </svg>
       </div>
       <transition name="like" mode="out-in">
-        <div
-          class="icon"
-          key="emptyHeart"
-          v-if="isLike"
-          @click="isLike = false"
-        >
-          <svg
-            width="30"
-            height="30"
-            viewBox="0 0 30 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15 27.0473H14.9825C11.7537 26.9873 2.4375 18.5698 2.4375 10.5973C2.4375 6.76728 5.59375 3.40479 9.19125 3.40479C12.0537 3.40479 13.9787 5.37979 14.9987 6.81729C16.0162 5.38229 17.9412 3.40479 20.805 3.40479C24.405 3.40479 27.56 6.76729 27.56 10.5985C27.56 18.5685 18.2425 26.986 15.0137 27.0448H15V27.0473ZM9.1925 5.28104C6.5925 5.28104 4.31375 7.76603 4.31375 10.5998C4.31375 17.7748 13.1062 25.0948 15.0012 25.1723C16.8987 25.0948 25.6887 17.776 25.6887 10.5998C25.6887 7.76603 23.41 5.28104 20.81 5.28104C17.65 5.28104 15.885 8.95104 15.87 8.98729C15.5825 9.68979 14.425 9.68979 14.1362 8.98729C14.1187 8.94979 12.355 5.28104 9.19375 5.28104H9.1925Z"
-              fill="#657786"
-            />
-          </svg>
-        </div>
-        <div class="icon" key="redHeart" v-else @click="isLike = true">
+        <!-- TODO get tweets/:id 缺isLiked -->
+        <!-- 喜愛功能未實行 -->
+        <div class="icon" key="redHeart" v-if="isLike" @click="isLike = false">
           <svg
             width="30"
             height="30"
@@ -67,25 +52,71 @@
             />
           </svg>
         </div>
+        <div class="icon" key="emptyHeart" v-else @click="isLike = true">
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M15 27.0473H14.9825C11.7537 26.9873 2.4375 18.5698 2.4375 10.5973C2.4375 6.76728 5.59375 3.40479 9.19125 3.40479C12.0537 3.40479 13.9787 5.37979 14.9987 6.81729C16.0162 5.38229 17.9412 3.40479 20.805 3.40479C24.405 3.40479 27.56 6.76729 27.56 10.5985C27.56 18.5685 18.2425 26.986 15.0137 27.0448H15V27.0473ZM9.1925 5.28104C6.5925 5.28104 4.31375 7.76603 4.31375 10.5998C4.31375 17.7748 13.1062 25.0948 15.0012 25.1723C16.8987 25.0948 25.6887 17.776 25.6887 10.5998C25.6887 7.76603 23.41 5.28104 20.81 5.28104C17.65 5.28104 15.885 8.95104 15.87 8.98729C15.5825 9.68979 14.425 9.68979 14.1362 8.98729C14.1187 8.94979 12.355 5.28104 9.19375 5.28104H9.1925Z"
+              fill="#657786"
+            />
+          </svg>
+        </div>
       </transition>
     </div>
+    <!-- replies尚未完成 -->
     <ReplyList />
   </div>
 </template>
 <script>
 import ReplyModal from "../components/ReplyModal.vue";
-import { modalController } from "../utils/mixins.js";
+import { modalController, dateFilter } from "../utils/mixins.js";
+import tweetsAPI from "../apis/tweets.js";
+import { toast } from "../utils/helper.js";
 import ReplyList from "../components/ReplyList.vue";
 export default {
-  mixins: [modalController],
+  mixins: [modalController, dateFilter],
   components: {
     ReplyList,
     ReplyModal,
   },
+  created() {
+    const { id } = this.$route.params;
+    this.fetchTweet(id);
+  },
   data() {
     return {
       isLike: true,
+      tweet: {},
+      replies: [],
     };
+  },
+  methods: {
+    async fetchTweet(tweetId) {
+      try {
+        const response = await tweetsAPI.get({ tweetId });
+        if (response.statusText !== "OK") {
+          throw new Error(response.data.message);
+        }
+        console.log(response.data);
+        const { User, Replies, ...tweet } = response.data;
+        console.log(Replies);
+        this.tweet = {
+          userAvatar: User.avatar,
+          userName: User.name,
+          userAccount: User.account,
+          ...tweet,
+        };
+        this.replies = [...Replies];
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法讀取推文");
+      }
+    },
   },
 };
 </script>

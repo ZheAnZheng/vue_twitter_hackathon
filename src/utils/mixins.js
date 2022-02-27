@@ -1,5 +1,6 @@
-import emptyImage from "../assets/Logo@X2.png";
 import moment from "moment";
+import followshipAPI from "../apis/followships.js";
+import { toast } from "../utils/helper.js";
 // 將所有的filter放在mixins中
 export const Filters = {
   // 帳號前方加上@的filter
@@ -34,7 +35,14 @@ export const emptyImageFilter = {
   filters: {
     imageFilter(val) {
       if (!val) {
-        return emptyImage;
+        return "https://i.imgur.com/hAKcS3E.jpg";
+      } else {
+        return val;
+      }
+    },
+    coverFilter(val) {
+      if (!val) {
+        return "https://i.imgur.com/ju5wFt3.jpg";
       } else {
         return val;
       }
@@ -72,15 +80,18 @@ export const modalController = {
   data() {
     return {
       modalSwitch: false,
+      replyModalSwitch: false,
+      tweetModalSwitch: false,
+      modalTweets: {},
     };
   },
   methods: {
-    openModal() {
-      this.modalSwitch = true;
+    openModal(name) {
+      this.toggleSwitch(name);
       this.lockView();
     },
-    closeModal() {
-      this.modalSwitch = false;
+    closeModal(name) {
+      this.toggleSwitch(name);
       this.unlickView();
     },
     unlickView() {
@@ -92,6 +103,115 @@ export const modalController = {
       const body = document.querySelector("body");
 
       body.style.overflow = "hidden";
+    },
+    toggleSwitch(name) {
+      switch (name) {
+        case "profileEdit":
+          this.modalSwitch = !this.modalSwitch;
+          return;
+        case "reply":
+          this.replyModalSwitch = !this.replyModalSwitch;
+          return;
+        case "tweet":
+          this.tweetModalSwitch = !this.tweetModalSwitch;
+          return;
+      }
+    },
+    handleOpenModal(payload) {
+      console.log(payload.tweet);
+
+      this.modalTweets = {
+        ...payload.tweet,
+      };
+
+      this.openModal("reply");
+    },
+  },
+};
+
+//profilePage PopularList followList都會使用到追蹤功能
+export const followshipHandler = {
+  data() {
+    return {
+      isProcessing: false,
+    };
+  },
+  methods: {
+    async addFollowing(userId, mode) {
+      try {
+        this.isProcessing = true;
+        const { data } = await followshipAPI.addFollowing({
+          userId,
+        });
+        if (data.status !== "success") {
+          throw Error(data.message);
+        }
+        if (mode === "popular") {
+          this.togglePopular(userId);
+        } else if (mode === "followList") {
+          this.toggleFollowList(userId);
+        } else if (mode === "profile") {
+          this.toggleProfile();
+        }
+        this.isProcessing = false;
+      } catch (e) {
+        console.log(e);
+        toast.fireError("追隨失敗");
+        this.isProcessing = false;
+      }
+    },
+    async deleteFollowing(followingId, mode) {
+      try {
+        this.isProcessing = true;
+        const { data } = await followshipAPI.deleteFollowing({
+          followerId: followingId,
+          followingId: this.currentUser.id,
+        });
+        if (data.status !== "success") {
+          throw Error(data.message);
+        }
+        if (mode === "popular") {
+          this.togglePopular(followingId);
+        } else if (mode === "followList") {
+          this.toggleFollowList(followingId);
+        } else if (mode === "profile") {
+          this.toggleProfile();
+        }
+        this.isProcessing = false;
+      } catch (e) {
+        console.log(e);
+        toast.fireError("移除追隨失敗");
+        this.isProcessing = false;
+      }
+    },
+    togglePopular(userId) {
+      this.showedUsers = this.showedUsers.map((user) => {
+        if (user.id === userId) {
+          console.log(user.isFollowed);
+          return {
+            ...user,
+            isFollowed: !user.isFollowed,
+          };
+        } else {
+          return user;
+        }
+      });
+    },
+    toggleFollowList(userId) {
+      this.users = this.users.map((user) => {
+        if (user.id === userId) {
+          console.log(user.isFollowed);
+          return {
+            ...user,
+            isFollowed: !user.isFollowed,
+          };
+        } else {
+          return user;
+        }
+      });
+    },
+    toggleProfile() {
+      this.user.data.isFollowed = !this.user.data.isFollowed;
     },
   },
 };

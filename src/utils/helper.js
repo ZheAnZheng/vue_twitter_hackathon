@@ -3,15 +3,12 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 export const apiHelper = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "http://192.168.31.244:3000/api",
 });
 
 apiHelper.interceptors.request.use(
   (config) => {
-    // 從 localStorage 將 token 取出
     const token = localStorage.getItem("token");
-
-    // 如果 token 存在的話，則帶入到 headers 當中
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }

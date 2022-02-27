@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.26.0",
+    "axois": "^0.0.1-security",
     "core-js": "^3.6.5",
     "moment": "^2.29.1",
     "sweetalert2": "^11.4.2",

@@ -1,9 +1,15 @@
 <template>
   <div>
     <MobileNavbar />
-    <Navbar />
+    <Navbar @openModal="openModal('tweet')" />
     <Header />
     <PopularList />
+    <TweetModal
+      class="modal"
+      :is-modal="true"
+      v-show="tweetModalSwitch"
+      @closeModal="closeModal('tweet')"
+    />
     <div class="slot">
       <slot></slot>
     </div>
@@ -15,12 +21,16 @@ import MobileNavbar from "../MobileNavbar.vue";
 import PopularList from "../PopularList.vue";
 import Navbar from "../Navbar.vue";
 import Header from "../Header.vue";
+import TweetModal from "../TweetModal.vue";
+import { modalController } from "../../utils/mixins.js";
 export default {
+  mixins: [modalController],
   components: {
     MobileNavbar,
     Navbar,
     Header,
     PopularList,
+    TweetModal,
   },
 };
 </script>
@@ -28,6 +38,14 @@ export default {
 .slot {
   padding-top: 55px;
 }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 @media screen and (min-width: 865px) {
   .slot {
     margin-left: 25%;

@@ -4,13 +4,10 @@
     <BaseInput :formItems="formItems" />
 
     <div class="button-group">
-      <base-button
-        :mode="'action'"
-        :position="'center'"
-        @handleClick="postSignup"
+      <base-button :mode="'action'" :position="'center'" @handleClick="signUp"
         >註冊</base-button
       >
-      <base-button :position="'center'">取消</base-button>
+      <base-button :position="'center'" @handleClick="cancel">取消</base-button>
     </div>
   </div>
 </template>
@@ -19,6 +16,8 @@
 import LogoTitle from "../components/UI/LogoTile.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
 import BaseButton from "../components/UI/BaseButton.vue";
+import { toast } from "../utils/helper.js";
+import adminAPI from "../apis/admin.js";
 export default {
   components: {
     LogoTitle,
@@ -31,29 +30,58 @@ export default {
         {
           id: 0,
           name: "帳號",
+          value: "",
+          type: "text",
         },
         {
           id: 1,
           name: "名稱",
+          value: "",
+          type: "text",
         },
         {
           id: 2,
           name: "email",
+          value: "",
+          type: "email",
         },
         {
           id: 3,
           name: "密碼",
+          value: "",
+          type: "password",
         },
         {
           id: 4,
           name: "密碼確認",
+          value: "",
+          type: "password",
         },
       ],
     };
   },
   methods: {
-    postSignup() {
-      this.$router.push("/signin");
+    async signUp() {
+      try {
+        const response = await adminAPI.users.signUp({
+          account: this.formItems[0].value,
+          name: this.formItems[1].value,
+          email: this.formItems[2].value,
+          password: this.formItems[3].value,
+          checkPassword: this.formItems[4].value,
+        });
+        if (response.statusText !== "OK") {
+          throw Error(response.data.message);
+        }
+        this.$router.push("/signin");
+        toast.fireSuccess("註冊成功!");
+      } catch (e) {
+        console.log(e);
+        toast.fireError("註冊失敗");
+      }
+    },
+    cancel() {
+      this.$router.replace("/signin");
     },
   },
 };

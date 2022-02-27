@@ -2,34 +2,41 @@
   <div class="container">
     <ProfileEditModal
       v-show="modalSwitch"
-      @handleCloseModal="closeModal"
+      @handleCloseModal="closeModal('profileEdit')"
       :user="currentUser"
     />
-
+    <ReplyModal
+      v-show="replyModalSwitch"
+      @closeModal="closeModal('reply')"
+      :tweet="modalTweets"
+    />
     <img class="cover-image" :src="user.data.cover" />
     <div class="user-info">
       <img class="avatar" :src="user.data.avatar" />
-      <div class="button-wrapper" v-if="true">
+      <div class="button-wrapper" v-if="currentUser.id === user.data.id">
         <base-button
           class="profile-button"
           :mode="'actionOutline'"
           :position="'right'"
-          @handleClick="openModal"
+          @handleClick="openModal('profileEdit')"
           >編輯個人資料</base-button
         >
       </div>
+      <!-- 追隨邏輯 -->
       <div class="button-wrapper" v-else>
         <base-button
           class="profile-button"
           :mode="'actionOutline'"
           :position="'right'"
-          v-if="false"
+          @handleClick="addFollowing(user.data.id, 'profile')"
+          v-if="!user.data.isFollowed"
           >跟隨</base-button
         >
         <base-button
           class="profile-button"
           :mode="'action'"
           :position="'right'"
+          @handleClick="deleteFollowing(user.data.id, 'profile')"
           v-else
           >正在跟隨</base-button
         >
@@ -118,12 +125,14 @@
       </div>
       <div class="profile-follow">
         <div class="follow">
-          {{ user.data.followerCount }}個<router-link to="/users/1/followed"
+          {{ user.data.followerCount }}個<router-link
+            :to="{ name: 'following', params: { id: `${user.data.id}` } }"
             >追隨中</router-link
           >
         </div>
         <div class="follow">
-          {{ user.data.followingCount }}位<router-link to="/users/1/following"
+          {{ user.data.followingCount }}位<router-link
+            :to="{ name: 'followed', params: { id: `${user.data.id}` } }"
             >跟隨者</router-link
           >
         </div>
@@ -131,7 +140,7 @@
     </div>
 
     <profile-tabs>
-      <router-view />
+      <router-view @openReplyModal="handleOpenModal" />
     </profile-tabs>
   </div>
 </template>
@@ -139,15 +148,17 @@
 <script>
 import BaseButton from "./UI/BaseButton.vue";
 import ProfileTabs from "./ProfileTabs.vue";
-import { modalController } from "../utils/mixins.js";
+import ReplyModal from "./ReplyModal.vue";
+import { modalController, followshipHandler } from "../utils/mixins.js";
 import { mapState } from "vuex";
 import ProfileEditModal from "./ProfileEditModal.vue";
 export default {
-  mixins: [modalController],
+  mixins: [modalController, followshipHandler],
   components: {
     BaseButton,
     ProfileTabs,
     ProfileEditModal,
+    ReplyModal,
   },
   inject: {
     user: {

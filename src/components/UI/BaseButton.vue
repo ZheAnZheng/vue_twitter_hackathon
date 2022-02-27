@@ -1,5 +1,8 @@
 <template>
-  <button :class="[modeStyle, positionStyle]" @click="handleClick">
+  <button
+    :class="[modeStyle, positionStyle]"
+    @click.prevent.stop="$emit('handleClick')"
+  >
     <slot></slot>
   </button>
 </template>
@@ -38,11 +41,6 @@ export default {
       } else {
         return "";
       }
-    },
-  },
-  methods: {
-    handleClick() {
-      this.$emit("handleClick");
     },
   },
 };

@@ -4,6 +4,7 @@ import SignUpPage from "../views/SignUpPage.vue";
 import SignInPage from "../views/SignInPage.vue";
 import AdminLoginPage from "../views/AdminLoginPage.vue";
 import AdminMainPage from "../views/AdminMainPage.vue";
+import store from "./../store";
 Vue.use(VueRouter);
 
 const routes = [
@@ -107,6 +108,11 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  store.dispatch("fetchCurrentUser");
+  next();
 });
 
 export default router;
