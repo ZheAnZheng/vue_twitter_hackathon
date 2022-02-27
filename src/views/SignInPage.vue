@@ -35,11 +35,13 @@ export default {
           id: 0,
           name: "帳號",
           value: "",
+          type:'text'
         },
         {
           id: 1,
           name: "密碼",
           value: "",
+          type:'password'
         },
       ],
     };

@@ -31,26 +31,31 @@ export default {
           id: 0,
           name: "帳號",
           value: "",
+          type: "text",
         },
         {
           id: 1,
           name: "名稱",
           value: "",
+          type: "text",
         },
         {
           id: 2,
           name: "email",
           value: "",
+          type: "email",
         },
         {
           id: 3,
           name: "密碼",
           value: "",
+          type: "password",
         },
         {
           id: 4,
           name: "密碼確認",
           value: "",
+          type: "password",
         },
       ],
     };

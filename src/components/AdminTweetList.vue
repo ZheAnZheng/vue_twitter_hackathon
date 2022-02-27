@@ -1,5 +1,6 @@
 <template>
   <div class="admin-tweet-list-container">
+    <BaseSpinner v-if="isLoading"/>
     <adminTweetListCard
       v-for="tweet in tweetLists"
       :key="tweet.id"
@@ -11,80 +12,72 @@
 
 <script>
 import adminTweetListCard from "../components/AdminTweetListCard.vue";
-
-// 模擬所有推文的資料
-const dummyData = [
-  {
-    id: 1,
-    name: "L'Oréal",
-    account: "Loreal",
-    image: "https://randomuser.me/api/portraits/men/44.jpg",
-    tweetContent:
-      "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum.",
-    createdAt: "10 小時",
-  },
-  {
-    id: 2,
-    name: "L'Oréal",
-    account: "Loreal",
-    image: "https://randomuser.me/api/portraits/men/44.jpg",
-    tweetContent:
-      "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum.",
-    createdAt: "1 小時",
-  },
-  {
-    id: 3,
-    name: "L'Oréal",
-    account: "Loreal",
-    image: "https://randomuser.me/api/portraits/men/44.jpg",
-    tweetContent:
-      "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum.",
-    createdAt: "100 小時",
-  },
-  {
-    id: 4,
-    name: "L'Oréal",
-    account: "Loreal",
-    image: "https://randomuser.me/api/portraits/men/44.jpg",
-    tweetContent:
-      "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum.",
-    createdAt: "11 小時",
-  },
-  {
-    id: 5,
-    name: "L'Oréal",
-    account: "Loreal",
-    image: "https://randomuser.me/api/portraits/men/44.jpg",
-    tweetContent:
-      "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum.",
-    createdAt: "15 小時",
-  },
-];
+import adminAPI from "../apis/admin";
+import { toast } from '../utils/helper';
+import BaseSpinner from "../components/UI/BaseSpinner.vue"
 
 export default {
   name: "adminTweetList",
   components: {
     adminTweetListCard,
+    BaseSpinner,
   },
   data() {
     return {
       tweetLists: [],
+      isLoading: true,
     };
   },
   created() {
     this.fetchTweetLists();
   },
   methods: {
-    fetchTweetLists() {
-      // TODO：向伺服器取得所有推文的資料
+    // 向伺服器取得所有推文的函式
+    async fetchTweetLists() {
+      try {
+        const { data } = await adminAPI.tweets.getAll()
+        const { tweets } = data
 
-      this.tweetLists = dummyData;
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        // 將取得的tweets放回tweetLists中
+        this.tweetLists = tweets.map( tweet => {
+          const { name, account, avatar } = tweet.User
+          const { id, description, createdAt } = tweet
+
+          return {
+            id,
+            name,
+            account,
+            image: avatar,
+            tweetContent: description,
+            createdAt
+          }
+        });
+
+        this.isLoading = false
+      } catch(error) {
+        console.log('Error', error)
+        toast.fireError('目前無法取得所有推文，請稍後再試')
+      }
+      
     },
-    handleDeleteTweet(tweetId) {
-      // TODO：向伺服器傳送刪除推文的訊息
+    // 向伺服器傳送刪除推文的函式
+    async handleDeleteTweet(tweetId) {
+      try {
+        // 透過API向伺服器刪除推文
+        const { data } = await adminAPI.tweets.delete({ tweetId })
 
-      // 將點擊到的推文刪除
-      this.tweetLists = this.tweetLists.filter((tweet) => tweet.id !== tweetId);
+        if (data.status !== "success") {
+          throw new Error(data.message)
+        }
+         // 將點擊到的推文刪除
+        this.tweetLists = this.tweetLists.filter((tweet) => tweet.id !== tweetId);
+      } catch(error) {
+        console.log('Error', error)
+      }
     },
   },
 };
