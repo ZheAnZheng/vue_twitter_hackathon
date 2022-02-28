@@ -164,8 +164,9 @@ export default {
     nameTextLength() {
       return this.editUser.name.length;
     },
+    //TODO 長度問題
     introTextLength() {
-      return this.editUser.introduction.length;
+      return this.editUser.introduction;
     },
     isNameInvalid() {
       return this.nameTextLength > 15 || this.nameTextLength < 1;

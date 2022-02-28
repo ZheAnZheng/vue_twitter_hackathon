@@ -1,12 +1,13 @@
 <template>
   <setting-layout>
     <div class="setting-container">
-      <BaseInput class="setting-input" :form-items="formItems" />
-      <router-link class="setting-link" to="/main">
+      <form @submit="submit">
+        <BaseInput class="setting-input" :form-items="formItems" />
+
         <BaseButton class="setting-button" :position="'right'" :mode="'action'"
           >儲存</BaseButton
         >
-      </router-link>
+      </form>
     </div>
   </setting-layout>
 </template>
@@ -89,6 +90,9 @@ export default {
       this.formItems[0].value = account;
       this.formItems[1].value = name;
       this.formItems[2].value = email;
+    },
+    submit(e) {
+      console.log(e);
     },
   },
 };

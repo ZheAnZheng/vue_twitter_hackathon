@@ -1,10 +1,12 @@
 <template>
   <div class="container">
-    <ReplyModal
-      v-show="replyModalSwitch"
-      @closeModal="closeModal('reply')"
-      :tweet="tweet"
-    />
+    <transition name="fade">
+      <ReplyModal
+        v-show="replyModalSwitch"
+        @closeModal="closeModal('reply')"
+        :tweet="tweet"
+      />
+    </transition>
     <div class="tweet-info">
       <div class="user-info">
         <img src="../assets/Photo.png" />
@@ -36,8 +38,6 @@
         </svg>
       </div>
       <transition name="like" mode="out-in">
-        <!-- TODO get tweets/:id 缺isLiked -->
-        <!-- 喜愛功能未實行 -->
         <div
           class="icon"
           key="redHeart"
@@ -164,6 +164,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "../assets/scss/fadeTransition";
 .container {
   width: 100%;
   height: 100%;

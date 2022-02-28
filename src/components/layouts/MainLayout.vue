@@ -4,12 +4,14 @@
     <Navbar @openModal="openModal('tweet')" />
     <Header />
     <PopularList />
-    <TweetModal
-      class="modal"
-      :is-modal="true"
-      v-show="tweetModalSwitch"
-      @closeModal="closeModal('tweet')"
-    />
+    <transition name="fade">
+      <TweetModal
+        class="modal"
+        :is-modal="true"
+        v-show="tweetModalSwitch"
+        @closeModal="closeModal('tweet')"
+      />
+    </transition>
     <div class="slot" v-if="isRouteAlive">
       <slot></slot>
     </div>
@@ -53,6 +55,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "../../assets/scss/fadeTransition";
 .slot {
   padding-top: 55px;
 }

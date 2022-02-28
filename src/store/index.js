@@ -22,15 +22,17 @@ export default new Vuex.Store({
       state.token = "";
       state.isAuthenticated = false;
       localStorage.removeItem("token");
+      localStorage.removeItem("STATE_KEY");
     },
     //重新整理會導致store資料消失，所以儲存在localStorage
     saveState(state) {
-      console.log("in");
       localStorage.setItem("STATE_KEY", JSON.stringify(state));
     },
     loadState(state) {
       const previousState = JSON.parse(localStorage.getItem("STATE_KEY"));
-      console.log(previousState);
+      if (!previousState) {
+        return;
+      }
       state.currentUser = {
         ...previousState.currentUser,
       };
@@ -43,9 +45,12 @@ export default new Vuex.Store({
       try {
         const { data } = await usersAPI.getCurrentUser();
         commit("setCurrentUser", data);
+        return true;
       } catch (e) {
         console.log(e);
         toast.fireError("無法讀取...");
+        localStorage.removeItem("STATE_KEY");
+        return false;
       }
     },
     setCurrentUser({ commit }, payload) {

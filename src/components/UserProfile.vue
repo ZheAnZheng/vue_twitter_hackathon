@@ -1,15 +1,22 @@
 <template>
   <div class="container">
-    <ProfileEditModal
-      v-show="modalSwitch"
-      @handleCloseModal="closeModal('profileEdit')"
-      :user="currentUser"
-    />
-    <ReplyModal
-      v-show="replyModalSwitch"
-      @closeModal="closeModal('reply')"
-      :tweet="modalTweets"
-    />
+    <transition name="fade">
+      <ProfileEditModal
+        key="profile"
+        v-show="modalSwitch"
+        @handleCloseModal="closeModal('profileEdit')"
+        :user="currentUser"
+      />
+    </transition>
+    <transition name="fade">
+      <ReplyModal
+        key="reply"
+        v-show="replyModalSwitch"
+        @closeModal="closeModal('reply')"
+        :tweet="modalTweets"
+      />
+    </transition>
+
     <img class="cover-image" :src="user.cover" />
     <div class="user-info">
       <img class="avatar" :src="user.avatar" />
@@ -185,6 +192,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/scss/fadeTransition";
 .container {
   width: 100%;
   height: 100%;

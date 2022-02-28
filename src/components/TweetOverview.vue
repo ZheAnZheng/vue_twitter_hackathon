@@ -1,12 +1,14 @@
 <template>
   <div class="container">
     <TweetModal :is-modal="false" />
-    <ReplyModal
-      v-show="replyModalSwitch"
-      @closeModal="closeModal('reply')"
-      :tweet="modalTweets"
-    />
-    
+    <transition name="fade">
+      <ReplyModal
+        v-show="replyModalSwitch"
+        @closeModal="closeModal('reply')"
+        :tweet="modalTweets"
+      />
+    </transition>
+
     <TweetList @openReplyModal="handleOpenModal" />
   </div>
 </template>
@@ -29,3 +31,7 @@ export default {
   methods: {},
 };
 </script>
+
+<style lang="scss" scoped>
+@import "../assets/scss/fadeTransition";
+</style>

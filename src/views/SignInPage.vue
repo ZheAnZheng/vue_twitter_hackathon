@@ -55,14 +55,17 @@ export default {
           email: this.formItems[0].value,
           password: this.formItems[1].value,
         });
+        console.log(data);
         if (data.status !== "success") {
           throw Error(data.message);
         }
+
         const user = data.data.user;
         if (user.role !== "user") {
           toast.fireWarning("管理員請由後台登入");
         } else {
           localStorage.setItem("token", `${data.data.token}`);
+
           this.setCurrentUser(user);
           toast.fireSuccess("登入成功");
           this.$router.replace("/main");

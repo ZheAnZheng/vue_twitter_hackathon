@@ -2,12 +2,14 @@
   <div>
     <Navbar @openModal="openModal('tweet')" />
     <Header />
-    <TweetModal
-      class="modal"
-      :is-modal="true"
-      v-show="tweetModalSwitch"
-      @closeModal="closeModal('tweet')"
-    />
+    <transition name="fade">
+      <TweetModal
+        class="modal"
+        :is-modal="true"
+        v-show="tweetModalSwitch"
+        @closeModal="closeModal('tweet')"
+      />
+    </transition>
     <div class="slot">
       <slot></slot>
     </div>
@@ -29,6 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/scss/fadeTransition";
 .slot {
   padding-top: 55px;
 }
