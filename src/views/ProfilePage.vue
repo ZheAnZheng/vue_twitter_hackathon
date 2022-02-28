@@ -24,11 +24,11 @@ export default {
     };
   },
   beforeRouteUpdate(to, from, next) {
-    const {id:toId}=to.params;
-    const {id:fromId}=from.params;
-    
-    if(toId !==fromId){
-      this.isLoading=true
+    const { id: toId } = to.params;
+    const { id: fromId } = from.params;
+
+    if (toId !== fromId) {
+      this.isLoading = true;
     }
     this.fetchProfileUser(toId);
     next();

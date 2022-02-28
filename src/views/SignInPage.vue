@@ -3,7 +3,11 @@
     <LogoTitle :title="'登入Alphitter'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :mode="'action'" :position="'center'" @handleClick="signin"
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="signin"
+        :isDisabled="isProcessing"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -45,17 +49,19 @@ export default {
           type: "password",
         },
       ],
+      isProcessing: false,
     };
   },
   methods: {
     ...mapActions(["setCurrentUser"]),
     async signin() {
       try {
+        this.isProcessing = true;
         const { data } = await authirozationAPI.signIn({
           email: this.formItems[0].value,
           password: this.formItems[1].value,
         });
-        console.log(data);
+
         if (data.status !== "success") {
           throw Error(data.message);
         }
@@ -67,11 +73,13 @@ export default {
           localStorage.setItem("token", `${data.data.token}`);
 
           this.setCurrentUser(user);
+          this.isProcessing = false;
           toast.fireSuccess("登入成功");
           this.$router.replace("/main");
         }
       } catch (e) {
         console.log(e);
+        this.isProcessing = false;
         toast.fireError("登入失敗");
       }
     },

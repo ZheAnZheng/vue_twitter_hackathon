@@ -3,7 +3,10 @@
     <LogoTitle :title="'後台登入'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :mode="'action'" @handleClick="handleClick"
+      <base-button
+        :mode="'action'"
+        @handleClick="handleClick"
+        :isDisabled="isProcessing"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -43,6 +46,7 @@ export default {
           value: "",
         },
       ],
+      isProcessing: false,
     };
   },
   methods: {
@@ -50,6 +54,7 @@ export default {
     // 向伺服器傳遞登入的資訊
     async handleClick() {
       try {
+        this.isProcessing = true;
         const email = this.formItems[0].value;
         const password = this.formItems[1].value;
 
@@ -71,12 +76,13 @@ export default {
         }
 
         localStorage.setItem("token", data.data.token);
-
+        this.isProcessing = false;
         this.setCurrentUser(data.data.user);
 
         this.$router.replace("/admin/users");
       } catch (error) {
         console.log("Error", error);
+        this.isProcessing = false;
         toast.fireError("帳號或密碼錯誤，請重新輸入");
       }
     },

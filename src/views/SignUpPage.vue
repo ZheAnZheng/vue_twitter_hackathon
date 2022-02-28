@@ -4,7 +4,11 @@
     <BaseInput :formItems="formItems" />
 
     <div class="button-group">
-      <base-button :mode="'action'" :position="'center'" @handleClick="signUp"
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="signUp"
+        :isDisabled="isProcessing"
         >註冊</base-button
       >
       <base-button :position="'center'" @handleClick="cancel"
@@ -60,11 +64,13 @@ export default {
           type: "password",
         },
       ],
+      isProcessing: false,
     };
   },
   methods: {
     async signUp() {
       try {
+        this.isProcessing = true;
         const response = await adminAPI.users.signUp({
           account: this.formItems[0].value,
           name: this.formItems[1].value,
@@ -75,10 +81,12 @@ export default {
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
         }
+        this.isProcessing = false;
         this.$router.push("/signin");
         toast.fireSuccess("註冊成功!");
       } catch (e) {
         console.log(e);
+        this.isProcessing = false;
         toast.fireError("註冊失敗");
       }
     },
