@@ -158,7 +158,8 @@ export default {
           throw new Error(response.data.message);
         }
         this.tweets = response.data.map((tweet) => {
-          const { User, Tweet, ...data } = tweet;
+          const { Tweet, ...data } = tweet;
+          const { User } = Tweet;
           return {
             id: data.TweetId,
             createdAt: data.createdAt,
