@@ -3,7 +3,7 @@
     <div key="edit-modal" class="edit-modal">
       <form @submit.prevent.stop="uploadEdit">
         <div class="modal-head">
-          <div class="close" @click="$emit('handleCloseModal')">
+          <div class="close" @click="cancelChangeAndCloseModal">
             <svg
               width="16"
               height="16"
@@ -94,13 +94,17 @@
               @change="handleAvatarChange"
             />
           </div>
-          <!-- TODO API路由改成patch -->
-          <div class="form-group">
+          <div class="form-group" :class="{ invalid: isNameInvalid }">
             <label for="name">名稱</label>
             <input id="name" name="name" v-model="editUser.name" />
-            <div class="text-count">8/15</div>
+
+            <div class="text-count">
+              <span v-show="nameTextLength > 15"> 字數過長 </span>
+              <span v-show="nameTextLength < 1"> 名字不可為空 </span>
+              {{ nameTextLength }}/15
+            </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" :class="{ invalid: isIntroInvalid }">
             <label for="description">自我介紹</label>
             <textarea
               rows="6"
@@ -109,9 +113,15 @@
               placeholder="尚無自我介紹"
               v-model="editUser.introduction"
             />
-            <div class="text-count">0/160</div>
+            <div class="text-count">
+              <span v-show="isIntroInvalid">自我介紹超過160</span>
+              {{ introTextLength }}/160
+            </div>
           </div>
         </div>
+        <input class="d-none" name="email" v-model="currentUser.email" />
+        <input class="d-none" name="password" v-model="currentUser.password" />
+        <input class="d-none" name="account" v-model="currentUser.account" />
       </form>
     </div>
   </div>
@@ -138,25 +148,49 @@ export default {
       editUser: {},
     };
   },
+  watch: {
+    user() {
+      this.copyUser();
+    },
+    editUser: {
+      handler: function (val) {
+        return val;
+      },
+      deep: true,
+    },
+  },
   computed: {
     ...mapState(["currentUser"]),
+    nameTextLength() {
+      return this.editUser.name.length;
+    },
+    introTextLength() {
+      return this.editUser.introduction.length;
+    },
+    isNameInvalid() {
+      return this.nameTextLength > 15 || this.nameTextLength < 1;
+    },
+    isIntroInvalid() {
+      return this.introTextLength > 160;
+    },
   },
   created() {
     this.copyUser();
   },
   methods: {
     handleCoverImageChagne(e) {
+      console.log(e);
       const { files } = e.target;
       if (files.length > 0) {
-        this.editUser.coverImage = window.URL.createObjectURL(files[0]);
+        this.editUser.cover = window.URL.createObjectURL(files[0]);
       } else {
-        this.editUser.coverImage = "";
+        this.editUser.cover = "";
       }
     },
     handleAvatarChange(e) {
       const { files } = e.target;
       if (files.length > 0) {
-        this.editUser.image = window.URL.createObjectURL(files[0]);
+        this.editUser.avatar = window.URL.createObjectURL(files[0]);
       }
     },
     deleteCoverImage() {
@@ -168,11 +202,12 @@ export default {
     },
     async uploadEdit(e) {
       try {
-        const formData = new FormData(e.target);
-        for (let [a, b] of formData.entries()) {
-          console.log(a);
-          console.log(b);
+        if (this.checkFormInvalid()) {
+          toast.fireWarning("填寫錯誤，請更新後送出");
+          return;
         }
+
+        const formData = new FormData(e.target);
         const response = await usersAPI.update({
           userId: this.currentUser.id,
           formData,
@@ -196,6 +231,13 @@ export default {
       this.user.introduction = introduction;
       this.$emit("handleCloseModal");
     },
+    checkFormInvalid() {
+      return this.isNameInvalid || this.isIntroInvalid;
+    },
+    cancelChangeAndCloseModal() {
+      this.copyUser();
+      this.$emit("handleCloseModal");
+    },
   },
 };
 </script>
@@ -212,7 +254,9 @@ export default {
   bottom: 0;
   right: 0;
 }
-
+.d-none {
+  display: none;
+}
 .edit-modal {
   width: 600px;
   height: max-content;
@@ -346,6 +390,13 @@ form {
     background: var(--input-bg-color);
     border-bottom: 2px solid var(--mute-color);
     border-radius: 3px;
+    &.invalid {
+      border-bottom: 2px solid var(--alert-message-color);
+      div,
+      span {
+        color: var(--alert-message-color);
+      }
+    }
   }
 
   label {

@@ -20,8 +20,9 @@ export default {
     return apiHelper.get(`/users/${userId}/likes`);
   },
   update({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}`, {
-      formData,
-    });
+    for (const [a, b] of formData) {
+      console.log(`${a}  and   ${b}`);
+    }
+    return apiHelper.put(`/users/${userId}`, formData);
   },
 };

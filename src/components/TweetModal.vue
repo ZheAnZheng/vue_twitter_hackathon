@@ -63,9 +63,15 @@ export default {
       isBlank: false,
     };
   },
+  inject: {
+    reload: {
+      from: "reload",
+      default: function () {
+        return () => {};
+      },
+    },
+  },
   methods: {
-    // 新增tweet的函式
-    //TODO重構 provide inject
     async addTweet() {
       try {
         // 當輸入文字為空白或沒有輸入任何文字的提示訊息
@@ -86,7 +92,7 @@ export default {
 
         this.text = "";
         this.$emit("closeModal");
-        this.$router.go(0);
+        this.reload();
         toast.fireSuccess("推文成功");
       } catch (e) {
         console.log(e);

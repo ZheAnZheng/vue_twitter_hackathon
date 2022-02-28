@@ -10,10 +10,10 @@
       @closeModal="closeModal('reply')"
       :tweet="modalTweets"
     />
-    <img class="cover-image" :src="user.data.cover" />
+    <img class="cover-image" :src="user.cover" />
     <div class="user-info">
-      <img class="avatar" :src="user.data.avatar" />
-      <div class="button-wrapper" v-if="currentUser.id === user.data.id">
+      <img class="avatar" :src="user.avatar" />
+      <div class="button-wrapper" v-if="currentUser.id === user.id">
         <base-button
           class="profile-button"
           :mode="'actionOutline'"
@@ -28,15 +28,15 @@
           class="profile-button"
           :mode="'actionOutline'"
           :position="'right'"
-          @handleClick="addFollowing(user.data.id, 'profile')"
-          v-if="!user.data.isFollowed"
+          @handleClick="addFollowing(user.id, 'profile')"
+          v-if="!user.isFollowed"
           >跟隨</base-button
         >
         <base-button
           class="profile-button"
           :mode="'action'"
           :position="'right'"
-          @handleClick="deleteFollowing(user.data.id, 'profile')"
+          @handleClick="deleteFollowing(user.id, 'profile')"
           v-else
           >正在跟隨</base-button
         >
@@ -118,21 +118,21 @@
           </svg>
         </base-button>
       </div>
-      <div class="profile-name">{{ user.data.name }}</div>
-      <div class="profile-account">@{{ user.data.account }}</div>
+      <div class="profile-name">{{ user.name }}</div>
+      <div class="profile-account">@{{ user.account }}</div>
       <div class="profile-description">
-        {{ user.data.introduction }}
+        {{ user.introduction }}
       </div>
       <div class="profile-follow">
         <div class="follow">
-          {{ user.data.followerCount }}個<router-link
-            :to="{ name: 'following', params: { id: `${user.data.id}` } }"
+          {{ user.followersCount }}個<router-link
+            :to="{ name: 'following', params: { id: `${user.id}` } }"
             >追隨中</router-link
           >
         </div>
         <div class="follow">
-          {{ user.data.followingCount }}位<router-link
-            :to="{ name: 'followed', params: { id: `${user.data.id}` } }"
+          {{ user.followingsCount }}位<router-link
+            :to="{ name: 'followed', params: { id: `${user.id}` } }"
             >跟隨者</router-link
           >
         </div>
@@ -160,12 +160,22 @@ export default {
     ProfileEditModal,
     ReplyModal,
   },
-  inject: {
-    user: {
-      from: "profileUser",
-      default: {
-        id: -1,
+  data() {
+    return {
+      user: {},
+    };
+  },
+  inject: ["profileUser"],
+  watch: {
+    profileUser: {
+      handler: function (val) {
+        this.user = {
+          ...val.data,
+          followersCount: val.data.Followers.length,
+          followingsCount: val.data.Followers.length,
+        };
       },
+      deep: true,
     },
   },
   computed: {

@@ -38,7 +38,12 @@
       <transition name="like" mode="out-in">
         <!-- TODO get tweets/:id 缺isLiked -->
         <!-- 喜愛功能未實行 -->
-        <div class="icon" key="redHeart" v-if="isLike" @click="isLike = false">
+        <div
+          class="icon"
+          key="redHeart"
+          v-if="tweet.isLiked"
+          @click="deleteLike(tweet.id)"
+        >
           <svg
             width="30"
             height="30"
@@ -52,7 +57,7 @@
             />
           </svg>
         </div>
-        <div class="icon" key="emptyHeart" v-else @click="isLike = true">
+        <div class="icon" key="emptyHeart" v-else @click="addLike(tweet.id)">
           <svg
             width="30"
             height="30"
@@ -75,8 +80,8 @@
 <script>
 import ReplyModal from "../components/ReplyModal.vue";
 import { modalController, dateFilter } from "../utils/mixins.js";
-import tweetsAPI from "../apis/tweets.js";
 import { toast } from "../utils/helper.js";
+import tweetsAPI from "../apis/tweets.js";
 import ReplyList from "../components/ReplyList.vue";
 export default {
   mixins: [modalController, dateFilter],
@@ -129,6 +134,30 @@ export default {
       } catch (e) {
         console.log(e);
         toast.fireError("無法讀取推文");
+      }
+    },
+    async addLike(tweetId) {
+      try {
+        const response = await tweetsAPI.addLike({ tweetId });
+        if (response.statusText !== "OK") {
+          throw Error(response.data.message);
+        }
+        this.tweet.isLiked = true;
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法加入喜歡");
+      }
+    },
+    async deleteLike(tweetId) {
+      try {
+        const response = await tweetsAPI.deleteLike({ tweetId });
+        if (response.statusText !== "OK") {
+          throw Error(response.data.message);
+        }
+        this.tweet.isLiked = false;
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法加入喜歡");
       }
     },
   },

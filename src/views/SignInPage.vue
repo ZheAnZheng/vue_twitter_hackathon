@@ -19,6 +19,7 @@
 <script>
 import authirozationAPI from "../apis/authirozation.js";
 import { toast } from "../utils/helper.js";
+import { mapActions } from "vuex";
 import LogoTitle from "../components/UI/LogoTile.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
 import BaseButton from "../components/UI/BaseButton.vue";
@@ -35,18 +36,19 @@ export default {
           id: 0,
           name: "帳號",
           value: "",
-          type:'text'
+          type: "text",
         },
         {
           id: 1,
           name: "密碼",
           value: "",
-          type:'password'
+          type: "password",
         },
       ],
     };
   },
   methods: {
+    ...mapActions(["setCurrentUser"]),
     async signin() {
       try {
         const { data } = await authirozationAPI.signIn({
@@ -61,6 +63,7 @@ export default {
           toast.fireWarning("管理員請由後台登入");
         } else {
           localStorage.setItem("token", `${data.data.token}`);
+          this.setCurrentUser(user);
           toast.fireSuccess("登入成功");
           this.$router.replace("/main");
         }
@@ -76,6 +79,9 @@ export default {
 @import "../assets/scss/extends.scss";
 .container {
   @extend %alphitterContainer;
+}
+a {
+  color: var(--blue-text-color);
 }
 .button-group {
   @extend %button-group;

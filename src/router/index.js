@@ -24,6 +24,16 @@ const routes = [
     component: SignUpPage,
   },
   {
+    path: "/main",
+    name: "main",
+    component: () => import("../views/MainPage.vue"),
+  },
+  {
+    path: "/setting",
+    name: "setting",
+    component: () => import("../views/SettingPage.vue"),
+  },
+  {
     path: "/users/:id",
     component: () => import("../views/ProfilePage.vue"),
     children: [
@@ -94,15 +104,11 @@ const routes = [
       },
     ],
   },
+
   {
-    path: "/main",
-    name: "main",
-    component: () => import("../views/MainPage.vue"),
-  },
-  {
-    path: "/setting",
-    name: "setting",
-    component: () => import("../views/SettingPage.vue"),
+    path: "*",
+    name: "NotFound",
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 
@@ -111,11 +117,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAdmin = store.getters["isAuthenticated"];
+  const token = store.state.token;
+  const isAuthenticated = store.getters["isAuthenticated"];
+  if (token.trim() === "") {
+    next();
+    return;
+  }
 
-  console.log(typeof isAdmin);
-  if (isAdmin === "false") {
-    console.log("in");
+  if (isAuthenticated === "false") {
     store.dispatch("fetchCurrentUser");
   }
   next();

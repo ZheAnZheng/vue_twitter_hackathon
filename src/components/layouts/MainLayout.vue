@@ -10,7 +10,7 @@
       v-show="tweetModalSwitch"
       @closeModal="closeModal('tweet')"
     />
-    <div class="slot">
+    <div class="slot" v-if="isRouteAlive">
       <slot></slot>
     </div>
   </div>
@@ -31,6 +31,24 @@ export default {
     Header,
     PopularList,
     TweetModal,
+  },
+  data() {
+    return {
+      isRouteAlive: true,
+    };
+  },
+  provide() {
+    return {
+      reload: this.reload,
+    };
+  },
+  methods: {
+    reload() {
+      this.isRouteAlive = false;
+      this.$nextTick(() => {
+        this.isRouteAlive = true;
+      });
+    },
   },
 };
 </script>

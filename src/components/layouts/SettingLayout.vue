@@ -1,19 +1,29 @@
 <template>
   <div>
-    <Navbar />
+    <Navbar @openModal="openModal('tweet')" />
     <Header />
+    <TweetModal
+      class="modal"
+      :is-modal="true"
+      v-show="tweetModalSwitch"
+      @closeModal="closeModal('tweet')"
+    />
     <div class="slot">
       <slot></slot>
     </div>
   </div>
 </template>
 <script>
+import { modalController } from "../../utils/mixins.js";
 import Navbar from "../Navbar.vue";
 import Header from "../Header.vue";
+import TweetModal from "../TweetModal.vue";
 export default {
+  mixins: [modalController],
   components: {
     Navbar,
     Header,
+    TweetModal,
   },
 };
 </script>

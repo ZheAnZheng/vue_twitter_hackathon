@@ -7,7 +7,9 @@
       <base-button :mode="'action'" :position="'center'" @handleClick="signUp"
         >註冊</base-button
       >
-      <base-button :position="'center'" @handleClick="cancel">取消</base-button>
+      <base-button :position="'center'" @handleClick="cancel"
+        ><div>取消</div></base-button
+      >
     </div>
   </div>
 </template>

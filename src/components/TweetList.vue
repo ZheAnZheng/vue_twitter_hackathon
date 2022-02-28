@@ -110,7 +110,8 @@ export default {
         const { id } = to.params;
         this.fetchUserTweets(id);
       } else if (to.name === "likeTweets") {
-        this.fetchUserLikeTweets();
+        const { id } = to.params;
+        this.fetchUserLikeTweets(id);
       }
     },
   },
@@ -123,7 +124,8 @@ export default {
       const { id } = this.$route.params;
       this.fetchUserTweets(id);
     } else if (routeName === "likeTweets") {
-      this.fetchUserLikeTweets();
+      const { id } = this.$route.params;
+      this.fetchUserLikeTweets(id);
     }
   },
 
@@ -149,9 +151,33 @@ export default {
         toast.fireError("無法存取資料");
       }
     },
-    fetchUserLikeTweets() {
-      this.tweets = [];
-      this.isLoading = false;
+    async fetchUserLikeTweets(userId) {
+      try {
+        const response = await usersAPI.getlikeTweets({ userId });
+        if (response.statusText !== "OK") {
+          throw new Error(response.data.message);
+        }
+        this.tweets = response.data.map((tweet) => {
+          const { User, Tweet, ...data } = tweet;
+          return {
+            id: data.TweetId,
+            createdAt: data.createdAt,
+            likedCount: Tweet.likedCount,
+            repliedCount: Tweet.repliedCount,
+            updatedAt: data.updatedAt,
+            userAccount: User.account,
+            userAvatar: User.avatar,
+            userName: User.name,
+            UserId: data.UserId,
+            description: Tweet.description,
+            isLiked: data.likedTweet,
+          };
+        });
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法讀取喜歡過推文");
+      }
     },
     async fetchIndexTweets() {
       try {
