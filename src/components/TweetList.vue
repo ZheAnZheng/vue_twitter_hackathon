@@ -107,9 +107,11 @@ export default {
   watch: {
     $route(to) {
       if (to.name === "userTweets") {
+        this.isLoading=true;
         const { id } = to.params;
         this.fetchUserTweets(id);
       } else if (to.name === "likeTweets") {
+        this.isLoading=true;
         const { id } = to.params;
         this.fetchUserLikeTweets(id);
       }
