@@ -8,18 +8,18 @@
           @click="$emit('closeModal')"
         />
       </div>
-      <form :class="{ 'main-form': !isModal }">
+      <form :class="{ 'main-form': !isModal }" @submit.prevent.stop>
         <img
           :class="{ 'main-image': isModal }"
-          :src="currentUser.avatar"
+          :src="currentUser.avatar | imageFilter"
           alt="user-image"
         />
         <textarea
-          v-model="text"
           :class="{ 'main-textarea': !isModal }"
           name="new-tweet"
           id="new-tweet"
           placeholder="有什麼新鮮事？"
+          v-model="text"
         ></textarea>
         <div class="alert-message-limit" v-show="isLimited">
           字數不可超過140字
@@ -30,6 +30,7 @@
           :position="'right'"
           :mode="'action'"
           @handleClick="addTweet"
+          :isDisabled="isProcessing"
           >推文</BaseButton
         >
       </form>
@@ -40,10 +41,12 @@
 <script>
 import BaseButton from "../components/UI/BaseButton.vue";
 import { mapState } from "vuex";
+import { emptyImageFilter } from "../utils/mixins.js";
 import { toast } from "../utils/helper.js";
 import tweetsAPI from "../apis/tweets.js";
 export default {
   name: "TweetModal",
+  mixins: [emptyImageFilter],
   components: {
     BaseButton,
   },
@@ -61,6 +64,7 @@ export default {
       text: "",
       isLimited: false,
       isBlank: false,
+      isProcessing: false,
     };
   },
   inject: {
@@ -83,9 +87,11 @@ export default {
           this.isLimited = true;
           return;
         }
+        this.isProcessing = true;
         const response = await tweetsAPI.createTweet({
           description: this.text,
         });
+        console.log(response);
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
@@ -93,9 +99,11 @@ export default {
         this.text = "";
         this.$emit("closeModal");
         this.reload();
+        this.isProcessing = false;
         toast.fireSuccess("推文成功");
       } catch (e) {
         console.log(e);
+        this.isProcessing = false;
         toast.fireError("無法推文，請稍後再試");
       }
     },

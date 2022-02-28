@@ -5,28 +5,30 @@
       <transition-group name="list">
         <li v-for="user in showedUsers" :key="user.id" class="list-item">
           <img class="image" :src="user.image | imageFilter" />
-          <div class="user-info">
+          <router-link
+            class="user-info"
+            :to="{ name: 'userTweets', params: { id: user.id } }"
+          >
             <div class="name">{{ user.name }}</div>
             <div class="account">@{{ user.account }}</div>
-          </div>
+          </router-link>
           <div class="button-wrapper" v-show="user.id !== currentUser.id">
             <base-button
               class="popularList-button"
               v-if="user.isFollowed"
               key="followed"
               :mode="'action'"
-              @handleClick="deleteFollowing(user.id, 'popular')"
-              :disabled="isProcessing"
+              @handleClick="setActiveAndDeleteFollow(user.id)"
+              :isDisabled="isProcessing && activeId === user.id"
               >正在跟隨</base-button
             >
             <base-button
               class="popularList-button"
-              :class="{ disabled: isProcessing }"
               v-else
               :mode="'actionOutline'"
               key="follow"
-              @handleClick="addFollowing(user.id, 'popular')"
-              :disabled="isProcessing"
+              @handleClick="setActiveAndAddFollow(user.id)"
+              :isDisabled="isProcessing && activeId === user.id"
               >跟隨</base-button
             >
           </div>
@@ -71,13 +73,13 @@ export default {
       users: [],
       tailShow: true,
       isTailIn: false,
+      activeId: 0,
     };
   },
   computed: {
     ...mapState(["currentUser"]),
-
     notOverSix() {
-      if (this.users.length > 6) {
+      if (this.users.length > 7) {
         return true;
       } else {
         return false;
@@ -109,6 +111,17 @@ export default {
       for (let i = 7; i < this.users.length; i++) {
         this.showedUsers.push(this.users[i]);
       }
+    },
+    setActive(id) {
+      this.activeId = id;
+    },
+    setActiveAndDeleteFollow(userId) {
+      this.setActive(userId);
+      this.deleteFollowing(userId, "popular");
+    },
+    setActiveAndAddFollow(userId) {
+      this.setActive(userId);
+      this.addFollowing(userId, "popular");
     },
   },
 };
@@ -159,6 +172,10 @@ export default {
   }
   .user-info {
     flex: 2;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     .name {
       color: var(--primary-text-color);
     }

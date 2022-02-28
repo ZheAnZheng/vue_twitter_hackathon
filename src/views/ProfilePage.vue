@@ -1,24 +1,34 @@
 <template>
   <main-layout>
-    <router-view />
+    <!-- 這邊必須用v-show，否則會造成profileUser資料被截斷 -->
+    <BaseSpinner v-show="isLoading" />
+    <router-view v-show="!isLoading" />
   </main-layout>
 </template>
 <script>
 import MainLayout from "../components/layouts/MainLayout.vue";
 import { userProvider } from "../utils/mixins.js";
 import usersAPI from "../apis/users.js";
+import BaseSpinner from "../components/UI/BaseSpinner.vue";
 import { toast } from "../utils/helper.js";
 export default {
   mixins: [userProvider],
   components: {
     MainLayout,
+    BaseSpinner,
   },
   data() {
     return {
       user: {},
+      isLoading: true,
     };
   },
-
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params;
+    this.fetchProfileUser(id);
+    this.isLoading = true;
+    next();
+  },
   created() {
     const { id } = this.$route.params;
     this.fetchProfileUser(id);
@@ -32,8 +42,14 @@ export default {
           throw Error(response.data.message);
         }
         this.user = { ...response.data };
+        this.isLoading = false;
       } catch (e) {
-        console.log(e);
+        console.log(e.message);
+        if (e.message === "Request failed with status code 500") {
+          this.$router.go(-1);
+          toast.fireError("無此用戶");
+          return;
+        }
         toast.fireError("讀取用戶失敗");
       }
     },

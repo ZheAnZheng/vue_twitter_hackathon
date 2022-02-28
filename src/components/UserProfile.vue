@@ -17,9 +17,9 @@
       />
     </transition>
 
-    <img class="cover-image" :src="user.cover" />
+    <img class="cover-image" :src="user.cover | coverFilter" />
     <div class="user-info">
-      <img class="avatar" :src="user.avatar" />
+      <img class="avatar" :src="user.avatar | imageFilter" />
       <div class="button-wrapper" v-if="currentUser.id === user.id">
         <base-button
           class="profile-button"
@@ -36,6 +36,7 @@
           :mode="'actionOutline'"
           :position="'right'"
           @handleClick="addFollowing(user.id, 'profile')"
+          :isDisabled="isProcessing"
           v-if="!user.isFollowed"
           >跟隨</base-button
         >
@@ -43,6 +44,7 @@
           class="profile-button"
           :mode="'action'"
           :position="'right'"
+          :isDisabled="isProcessing"
           @handleClick="deleteFollowing(user.id, 'profile')"
           v-else
           >正在跟隨</base-button
@@ -156,16 +158,28 @@
 import BaseButton from "./UI/BaseButton.vue";
 import ProfileTabs from "./ProfileTabs.vue";
 import ReplyModal from "./ReplyModal.vue";
-import { modalController, followshipHandler } from "../utils/mixins.js";
+import {
+  modalController,
+  followshipHandler,
+  emptyImageFilter,
+} from "../utils/mixins.js";
 import { mapState } from "vuex";
 import ProfileEditModal from "./ProfileEditModal.vue";
 export default {
-  mixins: [modalController, followshipHandler],
+  mixins: [modalController, followshipHandler, emptyImageFilter],
   components: {
     BaseButton,
     ProfileTabs,
     ProfileEditModal,
     ReplyModal,
+  },
+  routeUpdated(to, from, next) {
+    this.user = {
+      ...this.userData,
+      followersCount: this.userData.Followers.length,
+      followingsCount: this.userData.Followers.length,
+    };
+    next();
   },
   data() {
     return {
@@ -173,13 +187,14 @@ export default {
     };
   },
   inject: ["profileUser"],
+
   watch: {
     profileUser: {
-      handler: function (val) {
+      handler: function () {
         this.user = {
-          ...val.data,
-          followersCount: val.data.Followers.length,
-          followingsCount: val.data.Followers.length,
+          ...this.userData,
+          followersCount: this.userData.Followers.length,
+          followingsCount: this.userData.Followers.length,
         };
       },
       deep: true,
@@ -187,6 +202,9 @@ export default {
   },
   computed: {
     ...mapState(["currentUser"]),
+    userData() {
+      return this.profileUser.data;
+    },
   },
 };
 </script>

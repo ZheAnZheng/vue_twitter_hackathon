@@ -109,10 +109,10 @@ export default {
     openModal() {
       this.$emit("openModal");
     },
-    logout () {
-      this.$store.commit('revokeAuthentication')
-      this.$router.push('/signin')
-    }
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/signin");
+    },
   },
 };
 </script>

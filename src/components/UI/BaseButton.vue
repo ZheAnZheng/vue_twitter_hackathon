@@ -1,5 +1,9 @@
 <template>
-  <button :class="[modeStyle, positionStyle]" @click="$emit('handleClick')">
+  <button
+    :class="[modeStyle, positionStyle, isDisabled ? 'disabled' : '']"
+    @click="$emit('handleClick')"
+    :disabled="isDisabled"
+  >
     <slot></slot>
   </button>
 </template>
@@ -20,6 +24,16 @@ export default {
       type: String,
       required: false,
       default: "center",
+    },
+    isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
+  watch: {
+    isDisabled(val) {
+      return val;
     },
   },
   computed: {
@@ -97,5 +111,17 @@ export default {
   display: inline;
   width: max-content;
   float: right;
+}
+.disabled {
+  opacity: 0.6;
+  border: unset;
+  background: var(--mute-color);
+  color: var(--white-text-color);
+  cursor: default;
+  &:hover {
+    background: var(--mute-color);
+    color: var(--white-text-color);
+    border: unset;
+  }
 }
 </style>

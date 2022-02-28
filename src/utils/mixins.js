@@ -143,6 +143,7 @@ export const followshipHandler = {
         const { data } = await followshipAPI.addFollowing({
           userId,
         });
+        console.log(data);
         if (data.status !== "success") {
           throw Error(data.message);
         }
@@ -212,7 +213,7 @@ export const followshipHandler = {
       });
     },
     toggleProfile() {
-      this.user.data.isFollowed = !this.user.data.isFollowed;
+      this.user.isFollowed = !this.user.isFollowed;
     },
   },
 };
