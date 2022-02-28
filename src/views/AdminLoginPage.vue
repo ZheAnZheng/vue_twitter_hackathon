@@ -3,7 +3,7 @@
     <LogoTitle :title="'後台登入'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :mode="'action'" @handleClick="handleClick"
+      <base-button :disabled="isLoading" :mode="'action'" @handleClick="handleClick"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -42,12 +42,15 @@ export default {
           value: ""
         },
       ],
+      isLoading: false,
     };
   },
   methods: {
     // 向伺服器傳遞登入的資訊
     async handleClick() {
       try {
+        this.isLoading = true
+
         const email = this.formItems[0].value
         const password = this.formItems[1].value
 
@@ -65,6 +68,7 @@ export default {
         // 防止前台帳號登入以及當登入的是前台帳號的提示訊息
         if (data.data.user.role !== 'admin') {
           toast.fireWarning('非管理帳號無法登入')
+          this.isLoading = false
           return
         }
 
@@ -74,6 +78,7 @@ export default {
         
         this.$router.replace("/admin/users");
       } catch(error) {
+        this.isLoading = false
         console.log('Error', error)
         toast.fireError('帳號或密碼錯誤，請重新輸入')
       }

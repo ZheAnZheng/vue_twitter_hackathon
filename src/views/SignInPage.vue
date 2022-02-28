@@ -3,7 +3,7 @@
     <LogoTitle :title="'登入Alphitter'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :mode="'action'" :position="'center'" @handleClick="signin"
+      <base-button :disabled="isLoading"  :mode="'action'" :position="'center'" @handleClick="signin"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -44,11 +44,13 @@ export default {
           type:'password'
         },
       ],
+      isLoading: false,
     };
   },
   methods: {
     async signin() {
       try {
+        this.isLoading = true
         const { data } = await authirozationAPI.signIn({
           email: this.formItems[0].value,
           password: this.formItems[1].value,
@@ -58,6 +60,7 @@ export default {
         }
         const user = data.data.user;
         if (user.role !== "user") {
+          this.isLoading = false
           toast.fireWarning("管理員請由後台登入");
         } else {
           localStorage.setItem("token", `${data.data.token}`);
@@ -65,6 +68,7 @@ export default {
           this.$router.replace("/main");
         }
       } catch (e) {
+        this.isLoading = false
         console.log(e);
         toast.fireError("登入失敗");
       }

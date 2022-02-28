@@ -30,6 +30,7 @@ export default {
     // 向伺服器取得所有使用者的資料
     async fetchUsers() {
       try {
+        toast.fireSuccess('成功登入')
         // 透過API向伺服器取得管理者的資訊
         const { data } = await adminAPI.users.getAll()
 
@@ -40,7 +41,7 @@ export default {
             name: user.account,
             image: user.avatar,
             backgroundImage: {
-              background: `no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')`,
+              background: `no-repeat url('https://i.imgur.com/ju5wFt3.jpg')`,
             },
             replyCount: user.repliedCount,
             likeCount: user.likedCount,
