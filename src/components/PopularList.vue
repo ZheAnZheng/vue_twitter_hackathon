@@ -32,9 +32,14 @@
           </div>
         </li>
       </transition-group>
-      <transition name="list" @afterLeave="showAll">
+      <transition
+        name="list"
+        @afterEnter="isTailIn = true"
+        @afterLeave="showAll"
+      >
         <li
-          class="list-item tail"
+          class="list-item"
+          :class="{ tail: !isTailIn, 'tail-in': isTailIn }"
           key="tail"
           v-show="tailShow && notOverSix"
           @click="tailShow = false"
@@ -65,6 +70,7 @@ export default {
       showedUsers: [],
       users: [],
       tailShow: true,
+      isTailIn: false,
     };
   },
   computed: {
@@ -109,8 +115,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 @mixin setDelay($num, $delay) {
-  @for $i from 0 to 11 {
+  @for $i from 1 to 7 {
     &:nth-of-type(#{$i}) {
+      transition-delay: $num;
+    }
+    &:nth-of-type(#{$i + 6}) {
       transition-delay: $num;
     }
     $num: $num + $delay;
@@ -170,6 +179,14 @@ export default {
     color: var(--primary-text-color);
   }
 }
+.tail-in {
+  border-radius: 0 0 10px 10px;
+  color: var(--primary-color);
+  cursor: pointer;
+  &:hover {
+    color: var(--primary-text-color);
+  }
+}
 .popularList-button {
   height: 35px;
   font-size: 15px;
@@ -192,7 +209,14 @@ export default {
 .list-move {
   @include setDelay(0s, 0.2s);
   transition: all 0.2s ease;
+  &.tail {
+    transition-delay: 1.2s;
+    &.tail-in {
+      transition-delay: 0 !important;
+    }
+  }
 }
+
 .list-enter-to {
   opacity: 1;
   transform: translateX(0);

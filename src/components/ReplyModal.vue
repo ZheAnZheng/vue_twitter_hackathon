@@ -76,6 +76,7 @@ export default {
       required: true,
     },
   },
+  inject: ["reload"],
   methods: {
     async submitReply(tweetId) {
       try {
@@ -89,6 +90,7 @@ export default {
             throw Error(response.data.message);
           }
           this.$emit("closeModal");
+          this.reload();
           toast.fireSuccess("回覆成功");
         }
       } catch (e) {

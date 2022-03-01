@@ -1,5 +1,8 @@
 <template>
-  <header :class="{ 'setting-layout-header': isSettingLayout }">
+  <header
+    :class="{ 'setting-layout-header': isSettingLayout }"
+    v-show="!isLoading"
+  >
     <div class="arrow" v-show="isShowArrow" @click="handleBackArrow">
       <svg
         width="17"
@@ -15,10 +18,10 @@
       </svg>
     </div>
     <div v-if="isUser" class="user-wrapper">
-      <div class="name">{{ profileUser.data.name }}</div>
-      <div class="info">{{ handleLength(profileUser.data.Tweets) }} 推文</div>
+      <div class="name">{{ userTitle }}</div>
+      <div class="info">{{ userTweetCount }}推文</div>
     </div>
-    <span v-else class="title">{{ titleName }}</span>
+    <span v-else class="title">{{ title }}</span>
   </header>
 </template>
 
@@ -42,14 +45,14 @@ export default {
   inject: {
     profileUser: {
       from: "profileUser",
-      default: {
-        id: -1,
-      },
+      default: {},
     },
   },
   data() {
     return {
       title: "",
+      userTitle: "",
+      userTweetCount: 0,
       isShowArrow: false,
       isUser: false,
       isSettingLayout: false,
@@ -59,12 +62,20 @@ export default {
     $route(to) {
       this.handleTitleByRoute(to.name);
     },
+    profileUser: {
+      handler: function (val) {
+        const { Tweets, name } = val.data;
+        this.userTitle = name;
+        this.userTweetCount = Tweets.length;
+      },
+      deep: true,
+    },
+    title(val) {
+      return val;
+    },
   },
   computed: {
     ...mapState(["currentUser"]),
-    titleName() {
-      return this.title;
-    },
   },
   methods: {
     handleTitleByRoute(routeName) {
@@ -86,23 +97,10 @@ export default {
         this.isShowArrow = true;
         this.title = "推文";
       }
+      this.isLoading = false;
     },
     handleBackArrow() {
       this.$router.back();
-    },
-    //錯誤處理，tweets無資料時，.length會報錯
-    handleLength(value) {
-      try {
-        if (value.join("") === "") {
-          // console.log('nothing')
-          return 0;
-        } else {
-          return value.length;
-        }
-      } catch (e) {
-        console.log(e);
-        console.clear();
-      }
     },
   },
 };

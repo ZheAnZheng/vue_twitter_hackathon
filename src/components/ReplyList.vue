@@ -83,17 +83,7 @@ export default {
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
         }
-        /*
-        reply={
-          id,
-          UserId,
-          userAvatar,
-          userName,
-          userAccount,
-          TweetId,
-          comment,
-        }
-         */
+
         this.replies = response.data.map((reply) => {
           const { Tweet, ...replyData } = reply;
           const { User } = Tweet;

@@ -24,6 +24,16 @@ const routes = [
     component: SignUpPage,
   },
   {
+    path: "/main",
+    name: "main",
+    component: () => import("../views/MainPage.vue"),
+  },
+  {
+    path: "/setting",
+    name: "setting",
+    component: () => import("../views/SettingPage.vue"),
+  },
+  {
     path: "/users/:id",
     component: () => import("../views/ProfilePage.vue"),
     children: [
@@ -95,14 +105,9 @@ const routes = [
     ],
   },
   {
-    path: "/main",
-    name: "main",
-    component: () => import("../views/MainPage.vue"),
-  },
-  {
-    path: "/setting",
-    name: "setting",
-    component: () => import("../views/SettingPage.vue"),
+    path: "/*",
+    name: "NotFound",
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 
@@ -110,14 +115,43 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const isAdmin = store.getters["isAuthenticated"];
+router.beforeEach(async (to, from, next) => {
+  store.commit("loadState");
+  let isAuthenticated = store.getters["isAuthenticated"];
+  const currentUser = store.state.currentUser;
 
-  console.log(typeof isAdmin);
-  if (isAdmin === "false") {
-    console.log("in");
-    store.dispatch("fetchCurrentUser");
+  const pathsWithoutAuthentication = ["sign-up", "sign-in", "admin"];
+  const pathWidthAdmin = ["admin-users", "admin-tweets", "admin-main"];
+
+  //無驗證 且 到無需驗證路由
+  if (!isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
+    next();
+    return;
   }
+  //無驗證 且 到需要驗證路由 回到登入
+  if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
+    next("/signin");
+    return;
+  }
+  //驗證通過的使用者到 需要admin角色路由 回到主頁
+  if (
+    isAuthenticated &&
+    currentUser.role === "user" &&
+    pathWidthAdmin.includes(to.name)
+  ) {
+    next("/main");
+    return;
+  }
+  //驗證通過的管理員到 需要user角色路由 回到admin/users
+  if (
+    isAuthenticated &&
+    currentUser.role === "admin" &&
+    !pathWidthAdmin.includes(to.name)
+  ) {
+    next("/admin/users");
+    return;
+  }
+
   next();
 });
 
