@@ -32,7 +32,7 @@ export default {
         {
           id: 0,
           name: "帳號",
-          type: "email",
+          type: "text",
           value: ""
         },
         {
@@ -51,17 +51,17 @@ export default {
       try {
         this.isLoading = true
 
-        const email = this.formItems[0].value
+        const account = this.formItems[0].value
         const password = this.formItems[1].value
 
         // 當使用者未輸入帳號或密碼其中一項時的提示訊息
-        if (email.length < 1 || password.length < 1) {
+        if (account.length < 1 || password.length < 1) {
           toast.fireWarning('請輸入帳號與密碼')
           return
         }
 
         const { data } = await adminAPI.users.login({
-          email,
+          account,
           password
         })
 
@@ -77,6 +77,8 @@ export default {
         this.$store.commit('setAdminUser', data.data.user)
         
         this.$router.replace("/admin/users");
+
+        toast.fireSuccess('成功登入')
       } catch(error) {
         this.isLoading = false
         console.log('Error', error)

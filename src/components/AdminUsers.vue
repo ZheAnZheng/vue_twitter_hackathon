@@ -30,10 +30,10 @@ export default {
     // 向伺服器取得所有使用者的資料
     async fetchUsers() {
       try {
-        toast.fireSuccess('成功登入')
+        // toast.fireSuccess('成功登入')
         // 透過API向伺服器取得管理者的資訊
         const { data } = await adminAPI.users.getAll()
-        console.log(data)
+
         this.users = data.map( user => {
           return {
             ...user,
