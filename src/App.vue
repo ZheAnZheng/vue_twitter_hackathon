@@ -1,7 +1,13 @@
 <template>
   <router-view />
 </template>
-
+<script>
+export default {
+  created() {
+    this.$store.commit("loadState");
+  },
+};
+</script>
 <style lang="scss">
 @import "./assets/scss/color.scss";
 @import "./assets/scss/reset.scss";

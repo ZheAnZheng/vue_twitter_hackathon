@@ -1,8 +1,5 @@
 <template>
-  <button
-    :class="[modeStyle, positionStyle]"
-    @click.prevent.stop="$emit('handleClick')"
-  >
+  <button :class="[modeStyle, positionStyle]" @click="$emit('handleClick')">
     <slot></slot>
   </button>
 </template>
@@ -91,6 +88,7 @@ export default {
   :visited {
     color: var(--blue-text-color);
   }
+
   :hover {
     color: var(--primary-color);
   }

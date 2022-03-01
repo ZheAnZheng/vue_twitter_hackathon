@@ -17,8 +17,9 @@
 import LogoTitle from "../components/UI/LogoTile.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
 import BaseButton from "../components/UI/BaseButton.vue";
-import adminAPI from "../apis/admin"
-import { toast } from "../utils/helper"
+import adminAPI from "../apis/admin";
+import { mapActions } from "vuex";
+import { toast } from "../utils/helper";
 
 export default {
   components: {
@@ -33,19 +34,20 @@ export default {
           id: 0,
           name: "帳號",
           type: "email",
-          value: ""
+          value: "",
         },
         {
           id: 1,
           name: "密碼",
           type: "password",
-          value: ""
+          value: "",
         },
       ],
       isLoading: false,
     };
   },
   methods: {
+    ...mapActions(["setCurrentUser"]),
     // 向伺服器傳遞登入的資訊
     async handleClick() {
       try {
@@ -56,14 +58,14 @@ export default {
 
         // 當使用者未輸入帳號或密碼其中一項時的提示訊息
         if (email.length < 1 || password.length < 1) {
-          toast.fireWarning('請輸入帳號與密碼')
-          return
+          toast.fireWarning("請輸入帳號與密碼");
+          return;
         }
 
         const { data } = await adminAPI.users.login({
           email,
-          password
-        })
+          password,
+        });
 
         // 防止前台帳號登入以及當登入的是前台帳號的提示訊息
         if (data.data.user.role !== 'admin') {
@@ -72,17 +74,16 @@ export default {
           return
         }
 
-        localStorage.setItem('token', data.data.token)
+        localStorage.setItem("token", data.data.token);
 
-        this.$store.commit('setAdminUser', data.data.user)
-        
+        this.setCurrentUser(data.data.user);
+
         this.$router.replace("/admin/users");
       } catch(error) {
         this.isLoading = false
         console.log('Error', error)
         toast.fireError('帳號或密碼錯誤，請重新輸入')
       }
-      
     },
   },
 };
