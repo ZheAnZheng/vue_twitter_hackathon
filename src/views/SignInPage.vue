@@ -56,12 +56,17 @@ export default {
     ...mapActions(["setCurrentUser"]),
     async signin() {
       try {
+        if(this.checkAccountIsInvalid()){
+          toast.fireWarning("請用帳號登入")
+          return ;
+        }
+        
         this.isProcessing = true;
         const { data } = await authirozationAPI.signIn({
-          email: this.formItems[0].value,
+          account: this.formItems[0].value,
           password: this.formItems[1].value,
         });
-
+        
         if (data.status !== "success") {
           throw Error(data.message);
         }
@@ -83,6 +88,15 @@ export default {
         toast.fireError("登入失敗");
       }
     },
+    checkAccountIsInvalid(){
+      const { value }=this.formItems[0];
+      const account=value.split("@");
+      if(account.length>1){
+        return true;
+      }else{
+        return false
+      }
+    }
   },
 };
 </script>

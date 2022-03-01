@@ -83,16 +83,25 @@ export default {
           password: this.formItems[3].value,
           checkPassword: this.formItems[4].value,
         });
+
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
         }
-        this.isProcessing = false;
+        if (response.data.message === "Email is already used!") {
+          toast.fireWarning("信箱重複");
+          return;
+        }
+        if (response.data.message === "Account is used.") {
+          toast.fireWarning("帳號重複");
+          return;
+        }
         this.$router.push("/signin");
         toast.fireSuccess("註冊成功!");
       } catch (e) {
         console.log(e);
-        this.isProcessing = false;
         toast.fireError("註冊失敗");
+      } finally {
+        this.isProcessing = false;
       }
     },
     checkFormIsInvalid() {
