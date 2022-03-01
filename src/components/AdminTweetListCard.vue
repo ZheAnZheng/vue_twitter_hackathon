@@ -7,7 +7,6 @@
       <span class="dot">·</span>
       <span class="created-time">{{ tweet.createdAt | fromNow }}</span>
       <div class="user-tweet">
-        <!-- {{ tweet.tweetContent }} -->
         {{ tweetContentLimit(tweet.tweetContent) }}
       </div>
     </div>
