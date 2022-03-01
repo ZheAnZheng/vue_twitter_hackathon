@@ -63,15 +63,16 @@ export default {
           toast.fireWarning("請輸入帳號與密碼");
           return;
         }
-        
+
         const { data } = await adminAPI.users.login({
-            account,
-            password,
+          account,
+          password,
         });
-       
+
         // 防止前台帳號登入以及當登入的是前台帳號的提示訊息
         if (data.data.user.role !== "admin") {
           toast.fireWarning("非管理帳號無法登入");
+          this.isLoading = false;
           return;
         }
 

@@ -9,7 +9,7 @@
       <div class="icon">
         <div class="icon-reply">
           <i class="far fa-comment"></i>
-          <span>{{ user.replyCount }}</span>
+          <span>{{ user.tweetCount }}</span>
         </div>
         <div class="icon-like">
           <i class="far fa-heart"></i>
@@ -30,7 +30,7 @@
 
 <script>
 import { Filters } from "../utils/mixins";
-import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
 
 export default {
   name: "AdminUsersCard",

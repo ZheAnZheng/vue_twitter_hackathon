@@ -168,7 +168,6 @@ export default {
     nameTextLength() {
       return this.editUser.name.length;
     },
-    //TODO 長度問題
     introTextLength() {
       return this.editUser.introduction;
     },
@@ -182,6 +181,7 @@ export default {
   created() {
     this.copyUser();
   },
+  inject: ["reFetchProfileUser"],
   methods: {
     handleCoverImageChagne(e) {
       console.log(e);
@@ -226,6 +226,7 @@ export default {
         }
         this.saveEdit();
         this.isProcessing = false;
+        this.reFetchProfileUser();
         toast.fireSuccess("修改成功");
       } catch (e) {
         console.log(e);
@@ -293,7 +294,7 @@ export default {
   .save-button {
     flex-basis: 70px;
     height: 28px;
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 .coverImage-group {

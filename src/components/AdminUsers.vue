@@ -1,15 +1,15 @@
 <template>
   <div class="admin-users-card">
-    <BaseSpinner v-if="isLoading"/>
+    <BaseSpinner v-if="isLoading" />
     <AdminUsersCard v-for="user in users" :key="user.id" :user="user" />
   </div>
 </template>
 
 <script>
 import AdminUsersCard from "../components/AdminUsersCard.vue";
-import adminAPI from "../apis/admin"
-import { toast } from "../utils/helper"
-import BaseSpinner from "../components/UI/BaseSpinner.vue"
+import adminAPI from "../apis/admin";
+import { toast } from "../utils/helper";
+import BaseSpinner from "../components/UI/BaseSpinner.vue";
 
 export default {
   name: "AdminUsers",
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       users: [],
-      isLoading: true
+      isLoading: true,
     };
   },
   created() {
@@ -30,31 +30,31 @@ export default {
     // 向伺服器取得所有使用者的資料
     async fetchUsers() {
       try {
+        // toast.fireSuccess('成功登入')
         // 透過API向伺服器取得管理者的資訊
-        const { data } = await adminAPI.users.getAll()
+        const { data } = await adminAPI.users.getAll();
 
-        this.users = data.map( user => {
+        this.users = data.map((user) => {
           return {
             ...user,
             id: user.id,
             name: user.account,
             image: user.avatar,
             backgroundImage: {
-              background: `no-repeat url('https://upload.cc/i1/2022/02/23/ck9BoJ.jpg')`,
+              background: `no-repeat url('https://i.imgur.com/ju5wFt3.jpg')`,
             },
-            replyCount: user.repliedCount,
+            tweetCount: user.tweetCount,
             likeCount: user.likedCount,
             following: user.followingCount,
             follower: user.followerCount,
-          }
-        })
+          };
+        });
 
-        this.isLoading = false
-      } catch(error) {
-        console.log('Error', error)
-        toast.fireError('目前無法取得所有使用者，請稍後再試')
+        this.isLoading = false;
+      } catch (error) {
+        console.log("Error", error);
+        toast.fireError("目前無法取得所有使用者，請稍後再試");
       }
-      
     },
   },
 };

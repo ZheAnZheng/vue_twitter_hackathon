@@ -23,6 +23,11 @@ export default {
       isLoading: true,
     };
   },
+  provide() {
+    return {
+      reFetchProfileUser: this.reFetchUser,
+    };
+  },
   beforeRouteUpdate(to, from, next) {
     const { id: toId } = to.params;
     const { id: fromId } = from.params;
@@ -46,6 +51,7 @@ export default {
           throw Error(response.data.message);
         }
         this.user = { ...response.data };
+        console.log(this.user.introduction);
         this.isLoading = false;
       } catch (e) {
         console.log(e.message);
@@ -56,6 +62,10 @@ export default {
         }
         toast.fireError("讀取用戶失敗");
       }
+    },
+    reFetchUser() {
+      const { id } = this.$route.params;
+      this.fetchProfileUser(id);
     },
   },
 };

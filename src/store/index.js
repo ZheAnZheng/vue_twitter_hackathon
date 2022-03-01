@@ -45,6 +45,7 @@ export default new Vuex.Store({
       try {
         const { data } = await usersAPI.getCurrentUser();
         commit("setCurrentUser", data);
+        commit("saveState");
         return true;
       } catch (e) {
         console.log(e);

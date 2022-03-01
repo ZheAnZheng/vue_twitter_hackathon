@@ -152,7 +152,9 @@ router.beforeEach(async (to, from, next) => {
     next("/admin/users");
     return;
   }
-
+  if (isAuthenticated && currentUser.role === "user") {
+    store.dispatch("fetchCurrentUser");
+  }
   next();
 });
 

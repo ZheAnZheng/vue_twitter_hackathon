@@ -56,23 +56,24 @@ export default {
     ...mapActions(["setCurrentUser"]),
     async signin() {
       try {
-        if(this.checkAccountIsInvalid()){
-          toast.fireWarning("請用帳號登入")
-          return ;
+        if (this.checkAccountIsInvalid()) {
+          toast.fireWarning("請用帳號登入");
+          return;
         }
-        
+
         this.isProcessing = true;
         const { data } = await authirozationAPI.signIn({
           account: this.formItems[0].value,
           password: this.formItems[1].value,
         });
-        
+
         if (data.status !== "success") {
           throw Error(data.message);
         }
 
         const user = data.data.user;
         if (user.role !== "user") {
+          this.isLoading = false;
           toast.fireWarning("管理員請由後台登入");
         } else {
           localStorage.setItem("token", `${data.data.token}`);
@@ -83,20 +84,21 @@ export default {
           this.$router.replace("/main");
         }
       } catch (e) {
+        this.isLoading = false;
         console.log(e);
         this.isProcessing = false;
         toast.fireError("登入失敗");
       }
     },
-    checkAccountIsInvalid(){
-      const { value }=this.formItems[0];
-      const account=value.split("@");
-      if(account.length>1){
+    checkAccountIsInvalid() {
+      const { value } = this.formItems[0];
+      const account = value.split("@");
+      if (account.length > 1) {
         return true;
-      }else{
-        return false
+      } else {
+        return false;
       }
-    }
+    },
   },
 };
 </script>

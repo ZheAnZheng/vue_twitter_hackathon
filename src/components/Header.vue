@@ -123,7 +123,7 @@ header {
 .user-wrapper {
   display: block;
   height: 55px;
-  width: 100px;
+  width: 100%;
   display: flex;
   flex-direction: column;
 

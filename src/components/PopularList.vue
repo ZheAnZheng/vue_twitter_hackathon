@@ -4,7 +4,7 @@
       <li class="list-item head">Popular</li>
       <transition-group name="list">
         <li v-for="user in showedUsers" :key="user.id" class="list-item">
-          <img class="image" :src="user.image | imageFilter" />
+          <img class="image" :src="user.avatar | imageFilter" />
           <router-link
             class="user-info"
             :to="{ name: 'userTweets', params: { id: user.id } }"

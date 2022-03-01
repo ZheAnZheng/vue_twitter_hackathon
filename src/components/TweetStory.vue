@@ -11,7 +11,7 @@
       </transition>
       <div class="tweet-info">
         <div class="user-info">
-          <img src="../assets/Photo.png" />
+          <img :src="tweet.userAvatar | imageFilter" />
           <div class="name-wrapper">
             <div>{{ tweet.userName }}</div>
             <div>@{{ tweet.userAccount }}</div>
@@ -83,12 +83,16 @@
 <script>
 import ReplyModal from "../components/ReplyModal.vue";
 import BaseSpinner from "../components/UI/BaseSpinner.vue";
-import { modalController, dateFilter } from "../utils/mixins.js";
+import {
+  modalController,
+  dateFilter,
+  emptyImageFilter,
+} from "../utils/mixins.js";
 import { toast } from "../utils/helper.js";
 import tweetsAPI from "../apis/tweets.js";
 import ReplyList from "../components/ReplyList.vue";
 export default {
-  mixins: [modalController, dateFilter],
+  mixins: [modalController, dateFilter, emptyImageFilter],
   components: {
     ReplyList,
     ReplyModal,
