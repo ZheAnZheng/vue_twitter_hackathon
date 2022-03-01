@@ -7,45 +7,55 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentUser: {},
-    adminUser: {
-      id: -1,
-      name: "",
-      account: "",
-      avatar: "",
-      role: "user",
-    },
-    isAuthenticated: "false",
+    isAuthenticated: false,
     token: "",
   },
   mutations: {
     setCurrentUser(state, payload) {
-      state.currentUser = { ...payload.data };
-    },
-    setAdminUser(state, adminUser) {
-      state.adminUser = {
-        ...state.adminUser,
-        ...adminUser,
-      };
-
+      state.currentUser = { ...payload };
       state.isAuthenticated = true;
       state.token = localStorage.getItem("token");
     },
+
     revokeAuthentication(state) {
       state.currentUser = {};
-      state.adminUser = {};
+      state.token = "";
+      state.isAuthenticated = false;
       localStorage.removeItem("token");
+      localStorage.removeItem("STATE_KEY");
+    },
+    //重新整理會導致store資料消失，所以儲存在localStorage
+    saveState(state) {
+      localStorage.setItem("STATE_KEY", JSON.stringify(state));
+    },
+    loadState(state) {
+      const previousState = JSON.parse(localStorage.getItem("STATE_KEY"));
+      if (!previousState) {
+        return;
+      }
+      state.currentUser = {
+        ...previousState.currentUser,
+      };
+      state.isAuthenticated = previousState.isAuthenticated;
+      state.token = previousState.token;
     },
   },
   actions: {
     async fetchCurrentUser({ commit }) {
       try {
         const { data } = await usersAPI.getCurrentUser();
-
-        commit("setCurrentUser", { data });
+        commit("setCurrentUser", data);
+        return true;
       } catch (e) {
         console.log(e);
         toast.fireError("無法讀取...");
+        localStorage.removeItem("STATE_KEY");
+        return false;
       }
+    },
+    setCurrentUser({ commit }, payload) {
+      commit("setCurrentUser", payload);
+      commit("saveState");
     },
   },
   getters: {

@@ -17,8 +17,9 @@
 import LogoTitle from "../components/UI/LogoTile.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
 import BaseButton from "../components/UI/BaseButton.vue";
-import adminAPI from "../apis/admin"
-import { toast } from "../utils/helper"
+import adminAPI from "../apis/admin";
+import { mapActions } from "vuex";
+import { toast } from "../utils/helper";
 
 export default {
   components: {
@@ -39,13 +40,14 @@ export default {
           id: 1,
           name: "密碼",
           type: "password",
-          value: ""
+          value: "",
         },
       ],
       isLoading: false,
     };
   },
   methods: {
+    ...mapActions(["setCurrentUser"]),
     // 向伺服器傳遞登入的資訊
     async handleClick() {
       try {
@@ -72,10 +74,10 @@ export default {
           return
         }
 
-        localStorage.setItem('token', data.data.token)
+        localStorage.setItem("token", data.data.token);
 
-        this.$store.commit('setAdminUser', data.data.user)
-        
+        this.setCurrentUser(data.data.user);
+
         this.$router.replace("/admin/users");
 
         toast.fireSuccess('成功登入')
@@ -84,7 +86,6 @@ export default {
         console.log('Error', error)
         toast.fireError('帳號或密碼錯誤，請重新輸入')
       }
-      
     },
   },
 };

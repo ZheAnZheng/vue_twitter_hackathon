@@ -13,7 +13,7 @@
       </li>
     </ul>
     <ul class="followList">
-      <li v-for="user in currentList" :key="user.id" class="list-item">
+      <li v-for="user in users" :key="user.id" class="list-item">
         <img class="image" :src="user.image | imageFilter" />
         <div class="user-info">
           <base-button
@@ -21,7 +21,7 @@
             class="follow-button"
             :mode="'action'"
             :position="'right'"
-            @handleClick="addFollowing(user.id, 'followList')"
+            @handleClick="deleteFollowing(user.id, 'followList')"
             >正在跟隨</base-button
           >
           <base-button
@@ -29,7 +29,7 @@
             class="follow-button"
             :mode="'actionOutline'"
             :position="'right'"
-            @handleClick="deleteFollowing(user.id, 'followList')"
+            @handleClick="addFollowing(user.id, 'followList')"
             >跟隨</base-button
           >
           <div class="name">{{ user.name }}</div>
@@ -61,16 +61,29 @@ export default {
       users: [],
     };
   },
+  watch: {
+    profileUser: {
+      handler: function () {
+        this.setFollowList();
+      },
+      deep: true,
+    },
+    $route() {
+      this.setFollowList();
+    },
+  },
   computed: {
     ...mapState(["currentUser"]),
     //透過路由顯示對應 跟隨列表資料
-    currentList() {
+  },
+  methods: {
+    setFollowList() {
       const routeName = this.$route.name;
+
       if (routeName === "following") {
-        return this.profileUser.data.Followings;
+        this.users = [...this.profileUser.data.Followings];
       } else {
-        console.log(this.profileUser.data);
-        return this.profileUser.data.Followers;
+        this.users = [...this.profileUser.data.Followers];
       }
     },
   },

@@ -199,6 +199,7 @@ export const followshipHandler = {
     },
     toggleFollowList(userId) {
       this.users = this.users.map((user) => {
+        console.log(user);
         if (user.id === userId) {
           console.log(user.isFollowed);
           return {
