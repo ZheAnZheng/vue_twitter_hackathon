@@ -9,7 +9,7 @@
       <div class="icon">
         <div class="icon-reply">
           <i class="far fa-comment"></i>
-          <span>{{ user.replyCount }}</span>
+          <span>{{ user.tweetCount }}</span>
         </div>
         <div class="icon-like">
           <i class="far fa-heart"></i>

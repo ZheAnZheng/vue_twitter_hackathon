@@ -7,7 +7,8 @@
       <span class="dot">·</span>
       <span class="created-time">{{ tweet.createdAt | fromNow }}</span>
       <div class="user-tweet">
-        {{ tweet.tweetContent }}
+        <!-- {{ tweet.tweetContent }} -->
+        {{ tweetContentLimit(tweet.tweetContent) }}
       </div>
     </div>
     <div class="cross-icon">
@@ -24,7 +25,7 @@ export default {
   name: "adminTweetListCard",
   mixins: [Filters, emptyImageFilter, dateFilter],
   props: {
-    tweet: {
+    initialTweet: {
       type: Object,
       required: true,
     },
@@ -34,6 +35,21 @@ export default {
       // 將刪除推文事件傳遞至父元件
       this.$emit("after-delete-tweet", tweetId);
     },
+    // tweet內容超過50字的加...
+    tweetContentLimit(content) {
+      if ( content.length === 50) {
+        return content + "..."
+      } else {
+        return content
+      }
+    }
+  },
+  data() {
+    return {
+      tweet: {
+        ...this.initialTweet,
+      }
+    }
   },
 };
 </script>
@@ -59,13 +75,6 @@ export default {
     .dot,
     .created-time {
       @extend %share-user-info-style;
-    }
-    > .user-tweet {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-      width: 50%;
     }
   }
   // 叉按鈕樣式設定

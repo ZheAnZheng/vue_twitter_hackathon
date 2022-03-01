@@ -110,15 +110,15 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const isAdmin = store.getters["isAuthenticated"];
+// router.beforeEach((to, from, next) => {
+//   const isAdmin = store.getters["isAuthenticated"];
 
-  console.log(typeof isAdmin);
-  if (isAdmin === "false") {
-    console.log("in");
-    store.dispatch("fetchCurrentUser");
-  }
-  next();
-});
+//   console.log(typeof isAdmin);
+//   if (isAdmin === "false") {
+//     console.log("in");
+//     store.dispatch("fetchCurrentUser");
+//   }
+//   next();
+// });
 
 export default router;
