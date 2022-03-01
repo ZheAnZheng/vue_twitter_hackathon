@@ -71,6 +71,11 @@ export default {
     async signUp() {
       try {
         this.isProcessing = true;
+        if (this.checkFormIsInvalid()) {
+          this.isProcessing = false;
+          toast.fireWarning("表單填寫不正確");
+          return;
+        }
         const response = await adminAPI.users.signUp({
           account: this.formItems[0].value,
           name: this.formItems[1].value,
@@ -90,8 +95,21 @@ export default {
         toast.fireError("註冊失敗");
       }
     },
+    checkFormIsInvalid() {
+      let isInvalid = false;
+
+      this.formItems.forEach((item) => {
+        if (item.value.trim() === "") {
+          isInvalid = true;
+          return;
+        }
+      });
+      return isInvalid;
+    },
     cancel() {
-      this.$router.replace("/signin");
+      if (!this.isProcessing) {
+        this.$router.replace("/signin");
+      }
     },
   },
 };
