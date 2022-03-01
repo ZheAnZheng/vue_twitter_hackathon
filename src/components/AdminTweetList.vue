@@ -4,7 +4,7 @@
     <adminTweetListCard
       v-for="tweet in tweetLists"
       :key="tweet.id"
-      :tweet="tweet"
+      :initial-tweet="tweet"
       @after-delete-tweet="handleDeleteTweet"
     />
   </div>
@@ -74,7 +74,7 @@ export default {
           throw new Error(data.message)
         }
          // 將點擊到的推文刪除
-        this.tweetLists = this.tweetLists.filter((tweet) => tweet.id !== tweetId);
+        this.tweetLists= this.tweetLists.filter((tweet) => tweet.id !== tweetId);
       } catch(error) {
         console.log('Error', error)
       }

@@ -3,7 +3,7 @@
     <LogoTitle :title="'後台登入'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :mode="'action'" @handleClick="handleClick"
+      <base-button :disabled="isLoading" :mode="'action'" @handleClick="handleClick"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -43,6 +43,7 @@ export default {
           value: "",
         },
       ],
+      isLoading: false,
     };
   },
   methods: {
@@ -50,8 +51,10 @@ export default {
     // 向伺服器傳遞登入的資訊
     async handleClick() {
       try {
-        const email = this.formItems[0].value;
-        const password = this.formItems[1].value;
+        this.isLoading = true
+
+        const email = this.formItems[0].value
+        const password = this.formItems[1].value
 
         // 當使用者未輸入帳號或密碼其中一項時的提示訊息
         if (email.length < 1 || password.length < 1) {
@@ -65,9 +68,10 @@ export default {
         });
 
         // 防止前台帳號登入以及當登入的是前台帳號的提示訊息
-        if (data.data.user.role !== "admin") {
-          toast.fireWarning("非管理帳號無法登入");
-          return;
+        if (data.data.user.role !== 'admin') {
+          toast.fireWarning('非管理帳號無法登入')
+          this.isLoading = false
+          return
         }
 
         localStorage.setItem("token", data.data.token);
@@ -75,9 +79,10 @@ export default {
         this.setCurrentUser(data.data.user);
 
         this.$router.replace("/admin/users");
-      } catch (error) {
-        console.log("Error", error);
-        toast.fireError("帳號或密碼錯誤，請重新輸入");
+      } catch(error) {
+        this.isLoading = false
+        console.log('Error', error)
+        toast.fireError('帳號或密碼錯誤，請重新輸入')
       }
     },
   },
