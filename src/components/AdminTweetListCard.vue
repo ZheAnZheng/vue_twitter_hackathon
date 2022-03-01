@@ -18,7 +18,7 @@
 
 <script>
 import { Filters } from "../utils/mixins";
-import { emptyImageFilter, dateFilter } from "../utils/mixins"
+import { emptyImageFilter, dateFilter } from "../utils/mixins";
 
 export default {
   name: "adminTweetListCard",
@@ -36,19 +36,19 @@ export default {
     },
     // tweet內容超過50字的加...
     tweetContentLimit(content) {
-      if ( content.length === 50) {
-        return content + "..."
+      if (content.length === 50) {
+        return content + "...";
       } else {
-        return content
+        return content;
       }
-    }
+    },
   },
   data() {
     return {
       tweet: {
         ...this.initialTweet,
-      }
-    }
+      },
+    };
   },
 };
 </script>

@@ -137,7 +137,8 @@ router.beforeEach(async (to, from, next) => {
   if (
     isAuthenticated &&
     currentUser.role === "user" &&
-    pathWidthAdmin.includes(to.name)
+    (pathWidthAdmin.includes(to.name) ||
+      pathsWithoutAuthentication.includes(to.name))
   ) {
     next("/main");
     return;
@@ -151,7 +152,9 @@ router.beforeEach(async (to, from, next) => {
     next("/admin/users");
     return;
   }
-
+  if (isAuthenticated && currentUser.role === "user") {
+    store.dispatch("fetchCurrentUser");
+  }
   next();
 });
 

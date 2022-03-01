@@ -3,7 +3,10 @@
     <LogoTitle :title="'後台登入'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :disabled="isLoading" :mode="'action'" @handleClick="handleClick"
+      <base-button
+        :mode="'action'"
+        @handleClick="handleClick"
+        :isDisabled="isProcessing"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -34,7 +37,7 @@ export default {
           id: 0,
           name: "帳號",
           type: "text",
-          value: ""
+          value: "",
         },
         {
           id: 1,
@@ -43,7 +46,7 @@ export default {
           value: "",
         },
       ],
-      isLoading: false,
+      isProcessing: false,
     };
   },
   methods: {
@@ -51,40 +54,37 @@ export default {
     // 向伺服器傳遞登入的資訊
     async handleClick() {
       try {
-        this.isLoading = true
-
-        const account = this.formItems[0].value
-        const password = this.formItems[1].value
+        this.isProcessing = true;
+        const account = this.formItems[0].value;
+        const password = this.formItems[1].value;
 
         // 當使用者未輸入帳號或密碼其中一項時的提示訊息
         if (account.length < 1 || password.length < 1) {
-          toast.fireWarning('請輸入帳號與密碼')
-          return
+          toast.fireWarning("請輸入帳號與密碼");
+          return;
         }
 
         const { data } = await adminAPI.users.login({
           account,
-          password
-        })
+          password,
+        });
 
         // 防止前台帳號登入以及當登入的是前台帳號的提示訊息
-        if (data.data.user.role !== 'admin') {
-          toast.fireWarning('非管理帳號無法登入')
-          this.isLoading = false
-          return
+        if (data.data.user.role !== "admin") {
+          toast.fireWarning("非管理帳號無法登入");
+          this.isLoading = false;
+          return;
         }
 
         localStorage.setItem("token", data.data.token);
-
+        this.isProcessing = false;
         this.setCurrentUser(data.data.user);
 
         this.$router.replace("/admin/users");
-
-        toast.fireSuccess('成功登入')
-      } catch(error) {
-        this.isLoading = false
-        console.log('Error', error)
-        toast.fireError('帳號或密碼錯誤，請重新輸入')
+      } catch (error) {
+        console.log("Error", error);
+        this.isProcessing = false;
+        toast.fireError("帳號或密碼錯誤，請重新輸入");
       }
     },
   },

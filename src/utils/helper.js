@@ -3,9 +3,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 export const apiHelper = axios.create({
-  // baseURL: "http://192.168.31.244:3000/api",
-  baseURL: "http://localhost:3000/api",
-  // baseURL: "https://twitter-louis.herokuapp.com/api"
+  baseURL: "https://twitter-louis.herokuapp.com/api",
 });
 
 apiHelper.interceptors.request.use(

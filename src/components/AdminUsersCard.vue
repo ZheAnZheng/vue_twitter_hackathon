@@ -30,7 +30,7 @@
 
 <script>
 import { Filters } from "../utils/mixins";
-import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
 
 export default {
   name: "AdminUsersCard",

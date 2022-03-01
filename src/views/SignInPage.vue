@@ -3,7 +3,11 @@
     <LogoTitle :title="'登入Alphitter'" />
     <BaseInput :formItems="formItems" />
     <div class="button-group">
-      <base-button :disabled="isLoading"  :mode="'action'" :position="'center'" @handleClick="signin"
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="signin"
+        :isDisabled="isProcessing"
         >登入</base-button
       >
       <base-button :position="'right'">
@@ -45,38 +49,54 @@ export default {
           type: "password",
         },
       ],
-      isLoading: false,
+      isProcessing: false,
     };
   },
   methods: {
     ...mapActions(["setCurrentUser"]),
     async signin() {
       try {
-        this.isLoading = true
+        if (this.checkAccountIsInvalid()) {
+          toast.fireWarning("請用帳號登入");
+          return;
+        }
+
+        this.isProcessing = true;
         const { data } = await authirozationAPI.signIn({
-          email: this.formItems[0].value,
+          account: this.formItems[0].value,
           password: this.formItems[1].value,
         });
-        console.log(data);
+
         if (data.status !== "success") {
           throw Error(data.message);
         }
 
         const user = data.data.user;
         if (user.role !== "user") {
-          this.isLoading = false
+          this.isLoading = false;
           toast.fireWarning("管理員請由後台登入");
         } else {
           localStorage.setItem("token", `${data.data.token}`);
 
           this.setCurrentUser(user);
+          this.isProcessing = false;
           toast.fireSuccess("登入成功");
           this.$router.replace("/main");
         }
       } catch (e) {
-        this.isLoading = false
+        this.isLoading = false;
         console.log(e);
+        this.isProcessing = false;
         toast.fireError("登入失敗");
+      }
+    },
+    checkAccountIsInvalid() {
+      const { value } = this.formItems[0];
+      const account = value.split("@");
+      if (account.length > 1) {
+        return true;
+      } else {
+        return false;
       }
     },
   },

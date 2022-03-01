@@ -18,7 +18,13 @@
             </svg>
           </div>
           <div>編輯個人資料</div>
-          <base-button class="save-button" :mode="'action'"> 儲存</base-button>
+          <base-button
+            class="save-button"
+            :mode="'action'"
+            :isDisabled="isProcessing"
+          >
+            儲存</base-button
+          >
         </div>
 
         <!-- 背景圖 -->
@@ -119,9 +125,6 @@
             </div>
           </div>
         </div>
-        <input class="d-none" name="email" v-model="currentUser.email" />
-        <input class="d-none" name="password" v-model="currentUser.password" />
-        <input class="d-none" name="account" v-model="currentUser.account" />
       </form>
     </div>
   </div>
@@ -146,6 +149,7 @@ export default {
   data() {
     return {
       editUser: {},
+      isProcessing: false,
     };
   },
   watch: {
@@ -164,7 +168,6 @@ export default {
     nameTextLength() {
       return this.editUser.name.length;
     },
-    //TODO 長度問題
     introTextLength() {
       return this.editUser.introduction;
     },
@@ -178,6 +181,7 @@ export default {
   created() {
     this.copyUser();
   },
+  inject: ["reFetchProfileUser"],
   methods: {
     handleCoverImageChagne(e) {
       console.log(e);
@@ -207,8 +211,11 @@ export default {
           toast.fireWarning("填寫錯誤，請更新後送出");
           return;
         }
-
+        this.isProcessing = true;
         const formData = new FormData(e.target);
+        formData.append("password", this.currentUser.password);
+        formData.append("account", this.currentUser.account);
+        formData.append("email", this.currentUser.email);
         const response = await usersAPI.update({
           userId: this.currentUser.id,
           formData,
@@ -218,9 +225,12 @@ export default {
           throw new Error(response.data.message);
         }
         this.saveEdit();
+        this.isProcessing = false;
+        this.reFetchProfileUser();
         toast.fireSuccess("修改成功");
       } catch (e) {
         console.log(e);
+        this.isProcessing = false;
         toast.fireError("無法上傳修改");
       }
     },
@@ -284,7 +294,7 @@ export default {
   .save-button {
     flex-basis: 70px;
     height: 28px;
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 .coverImage-group {

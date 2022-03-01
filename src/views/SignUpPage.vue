@@ -4,7 +4,11 @@
     <BaseInput :formItems="formItems" />
 
     <div class="button-group">
-      <base-button :mode="'action'" :position="'center'" @handleClick="signUp"
+      <base-button
+        :mode="'action'"
+        :position="'center'"
+        @handleClick="signUp"
+        :isDisabled="isProcessing"
         >註冊</base-button
       >
       <base-button :position="'center'" @handleClick="cancel"
@@ -60,11 +64,18 @@ export default {
           type: "password",
         },
       ],
+      isProcessing: false,
     };
   },
   methods: {
     async signUp() {
       try {
+        this.isProcessing = true;
+        if (this.checkFormIsInvalid()) {
+          this.isProcessing = false;
+          toast.fireWarning("表單填寫不正確");
+          return;
+        }
         const response = await adminAPI.users.signUp({
           account: this.formItems[0].value,
           name: this.formItems[1].value,
@@ -72,18 +83,42 @@ export default {
           password: this.formItems[3].value,
           checkPassword: this.formItems[4].value,
         });
+
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
+        }
+        if (response.data.message === "Email is already used!") {
+          toast.fireWarning("信箱重複");
+          return;
+        }
+        if (response.data.message === "Account is used.") {
+          toast.fireWarning("帳號重複");
+          return;
         }
         this.$router.push("/signin");
         toast.fireSuccess("註冊成功!");
       } catch (e) {
         console.log(e);
         toast.fireError("註冊失敗");
+      } finally {
+        this.isProcessing = false;
       }
     },
+    checkFormIsInvalid() {
+      let isInvalid = false;
+
+      this.formItems.forEach((item) => {
+        if (item.value.trim() === "") {
+          isInvalid = true;
+          return;
+        }
+      });
+      return isInvalid;
+    },
     cancel() {
-      this.$router.replace("/signin");
+      if (!this.isProcessing) {
+        this.$router.replace("/signin");
+      }
     },
   },
 };

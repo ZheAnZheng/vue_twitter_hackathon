@@ -16,7 +16,7 @@
         </svg>
       </div>
       <div class="tweet-block">
-        <img class="avatar" :src="tweet.userAvatar" />
+        <img class="avatar" :src="tweet.userAvatar | imageFilter" />
         <div class="tweet-info">
           <div class="tweet-owner">
             <div>{{ tweet.userName }}</div>
@@ -34,7 +34,7 @@
       </div>
       <span class="connect-line"></span>
       <div class="reply-block">
-        <img class="avatar" :src="currentUser.avatar" />
+        <img class="avatar" :src="currentUser.avatar | imageFilter" />
         <div class="reply-content">
           <input
             id="reply"
@@ -56,12 +56,12 @@
 </template>
 <script>
 import BaseButton from "./UI/BaseButton.vue";
-import { dateFilter } from "../utils/mixins.js";
+import { dateFilter, emptyImageFilter } from "../utils/mixins.js";
 import { toast } from "../utils/helper.js";
 import { mapState } from "vuex";
 import tweetsAPI from "../apis/tweets.js";
 export default {
-  mixins: [dateFilter],
+  mixins: [dateFilter, emptyImageFilter],
   components: {
     BaseButton,
   },

@@ -1,45 +1,51 @@
 <template>
   <ul class="container">
-    <li v-for="reply in replies" :key="reply.id" class="tweet-item">
-      <!-- 回覆的人 -->
-      <router-link
-        :to="{ name: 'userTweets', params: { id: `${reply.userId}` } }"
-      >
-        <img class="image" :src="reply.userAvatar | imageFilter" />
-      </router-link>
-      <div class="tweet-context">
-        <div class="tweet-info">
-          <div class="name">{{ reply.userName }}</div>
-          <div class="account">@{{ reply.userAccount }}</div>
-          <div class="dot">．</div>
-          <div class="time">{{ reply.createdAt | fromNow }}</div>
-        </div>
-        <div class="reply-info">
-          <span class="reply-text">回覆</span>
+    <BaseSpinner v-if="isLoading" />
+    <template v-else>
+      <li v-for="reply in replies" :key="reply.id" class="tweet-item">
+        <!-- 回覆的人 -->
+        <router-link
+          :to="{ name: 'userTweets', params: { id: `${reply.userId}` } }"
+        >
+          <img class="image" :src="reply.userAvatar | imageFilter" />
+        </router-link>
+        <div class="tweet-context">
+          <div class="tweet-info">
+            <div class="name">{{ reply.userName }}</div>
+            <div class="account">@{{ reply.userAccount }}</div>
+            <div class="dot">．</div>
+            <div class="time">{{ reply.createdAt | fromNow }}</div>
+          </div>
+          <div class="reply-info">
+            <span class="reply-text">回覆</span>
 
-          <router-link
-            class="link"
-            :to="{ name: 'userTweets', params: { id: reply.tweetOwnerId } }"
-            >@{{ reply.tweetOwnerAccount }}</router-link
-          >
+            <router-link
+              class="link"
+              :to="{ name: 'userTweets', params: { id: reply.tweetOwnerId } }"
+              >@{{ reply.tweetOwnerAccount }}</router-link
+            >
+          </div>
+          <div class="tweet-content">
+            {{ reply.comment }}
+          </div>
         </div>
-        <div class="tweet-content">
-          {{ reply.comment }}
-        </div>
-      </div>
-    </li>
-    <li class="tweet-item no-data-item" v-show="!replies.length">
-      <div class="no-data-item">暫無回覆資料</div>
-    </li>
+      </li>
+      <li class="tweet-item no-data-item" v-show="!replies.length">
+        <div class="no-data-item">暫無回覆資料</div>
+      </li>
+    </template>
   </ul>
 </template>
 <script>
 import { emptyImageFilter, dateFilter } from "../utils/mixins.js";
-import tweetsAPI from "../apis/tweets.js";
+import BaseSpinner from "../components/UI/BaseSpinner.vue";
 import usersAPI from "../apis/users.js";
 import { toast } from "../utils/helper.js";
 
 export default {
+  components: {
+    BaseSpinner,
+  },
   mixins: [emptyImageFilter, dateFilter],
   props: {
     tweetReplies: {
@@ -50,6 +56,7 @@ export default {
   data() {
     return {
       replies: [],
+      isLoading: true,
     };
   },
   watch: {
@@ -63,7 +70,7 @@ export default {
 
     if (routeName === "tweetStory") {
       this.replies = this.tweetReplies;
-      // this.fetchTweetReplies(id)
+      this.isLoading = false;
     } else {
       this.fetchUserReplied(id);
     }
@@ -99,22 +106,11 @@ export default {
             userId: this.profileUser.data.id,
           };
         });
+        this.isLoading = false;
       } catch (e) {
         console.log(e);
         toast.fireError("讀取用戶回覆貼文失敗");
-      }
-    },
-    async fetchTweetReplies(tweetId) {
-      try {
-        const response = await tweetsAPI.get({ tweetId });
-        if (response.statusText !== "OK") {
-          throw new Error(response.data.message);
-        }
-
-        console.log(response.data);
-      } catch (e) {
-        console.log(e);
-        toast.fireError("無法讀取推文回覆");
+        this.isLoading = false;
       }
     },
   },
