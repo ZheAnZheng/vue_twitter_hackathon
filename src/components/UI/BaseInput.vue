@@ -12,7 +12,6 @@
       <div v-show="item.isError && item.name === '名稱'" class="name-alert-message">字數超出上限</div>
       <div v-show="item.isError && item.name === 'Email'" class="email-alert-message">Email重覆</div>
       <div v-show="item.isError && (item.name === '密碼' || item.name === '密碼確認')" class="password-alert-message">兩次密碼輸入不相同，請再次確認</div>
-      <div v-show="item.isBlank && (item.name === '密碼' || item.name === '密碼確認')" class="password-alert-message">密碼空白，請再次確認</div>
     </div>
   </form>
 </template>
