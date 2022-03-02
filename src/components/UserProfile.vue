@@ -179,6 +179,8 @@ export default {
       followersCount: this.userData.Followers.length,
       followingsCount: this.userData.Followers.length,
     };
+    this.turnHeaderShow();
+
     next();
   },
   data() {
@@ -186,7 +188,14 @@ export default {
       user: {},
     };
   },
-  inject: ["profileUser"],
+  inject: {
+    profileUser: {
+      from: "profileUser",
+    },
+    turnHeaderShow: {
+      from: "turnHeaderShow",
+    },
+  },
 
   watch: {
     profileUser: {
@@ -196,6 +205,7 @@ export default {
           followersCount: this.userData.Followers.length,
           followingsCount: this.userData.Followers.length,
         };
+        this.turnHeaderShow();
       },
       deep: true,
     },

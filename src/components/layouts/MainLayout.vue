@@ -2,7 +2,7 @@
   <div>
     <MobileNavbar />
     <Navbar @openModal="openModal('tweet')" />
-    <Header />
+    <Header :isReady="isHeaderReady" />
     <PopularList />
     <transition name="fade">
       <TweetModal
@@ -37,11 +37,13 @@ export default {
   data() {
     return {
       isRouteAlive: true,
+      isHeaderReady: false,
     };
   },
   provide() {
     return {
       reload: this.reload,
+      turnHeaderShow: this.turnHeaderShow,
     };
   },
   methods: {
@@ -50,6 +52,9 @@ export default {
       this.$nextTick(() => {
         this.isRouteAlive = true;
       });
+    },
+    turnHeaderShow() {
+      this.isHeaderReady = true;
     },
   },
 };

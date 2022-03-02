@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar @openModal="openModal('tweet')" />
-    <Header />
+    <Header :isReady="true" />
     <transition name="fade">
       <TweetModal
         class="modal"
