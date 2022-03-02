@@ -140,7 +140,7 @@ export default {
   margin: auto;
   border-radius: 10px;
   background-color: var(--primary-bg-color);
-  width: 50%;
+  width: 100%;
   > .close-button {
     width: 100%;
     padding: 0.5rem;
@@ -196,7 +196,7 @@ textarea {
 }
 .main-new-tweet {
   border-style: none;
-  width: 100%;
+  width: 100%!important;
   > .main-form {
     border: 1px solid var(--share-border-color);
     border-bottom: 0.6rem solid var(--share-border-color);
@@ -212,6 +212,11 @@ textarea {
     > button {
       bottom: 1rem;
     }
+  }
+}
+@media screen and (min-width:865px){
+  .modal-container{
+    width:50%;
   }
 }
 </style>

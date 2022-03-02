@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link :to="{ name: 'main' }">
+    <router-link :to="{ name: 'admin-tweets' }">
       <svg
         width="24"
         height="22"
@@ -14,7 +14,7 @@
         />
       </svg>
     </router-link>
-    <router-link to="/admin">
+    <div v-show="isUserPage" @click="$emit('openModal')">
       <svg
         width="24"
         height="22"
@@ -27,8 +27,40 @@
           fill="black"
         />
       </svg>
+    </div>
+    <router-link :to="{ name: 'admin-users' }" v-show="!isUserPage">
+      <svg
+        width="18"
+        height="21"
+        viewBox="0 0 18 21"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9.00003 10.8158C10.355 10.8158 11.872 10.6658 12.84 9.55976C13.654 8.62976 13.918 7.19176 13.646 5.16776C13.266 2.34276 11.529 0.655762 9.00003 0.655762C6.47103 0.655762 4.73403 2.34276 4.35403 5.16976C4.08203 7.19176 4.34603 8.62976 5.16003 9.55976C6.12803 10.6668 7.64503 10.8158 9.00003 10.8158ZM5.84003 5.36776C6.00203 4.16776 6.62703 2.15576 9.00003 2.15576C11.373 2.15576 11.998 4.16876 12.16 5.36776C12.367 6.91776 12.217 7.99476 11.71 8.57276C11.255 9.09276 10.444 9.31576 9.00003 9.31576C7.55603 9.31576 6.74503 9.09276 6.29003 8.57276C5.78303 7.99476 5.63303 6.91676 5.84003 5.36776ZM17.28 18.2358C16.403 14.7098 12.998 12.2458 9.00003 12.2458C5.00203 12.2458 1.59703 14.7098 0.720027 18.2358C0.548027 18.9278 0.692027 19.6358 1.11503 20.1758C1.52303 20.6958 2.15503 20.9958 2.84803 20.9958H15.152C15.845 20.9958 16.477 20.6958 16.885 20.1758C17.309 19.6358 17.452 18.9288 17.279 18.2358H17.28ZM15.704 19.2518C15.578 19.4118 15.388 19.4978 15.152 19.4978H2.84803C2.61303 19.4978 2.42203 19.4128 2.29603 19.2518C2.15903 19.0778 2.11603 18.8398 2.17603 18.5978C2.88603 15.7428 5.69303 13.7478 9.00003 13.7478C12.307 13.7478 15.114 15.7418 15.824 18.5978C15.884 18.8398 15.841 19.0778 15.704 19.2518Z"
+          fill="white"
+        />
+      </svg>
     </router-link>
-    <router-link to="/signup">
+    <div @click="logout" to="/signin" v-show="!isUserPage">
+      <svg
+        class="strokeLine"
+        width="20"
+        height="18"
+        viewBox="0 0 20 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9 13L5 9M5 9L9 5M5 9H19M14 13V14C14 14.7956 13.6839 15.5587 13.1213 16.1213C12.5587 16.6839 11.7956 17 11 17H4C3.20435 17 2.44129 16.6839 1.87868 16.1213C1.31607 15.5587 1 14.7956 1 14V4C1 3.20435 1.31607 2.44129 1.87868 1.87868C2.44129 1.31607 3.20435 1 4 1H11C11.7956 1 12.5587 1.31607 13.1213 1.87868C13.6839 2.44129 14 3.20435 14 4V5"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <router-link v-show="isUserPage" to="/signup">
       <svg
         width="20"
         height="21"
@@ -42,7 +74,7 @@
         />
       </svg>
     </router-link>
-    <router-link to="/signin">
+    <router-link v-show="isUserPage" to="/signin">
       <svg
         width="20"
         height="19"
@@ -58,14 +90,42 @@
     </router-link>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      isUserPage: false,
+    };
+  },
+  created() {
+    const routeName = this.$route.name;
+    const adminRoute = ["admin-tweets", "admin-users"];
+    if (!adminRoute.includes(routeName)) {
+      this.isUserPage = true;
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/signin");
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
-path {
+path[fill] {
   fill: var(--primary-text-color);
 }
+path[storke] {
+  stroke: var(--primary-text-color);
+}
 .router-link-active {
-  path {
+  path[fill] {
     fill: var(--primary-color);
+  }
+  path[stoke] {
+    stroke: var(--primary-color);
   }
 }
 .container {
