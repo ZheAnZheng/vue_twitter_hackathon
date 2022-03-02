@@ -70,9 +70,12 @@ export default {
       try {
         // 透過API向伺服器刪除推文
         const { data } = await adminAPI.tweets.delete({ tweetId });
-
+        
         if (data.status !== "success") {
+          toast.fireError('目前無法刪除推文，請稍後再試');
           throw new Error(data.message);
+        } else {
+          toast.fireSuccess('成功刪除推文')
         }
         // 將點擊到的推文刪除
         this.tweetLists = this.tweetLists.filter(
