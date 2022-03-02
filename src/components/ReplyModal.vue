@@ -36,22 +36,27 @@
       <div class="reply-block">
         <img class="avatar" :src="currentUser.avatar | imageFilter" />
         <div class="reply-content">
-          <input
+          <textarea
             id="reply"
             class="reply-input"
+            rows="5"
+            cols="40"
             v-model="reply"
             placeholder="推你的回覆"
-          />
+          ></textarea>
         </div>
       </div>
-      <base-button
-        class="reply-button"
-        :mode="'action'"
-        :position="'right'"
-        @handleClick="submitReply(tweet.id)"
-        :isDisabled="isProcessing"
-        >回覆</base-button
-      >
+      <div class="button-group">
+        <span v-show="!isReplyValid && isChecked">回覆不可空白</span>
+        <base-button
+          class="reply-button"
+          :mode="'action'"
+          :position="'right'"
+          @handleClick="submitReply(tweet.id)"
+          :isDisabled="isProcessing"
+          >回覆</base-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +75,8 @@ export default {
     return {
       reply: "",
       isProcessing: false,
+      isChecked: false,
+      
     };
   },
   props: {
@@ -83,6 +90,10 @@ export default {
     async submitReply(tweetId) {
       try {
         this.isProcessing = true;
+        if(!this.isReplyValid){
+          this.isChecked=true;
+          return;
+        }
         if (this.isReplyValid) {
           const response = await tweetsAPI.createReply({
             tweetId,
@@ -132,7 +143,7 @@ export default {
 .reply-modal {
   padding: 15px;
   width: 600px;
-  height: 450px;
+
   border-radius: 10px;
   background: var(--white-text-color);
 }
@@ -194,10 +205,14 @@ export default {
     background: var(--border-stroke-color);
   }
 }
+.reply-block {
+  margin-bottom: 70px;
+}
+
 .reply-content {
   margin-left: 60px;
-  margin-bottom: 141px;
-  transform: translateY(50%);
+
+  transform: translateY(13px);
 }
 .reply-button {
   height: 38px;
@@ -213,6 +228,21 @@ export default {
 .reply-input {
   width: 100%;
   font-size: 18px;
+  resize: none;
   border: unset;
+}
+.button-group {
+  position:relative;
+  line-height:38px;
+  padding-left:65%;
+  &::after{
+    content:'';
+    display:block;
+    clear:both;
+  }
+  span{
+    color:var(--alert-message-color);
+  }
+
 }
 </style>
