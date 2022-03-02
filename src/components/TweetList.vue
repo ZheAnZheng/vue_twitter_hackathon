@@ -19,7 +19,9 @@
               <div class="time">{{ tweet.createdAt | fromNow }}</div>
             </div>
             <div class="tweet-content">
-              {{ tweet.description }}
+              <p>
+                {{ tweet.description }}
+              </p>
             </div>
           </div>
         </router-link>
@@ -44,6 +46,8 @@
           <button
             class="like"
             v-if="tweet.isLiked"
+            :disabled="isProcessing"
+            :class="{ activeButton: isProcessingButton(tweet.id) }"
             @click="deleteLike(tweet.id)"
           >
             <svg
@@ -62,7 +66,13 @@
             <span class="like-text">{{ tweet.likedCount | emptyFilter }}</span>
           </button>
           <!-- 空心 -->
-          <button class="like" v-else @click="addLike(tweet.id)">
+          <button
+            class="like"
+            :class="{ activeButton: isProcessingButton(tweet.id) }"
+            v-else
+            @click="addLike(tweet.id)"
+            :disabled="isProcessing"
+          >
             <svg
               width="13"
               height="13"
@@ -102,8 +112,11 @@ export default {
     return {
       tweets: [],
       isLoading: true,
+      isProcessing: false,
+      activeTweetId: 0,
     };
   },
+
   watch: {
     $route(to) {
       if (to.name === "userTweets") {
@@ -117,7 +130,6 @@ export default {
       }
     },
   },
-
   created() {
     const routeName = this.$route.name;
     if (routeName === "main") {
@@ -190,6 +202,7 @@ export default {
         }
         this.tweets = response.data.map((data) => {
           const { User, ...tweet } = data;
+          console.log(tweet.description);
           return {
             userAccount: User.account,
             userAvatar: User.avatar,
@@ -205,6 +218,8 @@ export default {
     },
     async addLike(tweetId) {
       try {
+        this.isProcessing = true;
+        this.activeTweetId = tweetId;
         const response = await tweetsAPI.addLike({ tweetId });
 
         if (response.statusText !== "OK") {
@@ -224,10 +239,15 @@ export default {
       } catch (e) {
         console.log(e);
         toast.fireError("無法加入喜歡");
+      } finally {
+        this.isProcessing = false;
+        this.activeTweetId = 0;
       }
     },
     async deleteLike(tweetId) {
       try {
+        this.isProcessing = true;
+        this.activeTweetId = tweetId;
         const response = await tweetsAPI.deleteLike({ tweetId });
         console.log(response);
         if (response.statusText !== "OK") {
@@ -247,9 +267,18 @@ export default {
       } catch (e) {
         console.log(e);
         toast.fireError("無法取消喜歡");
+      } finally {
+        this.isProcessing = false;
+        this.activeTweetId = 0;
       }
     },
-    openReplyModal() {},
+    isProcessingButton(tweetId) {
+      if (tweetId === this.activeTweetId) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   filters: {
     emptyFilter(val) {
@@ -286,12 +315,26 @@ a {
     color: var(--mute-color);
     margin-left: 10px;
   }
+
   .like {
     @extend .message;
   }
   .like-text {
     color: var(--like-color);
   }
+}
+button {
+  border-radius: 2px;
+  border: 1px solid transparent;
+  &:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+  }
+  &:active {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+.activeButton {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .no-data-item {
   height: 100px;

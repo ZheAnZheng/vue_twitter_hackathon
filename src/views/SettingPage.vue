@@ -1,7 +1,11 @@
 <template>
   <setting-layout>
     <div class="setting-container">
-      <BaseInput class="setting-input" :form-items="formItems" @after-over-name-length="handleOverLength" />
+      <BaseInput
+        class="setting-input"
+        :form-items="formItems"
+        @after-over-name-length="handleOverLength"
+      />
       <BaseButton
         @handleClick="updateUserInfo"
         class="setting-button"
@@ -80,7 +84,7 @@ export default {
   methods: {
     // 處理名稱超過50個字的函式
     handleOverLength() {
-      this.formItems[1].isError = true
+      this.formItems[1].isError = true;
     },
     // 將currentUser的資料放入input中的函式
     setUser() {
@@ -100,7 +104,7 @@ export default {
       try {
         this.isProcessing = true;
         const id = this.currentUser.id;
-        const password = this.formItems[3].value
+        const password = this.formItems[3].value;
         const passwordCheck = this.formItems[4].value;
         const formData = new FormData();
 
@@ -114,15 +118,15 @@ export default {
 
         // 當密碼輸入不相同時
         if (password !== passwordCheck) {
-          this.formItems[3].isError = true
-          this.formItems[4].isError = true
+          this.formItems[3].isError = true;
+          this.formItems[4].isError = true;
           return;
         } else { // 將提示訊息還原
           this.formItems[3].isError = false
           this.formItems[4].isError = false
         }
 
-        if (this.formItems[1].value.length > 50) return
+        if (this.formItems[1].value.length > 50) return;
 
         // 向API傳送更新的資訊
         const { data } = await userAPI.update({
@@ -131,14 +135,21 @@ export default {
         });
 
         // 當帳號重覆時
-        if (data.status === "error" && data.message === "Account should be unique.") {
+        if (
+          data.status === "error" &&
+          data.message === "Account should be unique."
+        ) {
           console.log(data.message);
-          this.formItems[0].isError = true
-          return
-        } else if(data.status === "error" && data.message === "Email should be unique.") { // 當email重覆時
-          console.log(data.message)
-          this.formItems[2].isError = true
-          return
+          this.formItems[0].isError = true;
+          return;
+        } else if (
+          data.status === "error" &&
+          data.message === "Email should be unique."
+        ) {
+          // 當email重覆時
+          console.log(data.message);
+          this.formItems[2].isError = true;
+          return;
         } else {
           // 更新成功時的訊息
           toast.fireSuccess("更新成功");

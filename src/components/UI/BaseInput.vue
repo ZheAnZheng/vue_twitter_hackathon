@@ -28,14 +28,13 @@ export default {
   computed: {
     // 計算名稱長度的函式
     countNameLength() {
-      const nameLength = this.formItems[1].value.length
-
+      const nameLength = this.formItems[1].value.length;
       // 當名稱長度超過50個字時，將事件傳遞至母元件
       if (nameLength > 50) {
-        this.$emit('after-over-name-length')
+        this.$emit("after-over-name-length");
       }
 
-      return nameLength
+      return nameLength;
     },
   },
 };
@@ -70,7 +69,8 @@ form {
     border-bottom: 2px solid var(--mute-color);
 
     // 當游標hover或focus時的顏色
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       border-bottom: 2px solid var(--input-hover-focus-color);
     }
   }
@@ -90,9 +90,9 @@ form {
 
   // 提示訊息的樣式設定
   > .account-alert-message,
-    .name-alert-message,
-    .email-alert-message,
-    .password-alert-message {
+  .name-alert-message,
+  .email-alert-message,
+  .password-alert-message {
     color: var(--alert-message-color);
     position: absolute;
     bottom: -50%;

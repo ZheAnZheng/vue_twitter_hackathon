@@ -134,13 +134,13 @@
       </div>
       <div class="profile-follow">
         <div class="follow">
-          {{ user.followersCount }}個<router-link
+          {{ user.followerCount }}個<router-link
             :to="{ name: 'following', params: { id: `${user.id}` } }"
             >追隨中</router-link
           >
         </div>
         <div class="follow">
-          {{ user.followingsCount }}位<router-link
+          {{ user.followingCount }}位<router-link
             :to="{ name: 'followed', params: { id: `${user.id}` } }"
             >跟隨者</router-link
           >
@@ -176,8 +176,6 @@ export default {
   routeUpdated(to, from, next) {
     this.user = {
       ...this.userData,
-      followersCount: this.userData.Followers.length,
-      followingsCount: this.userData.Followers.length,
     };
     this.turnHeaderShow();
 
@@ -202,8 +200,6 @@ export default {
       handler: function () {
         this.user = {
           ...this.userData,
-          followersCount: this.userData.Followers.length,
-          followingsCount: this.userData.Followers.length,
         };
         this.turnHeaderShow();
       },
