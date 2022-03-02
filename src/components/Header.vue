@@ -173,6 +173,9 @@ header {
   display: inline-block;
   margin-right: 25px;
   cursor: pointer;
+  path {
+    fill: var(--primary-text-color);
+  }
 }
 
 // 標題的排版

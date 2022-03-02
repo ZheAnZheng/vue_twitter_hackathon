@@ -202,7 +202,7 @@ export default {
         }
         this.tweets = response.data.map((data) => {
           const { User, ...tweet } = data;
-          console.log(tweet.description);
+
           return {
             userAccount: User.account,
             userAvatar: User.avatar,
@@ -249,7 +249,7 @@ export default {
         this.isProcessing = true;
         this.activeTweetId = tweetId;
         const response = await tweetsAPI.deleteLike({ tweetId });
-        console.log(response);
+
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
         }

@@ -27,8 +27,7 @@
           </div>
           <div class="tweet-content">
             <p>
-
-            {{ reply.comment }}
+              {{ reply.comment }}
             </p>
           </div>
         </div>

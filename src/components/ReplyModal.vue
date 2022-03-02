@@ -233,6 +233,8 @@ export default {
   font-size: 18px;
   resize: none;
   border: unset;
+  background: transparent;
+  color: var(--parimary-text-color);
 }
 .button-group {
   position: relative;

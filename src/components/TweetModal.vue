@@ -171,6 +171,7 @@ export default {
       font-size: 1rem;
       height: 18rem;
       width: 100%;
+      color: var(--primary-text-color);
       &::placeholder {
         font-size: 1rem;
         color: var(--share-placeholder-color);
@@ -190,7 +191,9 @@ export default {
     }
   }
 }
-
+textarea {
+  background: transparent;
+}
 .main-new-tweet {
   border-style: none;
   width: 100%;

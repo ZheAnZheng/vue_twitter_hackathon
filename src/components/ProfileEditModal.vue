@@ -290,6 +290,9 @@ export default {
   }
   .close {
     cursor: pointer;
+    path {
+      fill: var(--primary-color);
+    }
   }
   .save-button {
     flex-basis: 70px;
@@ -401,6 +404,9 @@ form {
     background: var(--input-bg-color);
     border-bottom: 2px solid var(--mute-color);
     border-radius: 3px;
+    input {
+      color: var(--primary-text-color);
+    }
     &.invalid {
       border-bottom: 2px solid var(--alert-message-color);
       div,

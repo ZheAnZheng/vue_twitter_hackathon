@@ -7,6 +7,7 @@
         v-model="item.value"
         :value="item.value"
         :type="item.type"
+        style="background-color: transparent"
         :class="{ 'error-color': item.isError }"
       />
       <i class="limit-message" v-if="item.name === '名稱'"
@@ -95,13 +96,24 @@ form {
     font-size: 15px;
     color: var(--mute-color);
   }
-
+  input[type="text"] {
+    background: rgba(0, 0, 0, 0);
+    border: none;
+    outline: none;
+  }
+  input[type="password"] {
+    background: rgba(0, 0, 0, 0);
+    border: none;
+    outline: none;
+    color: var(--primary-text-color);
+  }
   input {
     width: 100%;
     background-color: rgba(0, 0, 0, 0);
     border: 0px;
     border-bottom: 2px solid var(--mute-color);
-
+    background: transparent;
+    color: var(--primary-text-color);
     // 當游標hover或focus時的顏色
     &:hover,
     &:focus {
