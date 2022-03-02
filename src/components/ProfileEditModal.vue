@@ -105,9 +105,9 @@
             <input id="name" name="name" v-model="editUser.name" />
 
             <div class="text-count">
-              <span v-show="nameTextLength > 15"> 字數過長 </span>
+              <span v-show="nameTextLength > 50"> 字數過長 </span>
               <span v-show="nameTextLength < 1"> 名字不可為空 </span>
-              {{ nameTextLength }}/15
+              {{ nameTextLength }}/50
             </div>
           </div>
           <div class="form-group" :class="{ invalid: isIntroInvalid }">
@@ -172,7 +172,7 @@ export default {
       return this.editUser.introduction.length;
     },
     isNameInvalid() {
-      return this.nameTextLength > 15 || this.nameTextLength < 1;
+      return this.nameTextLength > 50 || this.nameTextLength < 1;
     },
     isIntroInvalid() {
       return this.introTextLength > 160;

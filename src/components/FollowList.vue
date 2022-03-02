@@ -14,7 +14,7 @@
     </ul>
     <ul class="followList">
       <li v-for="user in users" :key="user.id" class="list-item">
-        <img class="image" :src="user.image | imageFilter" />
+        <img class="image" :src="user.avatar | imageFilter" />
         <div class="user-info">
           <base-button
             v-if="user.isFollowed"
@@ -55,7 +55,7 @@ import BaseButton from "./UI/BaseButton.vue";
 export default {
   components: { BaseButton },
   mixins: [activeLinkHandler, emptyImageFilter, followshipHandler],
-  inject: ["profileUser"],
+  inject: ["profileUser", "turnHeaderShow"],
   data() {
     return {
       users: [],
@@ -85,6 +85,7 @@ export default {
       } else {
         this.users = [...this.profileUser.data.Followers];
       }
+      this.turnHeaderShow();
     },
   },
 };

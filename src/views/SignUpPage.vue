@@ -71,7 +71,7 @@ export default {
     async signUp() {
       try {
         this.isProcessing = true;
-        
+
         if (this.checkFormIsInvalid()) {
           return;
         }
@@ -119,9 +119,9 @@ export default {
           return;
         }
       });
-      if(this.formItems[3].value!==this.formItems[4].value ){
-        isInvalid=true;
-        toast.fireWarning("密碼不一致")
+      if (this.formItems[3].value !== this.formItems[4].value) {
+        isInvalid = true;
+        toast.fireWarning("密碼不一致");
       }
       return isInvalid;
     },

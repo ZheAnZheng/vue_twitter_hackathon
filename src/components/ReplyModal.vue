@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="reply-modal">
-      <div class="close" @click="$emit('closeModal')">
+      <div class="close" @click="closeModal">
         <svg
           width="16"
           height="16"
@@ -76,7 +76,6 @@ export default {
       reply: "",
       isProcessing: false,
       isChecked: false,
-      
     };
   },
   props: {
@@ -90,8 +89,8 @@ export default {
     async submitReply(tweetId) {
       try {
         this.isProcessing = true;
-        if(!this.isReplyValid){
-          this.isChecked=true;
+        if (!this.isReplyValid) {
+          this.isChecked = true;
           return;
         }
         if (this.isReplyValid) {
@@ -113,6 +112,11 @@ export default {
       } finally {
         this.isProcessing = false;
       }
+    },
+    closeModal() {
+      this.isChecked = false;
+      this.reply = "";
+      this.$emit("closeModal");
     },
   },
   computed: {
@@ -217,8 +221,7 @@ export default {
 .reply-button {
   height: 38px;
   width: 66px;
-  font-size: 16px;
-
+  font-size: 15px;
   &::after {
     content: "";
     display: block;
@@ -232,17 +235,12 @@ export default {
   border: unset;
 }
 .button-group {
-  position:relative;
-  line-height:38px;
-  padding-left:65%;
-  &::after{
-    content:'';
-    display:block;
-    clear:both;
-  }
-  span{
-    color:var(--alert-message-color);
-  }
+  position: relative;
+  line-height: 38px;
+  padding-left: 65%;
 
+  span {
+    color: var(--alert-message-color);
+  }
 }
 </style>
