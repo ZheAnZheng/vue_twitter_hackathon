@@ -33,7 +33,7 @@ export default {
         // toast.fireSuccess('成功登入')
         // 透過API向伺服器取得管理者的資訊
         const { data } = await adminAPI.users.getAll();
-
+        console.log(data)
         this.users = data.map((user) => {
           return {
             ...user,
@@ -44,7 +44,7 @@ export default {
               background: `no-repeat url('https://i.imgur.com/ju5wFt3.jpg')`,
             },
             tweetCount: user.tweetCount,
-            likeCount: user.likedCount,
+            likeCount: user.likedCount ? user.likedCount : 0,
             following: user.followingCount,
             follower: user.followerCount,
           };
