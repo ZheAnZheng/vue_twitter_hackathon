@@ -2,50 +2,16 @@
   <form>
     <div v-for="item in formItems" :key="item.id" class="input-group">
       <label :for="item.name">{{ item.name }}</label>
-      <input
-        :id="item.name"
-        v-model="item.value"
-        :value="item.value"
-        :type="item.type"
-        :class="{ 'error-color': item.isError }"
-      />
-      <i class="limit-message" v-if="item.name === '名稱'"
-        >{{ countNameLength }} / 50</i
-      >
-      <div
-        v-show="item.isError && item.name === '帳號'"
-        class="account-alert-message"
-      >
-        帳號重覆
-      </div>
-      <div
-        v-show="item.isError && item.name === '名稱'"
-        class="name-alert-message"
-      >
-        字數超出上限
-      </div>
-      <div
-        v-show="item.isError && item.name === 'Email'"
-        class="email-alert-message"
-      >
-        Email重覆
-      </div>
-      <div
-        v-show="
-          item.isError && (item.name === '密碼' || item.name === '密碼確認')
-        "
-        class="password-alert-message"
-      >
-        兩次密碼輸入不相同，請再次確認
-      </div>
-      <div
-        v-show="
-          item.isBlank && (item.name === '密碼' || item.name === '密碼確認')
-        "
-        class="password-alert-message"
-      >
-        密碼空白，請再次確認
-      </div>
+      <input :id="item.name" 
+             v-model="item.value" 
+             :value="item.value" 
+             :type="item.type" 
+             :class="{ 'error-color': item.isError }" />
+      <i class="limit-message" v-if="item.name === '名稱'">{{ countNameLength }} / 50</i>
+      <div v-show="item.isError && item.name === '帳號'" class="account-alert-message">帳號重覆</div>
+      <div v-show="item.isError && item.name === '名稱'" class="name-alert-message">字數超出上限</div>
+      <div v-show="item.isError && item.name === 'Email'" class="email-alert-message">Email重覆</div>
+      <div v-show="item.isError && (item.name === '密碼' || item.name === '密碼確認')" class="password-alert-message">兩次密碼輸入不相同，請再次確認</div>
     </div>
   </form>
 </template>
