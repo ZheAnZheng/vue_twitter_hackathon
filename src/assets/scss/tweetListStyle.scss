@@ -40,6 +40,9 @@
   }
   .tweet-content {
     margin-bottom: 10px;
+    p{
+      white-space: pre;
+    }
   }
 }
 .tweet-relative{

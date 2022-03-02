@@ -19,7 +19,9 @@
               <div class="time">{{ tweet.createdAt | fromNow }}</div>
             </div>
             <div class="tweet-content">
+              <p>
               {{ tweet.description }}
+              </p>
             </div>
           </div>
         </router-link>
@@ -190,6 +192,7 @@ export default {
         }
         this.tweets = response.data.map((data) => {
           const { User, ...tweet } = data;
+          console.log(tweet.description)
           return {
             userAccount: User.account,
             userAvatar: User.avatar,
