@@ -49,6 +49,7 @@
         :mode="'action'"
         :position="'right'"
         @handleClick="submitReply(tweet.id)"
+        :isDisabled="isProcessing"
         >回覆</base-button
       >
     </div>
@@ -68,6 +69,7 @@ export default {
   data() {
     return {
       reply: "",
+      isProcessing: false,
     };
   },
   props: {
@@ -80,6 +82,7 @@ export default {
   methods: {
     async submitReply(tweetId) {
       try {
+        this.isProcessing = true;
         if (this.isReplyValid) {
           const response = await tweetsAPI.createReply({
             tweetId,
@@ -96,6 +99,8 @@ export default {
       } catch (e) {
         console.log(e);
         toast.fireError("無法發送回覆");
+      } finally {
+        this.isProcessing = false;
       }
     },
   },
