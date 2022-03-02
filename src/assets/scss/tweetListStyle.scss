@@ -40,8 +40,12 @@
   }
   .tweet-content {
     margin-bottom: 10px;
+     word-break: break-word;
+    width: 100%;
+    overflow: hidden;
     p{
-      white-space: pre;
+      white-space:pre-wrap;
+      word-break: break-word;
     }
   }
 }

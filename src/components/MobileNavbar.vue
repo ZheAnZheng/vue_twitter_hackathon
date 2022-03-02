@@ -79,6 +79,7 @@ path {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  z-index:9999;
 }
 // 計算出來手機版navbar要消失在865px=235+30+600
 @media screen and (min-width: 865px) {
