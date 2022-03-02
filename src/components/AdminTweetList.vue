@@ -5,7 +5,7 @@
       <adminTweetListCard
         v-for="tweet in tweetLists"
         :key="tweet.id"
-        :tweet="tweet"
+        :initial-tweet="tweet"
         @after-delete-tweet="handleDeleteTweet"
       />
     </transition-group>

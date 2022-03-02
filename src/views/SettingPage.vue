@@ -1,7 +1,7 @@
 <template>
   <setting-layout>
     <div class="setting-container">
-      <BaseInput class="setting-input" :form-items="formItems" />
+      <BaseInput class="setting-input" :form-items="formItems" @after-over-name-length="handleOverLength" />
       <BaseButton
         @handleClick="updateUserInfo"
         class="setting-button"
@@ -35,24 +35,36 @@ export default {
         {
           id: 0,
           name: "帳號",
+          value: "",
+          isError: false,
         },
         {
           id: 1,
           name: "名稱",
+          value: "",
+          isError: false,
         },
         {
           id: 2,
           name: "Email",
+          value: "",
+          isError: false,
         },
         {
           id: 3,
           name: "密碼",
           type: "password",
+          value: "",
+          isError: false,
+          isBlank: false,
         },
         {
           id: 4,
           name: "密碼確認",
           type: "password",
+          value: "",
+          isError: false,
+          isBlank: false,
         },
       ],
       isAuthenticated: false,
@@ -66,6 +78,10 @@ export default {
     this.setUser();
   },
   methods: {
+    // 處理名稱超過50個字的函式
+    handleOverLength() {
+      this.formItems[1].isError = true
+    },
     // 將currentUser的資料放入input中的函式
     setUser() {
       try {
@@ -84,7 +100,7 @@ export default {
       try {
         this.isProcessing = true;
         const id = this.currentUser.id;
-        const password = this.formItems[3].value;
+        const password = this.formItems[3].value
         const passwordCheck = this.formItems[4].value;
         const formData = new FormData();
 
@@ -98,9 +114,16 @@ export default {
 
         // 當密碼輸入不相同時
         if (password !== passwordCheck) {
-          toast.fireWarning("兩次密碼輸入不相同，請再次確認");
+          this.formItems[3].isError = true
+          this.formItems[4].isError = true
           return;
+        } else if (!password && !passwordCheck) { // 當密碼空白時
+          this.formItems[3].isBlank = true
+          this.formItems[4].isBlank = true
+          return
         }
+
+        if (this.formItems[1].value.length > 50) return
 
         // 向API傳送更新的資訊
         const { data } = await userAPI.update({
@@ -108,9 +131,15 @@ export default {
           formData,
         });
 
-        // 當無法修改時丟出錯誤
-        if (data.status === "error") {
+        // 當帳號重覆時
+        if (data.status === "error" && data.message === "Account should be unique.") {
           console.log(data.message);
+          this.formItems[0].isError = true
+          return
+        } else if(data.status === "error" && data.message === "Email should be unique.") { // 當email重覆時
+          console.log(data.message)
+          this.formItems[2].isError = true
+          return
         } else {
           // 更新成功時的訊息
           toast.fireSuccess("更新成功");
