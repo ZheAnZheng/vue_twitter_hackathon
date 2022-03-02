@@ -2,28 +2,42 @@
   <form>
     <div v-for="item in formItems" :key="item.id" class="input-group">
       <label :for="item.name">{{ item.name }}</label>
-      <input :id="item.name" v-model="item.value" :value="item.value" :type="item.type" :class="{ 'error-color': isError }" />
-      <div v-show="isError && item.name === '帳號'" class="account-alert-message">帳號不存在</div>
-      <div v-show="isError && item.name === '帳號'" class="account-alert-message">帳號重覆</div>
-      <div v-show="isError && item.name === '名稱'" class="name-alert-message">字數超出上限</div>
-      <div v-show="isError && item.name === 'Email'" class="account-alert-message">Email重覆</div>
-      <div v-show="isError && (item.name === '密碼' || item.name === '密碼確認')" class="account-alert-message">密碼輸入錯誤</div>
+      <input :id="item.name" 
+             v-model="item.value" 
+             :value="item.value" 
+             :type="item.type" 
+             :class="{ 'error-color': item.isError }" />
+      <i class="limit-message" v-if="item.name === '名稱'">{{ countNameLength }} / 50</i>
+      <div v-show="item.isError && item.name === '帳號'" class="account-alert-message">帳號重覆</div>
+      <div v-show="item.isError && item.name === '名稱'" class="name-alert-message">字數超出上限</div>
+      <div v-show="item.isError && item.name === 'Email'" class="email-alert-message">Email重覆</div>
+      <div v-show="item.isError && (item.name === '密碼' || item.name === '密碼確認')" class="password-alert-message">兩次密碼輸入不相同，請再次確認</div>
+      <div v-show="item.isBlank && (item.name === '密碼' || item.name === '密碼確認')" class="password-alert-message">密碼空白，請再次確認</div>
     </div>
   </form>
 </template>
 
 <script>
 export default {
+  name: "BaseInput",
   props: {
     formItems: {
       type: Array,
       required: true,
     },
   },
-  data() {
-    return {
-      isError: false,
-    }
+  computed: {
+    // 計算名稱長度的函式
+    countNameLength() {
+      const nameLength = this.formItems[1].value.length
+
+      // 當名稱長度超過50個字時，將事件傳遞至母元件
+      if (nameLength > 50) {
+        this.$emit('after-over-name-length')
+      }
+
+      return nameLength
+    },
   },
 };
 </script>
@@ -39,6 +53,7 @@ form {
   width: 100%;
   margin-bottom: 20px;
   background-color: var(--input-bg-color);
+  position: relative;
   &:last-child {
     margin-bottom: 0;
   }
@@ -61,15 +76,28 @@ form {
     }
   }
 
+  // 名稱字數的樣式設定
+  > .limit-message {
+    position: absolute;
+    bottom: -50%;
+    right: 0;
+    font-size: 15px;
+  }
+
   // 發生錯誤時的顏色
   > .error-color {
     border-bottom: 2px solid var(--alert-message-color);
   }
 
-  // 提示訊息的顏色
+  // 提示訊息的樣式設定
   > .account-alert-message,
-    .name-alert-message {
+    .name-alert-message,
+    .email-alert-message,
+    .password-alert-message {
     color: var(--alert-message-color);
+    position: absolute;
+    bottom: -50%;
+    left: 0;
   }
 }
 
