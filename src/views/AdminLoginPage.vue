@@ -72,12 +72,12 @@ export default {
         // 防止前台帳號登入以及當登入的是前台帳號的提示訊息
         if (data.data.user.role !== "admin") {
           toast.fireWarning("非管理帳號無法登入");
-          this.isLoading = false;
+          this.isProcessing = false
           return;
         }
 
         localStorage.setItem("token", data.data.token);
-        this.isProcessing = false;
+
         this.setCurrentUser(data.data.user);
 
         this.$router.replace("/admin/users");
