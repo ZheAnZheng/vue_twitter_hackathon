@@ -112,25 +112,14 @@ export default {
         formData.append("avatar", this.currentUser.avatar);
         formData.append("cover", this.currentUser.cover);
 
-        let passwordIsError = this.formItems[3];
-        let passwordCheckIsError = this.formItems[4];
-        let passwordIsBlank = this.formItems[3];
-        let passwordCheckIsBlank = this.formItems[4];
-
         // 當密碼輸入不相同時
         if (password !== passwordCheck) {
-          passwordIsError.isError = true
-          passwordCheckIsError.isError = true
+          this.formItems[3].isError = true
+          this.formItems[4].isError = true
           return;
-        } else if (!password && !passwordCheck) { // 當密碼空白時
-          passwordIsBlank.isBlank = true
-          passwordCheckIsBlank.isBlank = true
-          return;
-        } else { // 當密碼都不是空白或不同時
-          passwordIsError.isError = false
-          passwordCheckIsError.isError = false
-          passwordIsBlank.isBlank = false
-          passwordCheckIsBlank.isBlank = false
+        } else { // 將提示訊息還原
+          this.formItems[3].isError = false
+          this.formItems[4].isError = false
         }
 
         if (this.formItems[1].value.length > 50) return
