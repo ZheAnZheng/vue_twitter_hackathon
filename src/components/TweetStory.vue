@@ -25,7 +25,7 @@
           <div>{{ tweet.repliedCount }}<span>回覆</span></div>
           <div>{{ tweet.likedCount }}<span>喜歡次數</span></div>
         </div>
-        <div class="icon" @click="openModal('reply')">
+        <button class="icon reply-icon" @click="openModal('reply')">
           <svg
             width="30"
             height="30"
@@ -38,12 +38,14 @@
               fill="#657786"
             />
           </svg>
-        </div>
+        </button>
         <transition name="like" mode="out-in">
-          <div
-            class="icon"
+          <button
+            class="icon fillheart-icon"
+            :class="{ active: isProcessing }"
             key="redHeart"
             v-if="tweet.isLiked"
+            :disabled="isProcessing"
             @click="deleteLike(tweet.id)"
           >
             <svg
@@ -58,8 +60,15 @@
                 fill="#E0245E"
               />
             </svg>
-          </div>
-          <div class="icon" key="emptyHeart" v-else @click="addLike(tweet.id)">
+          </button>
+          <button
+            class="icon emptyheart-icon"
+            :class="{ active: isProcessing }"
+            key="emptyHeart"
+            v-else
+            @click="addLike(tweet.id)"
+            :disabled="isProcessing"
+          >
             <svg
               width="30"
               height="30"
@@ -72,7 +81,7 @@
                 fill="#657786"
               />
             </svg>
-          </div>
+          </button>
         </transition>
       </div>
 
@@ -115,6 +124,7 @@ export default {
       tweet: {},
       replies: [],
       isLoading: true,
+      isProcessing: false,
     };
   },
   methods: {
@@ -163,6 +173,7 @@ export default {
     },
     async addLike(tweetId) {
       try {
+        this.isProcessing = true;
         const response = await tweetsAPI.addLike({ tweetId });
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
@@ -172,10 +183,13 @@ export default {
       } catch (e) {
         console.log(e);
         toast.fireError("無法加入喜歡");
+      } finally {
+        this.isProcessing = false;
       }
     },
     async deleteLike(tweetId) {
       try {
+        this.isProcessing = true;
         const response = await tweetsAPI.deleteLike({ tweetId });
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
@@ -185,6 +199,8 @@ export default {
       } catch (e) {
         console.log(e);
         toast.fireError("無法加入喜歡");
+      } finally {
+        this.isProcessing = false;
       }
     },
   },
@@ -257,6 +273,30 @@ export default {
     margin-right: 100px;
     cursor: pointer;
   }
+}
+.reply-icon:hover {
+  path {
+    fill: var(--blue-text-color);
+  }
+}
+.emptyheart-icon:hover {
+  path {
+    fill: var(--like-color);
+  }
+}
+.fillheart-icon:hover {
+  path {
+    stroke: var(--mute-color);
+    fill: transparent;
+  }
+}
+.emptyheart-icon.active path {
+  fill: var(--like-color);
+}
+
+.fillheart-icon.active path {
+  stroke: var(--mute-color);
+  fill: transparent;
 }
 
 .like-enter-active {

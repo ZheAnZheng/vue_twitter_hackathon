@@ -13,33 +13,43 @@
       </li>
     </ul>
     <ul class="followList">
-      <li v-for="user in users" :key="user.id" class="list-item">
-        <img class="image" :src="user.image | imageFilter" />
-        <div class="user-info">
-          <base-button
-            v-if="user.isFollowed"
-            class="follow-button"
-            :mode="'action'"
-            :position="'right'"
-            @handleClick="deleteFollowing(user.id, 'followList')"
-            >正在跟隨</base-button
-          >
-          <base-button
-            v-else
-            class="follow-button"
-            :mode="'actionOutline'"
-            :position="'right'"
-            @handleClick="addFollowing(user.id, 'followList')"
-            >跟隨</base-button
-          >
-          <div class="name">{{ user.name }}</div>
-          <div class="account">@{{ user.account }}</div>
+      <BaseSpinner v-if="isLoading" />
+      <template v-else>
+        <li v-for="user in users" :key="user.id" class="list-item">
+          <img class="image" :src="user.avatar | imageFilter" />
+          <div class="user-info" >
+            <base-button
+              v-if="user.isFollowed"
+              class="follow-button"
+              :mode="'action'"
+              :position="'right'"
+              :isDisabled="isProcessing && processingUser === user.id"
+              v-show="currentUser.id!==user.id"
+              @handleClick="handleDeleteFollowing(user.id)"
+              >正在跟隨</base-button
+            >
+            <base-button
+              v-else
+              class="follow-button"
+              :mode="'actionOutline'"
+              :position="'right'"
+              :isDisabled="isProcessing && processingUser === user.id"
+               v-show="currentUser.id!==user.id"
+              @handleClick="handleAddFollowing(user.id)"
+              >跟隨</base-button
+            >
+            <div class="name">{{ user.name }}</div>
+            <div class="account">@{{ user.account }}</div>
 
-          <div class="introduction">
-            {{ user.introduction }}
+            <div class="introduction">
+              {{ user.introduction }}
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
+        <li class="list-item" v-show="!users.length">
+          <div class="no-item">暫無追隨資料</div>
+        </li>
+      </template>
     </ul>
   </div>
 </template>
@@ -50,15 +60,18 @@ import {
   followshipHandler,
 } from "../utils/mixins.js";
 import { mapState } from "vuex";
+import BaseSpinner from "./UI/BaseSpinner.vue";
 import BaseButton from "./UI/BaseButton.vue";
 
 export default {
-  components: { BaseButton },
+  components: { BaseButton, BaseSpinner },
   mixins: [activeLinkHandler, emptyImageFilter, followshipHandler],
-  inject: ["profileUser"],
+  inject: ["profileUser", "turnHeaderShow"],
   data() {
     return {
       users: [],
+      processingUser: 0,
+      isLoading: true,
     };
   },
   watch: {
@@ -85,6 +98,16 @@ export default {
       } else {
         this.users = [...this.profileUser.data.Followers];
       }
+      this.isLoading = false;
+      this.turnHeaderShow();
+    },
+    handleDeleteFollowing(userId) {
+      this.processingUser = userId;
+      this.deleteFollowing(userId, "followList");
+    },
+    handleAddFollowing(userId) {
+      this.processingUser = userId;
+      this.addFollowing(userId, "followList");
     },
   },
 };
@@ -143,6 +166,11 @@ export default {
   }
   .follow-button {
     height: 26px;
+  }
+  .no-item {
+    height: 50px;
+    line-height: 50px;
+    color: var(--mute-color);
   }
 }
 </style>

@@ -49,7 +49,13 @@ export default {
   },
   created() {
     const currentRouteName = this.$route.name;
-    const profileRoute = ["userTweets", "replyTweets", "likeTweets"];
+    const profileRoute = [
+      "userTweets",
+      "replyTweets",
+      "likeTweets",
+      "followed",
+      "following",
+    ];
     if (!profileRoute.includes(currentRouteName)) {
       this.isHeaderReady = true;
     }

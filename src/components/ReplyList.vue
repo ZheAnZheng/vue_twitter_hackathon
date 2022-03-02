@@ -26,7 +26,10 @@
             >
           </div>
           <div class="tweet-content">
+            <p>
+
             {{ reply.comment }}
+            </p>
           </div>
         </div>
       </li>

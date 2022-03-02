@@ -71,11 +71,11 @@ export default {
     async signUp() {
       try {
         this.isProcessing = true;
+
         if (this.checkFormIsInvalid()) {
-          this.isProcessing = false;
-          toast.fireWarning("表單填寫不正確");
           return;
         }
+
         const response = await adminAPI.users.signUp({
           account: this.formItems[0].value,
           name: this.formItems[1].value,
@@ -109,12 +109,23 @@ export default {
 
       this.formItems.forEach((item) => {
         if (item.value.trim() === "") {
+          toast.fireWarning("表單填寫不正確");
+          isInvalid = true;
+          return;
+        }
+        if (item.name === "名稱" && item.value.trim().length > 50) {
+          toast.fireWarning("名字最多50字");
           isInvalid = true;
           return;
         }
       });
+      if (this.formItems[3].value !== this.formItems[4].value) {
+        isInvalid = true;
+        toast.fireWarning("密碼不一致");
+      }
       return isInvalid;
     },
+
     cancel() {
       if (!this.isProcessing) {
         this.$router.replace("/signin");

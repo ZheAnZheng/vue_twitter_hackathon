@@ -79,15 +79,17 @@ export default {
           localStorage.setItem("token", `${data.data.token}`);
 
           this.setCurrentUser(user);
-          this.isProcessing = false;
+
           toast.fireSuccess("登入成功");
           this.$router.replace("/main");
         }
       } catch (e) {
         this.isLoading = false;
         console.log(e);
-        this.isProcessing = false;
+
         toast.fireError("登入失敗");
+      } finally {
+        this.isProcessing = false;
       }
     },
     checkAccountIsInvalid() {
