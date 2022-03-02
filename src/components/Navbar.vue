@@ -103,7 +103,6 @@ export default {
     if (themeColor) {
       this.themeMode = themeColor;
       this.isSwitchOn = themeColor === "dark" ? true : false;
-      this.turnTheme(themeColor);
     }
 
     if (routePath.includes("/admin")) {
