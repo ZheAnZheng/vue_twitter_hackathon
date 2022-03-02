@@ -169,7 +169,7 @@ export default {
       return this.editUser.name.length;
     },
     introTextLength() {
-      return this.editUser.introduction;
+      return this.editUser.introduction.length;
     },
     isNameInvalid() {
       return this.nameTextLength > 15 || this.nameTextLength < 1;
