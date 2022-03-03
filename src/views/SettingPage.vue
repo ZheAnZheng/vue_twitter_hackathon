@@ -102,9 +102,16 @@ export default {
         const id = this.currentUser.id;
         const password = this.formItems[3].value
         const passwordCheck = this.formItems[4].value;
+        const account = this.formItems[0].value
         const formData = new FormData();
 
-        formData.append("account", this.formItems[0].value.slice(1));
+        // 防止使用者刪除@
+        if (account.includes('@') === false) {
+          toast.fireWarning('帳號開頭必需有"@"')
+          return
+        }
+
+        formData.append("account", account.slice(1));
         formData.append("name", this.formItems[1].value);
         formData.append("email", this.formItems[2].value);
         formData.append("password", this.formItems[3].value);
