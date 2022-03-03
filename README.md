@@ -29,7 +29,7 @@ http://localhost:8080/
 ### 貼心小提醒 
 ```
 若是npm run serve失敗
-在運行一次npm install在嘗試看看
+在運行一次npm install再嘗試看看
 ```
 
 ### 可以直接複製貼到terminal執行
