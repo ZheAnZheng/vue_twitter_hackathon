@@ -1,5 +1,6 @@
 <template>
   <div>
+    <MobileNavbar />
     <Navbar @openModal="openModal('tweet')" />
     <Header :isReady="true" />
     <transition name="fade">
@@ -20,12 +21,14 @@ import { modalController } from "../../utils/mixins.js";
 import Navbar from "../Navbar.vue";
 import Header from "../Header.vue";
 import TweetModal from "../TweetModal.vue";
+import MobileNavbar from "../MobileNavbar.vue";
 export default {
   mixins: [modalController],
   components: {
     Navbar,
     Header,
     TweetModal,
+    MobileNavbar,
   },
 };
 </script>

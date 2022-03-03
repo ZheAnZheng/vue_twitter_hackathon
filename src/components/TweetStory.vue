@@ -131,9 +131,9 @@ export default {
     async fetchTweet(tweetId) {
       try {
         const response = await tweetsAPI.get({ tweetId });
-        // console.log(response)
+
         if (response.statusText !== "OK") {
-          console.log("not this. tweet");
+          console.log("this tweet doesnt exist");
           throw new Error(response.data.message);
         }
 

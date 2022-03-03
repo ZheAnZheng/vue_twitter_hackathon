@@ -74,6 +74,12 @@ export default {
         return () => {};
       },
     },
+    reFetchProfileUser: {
+      from: "reFetchProfileUser",
+      default: function () {
+        return () => {};
+      },
+    },
   },
   methods: {
     async addTweet() {
@@ -91,14 +97,17 @@ export default {
         const response = await tweetsAPI.createTweet({
           description: this.text,
         });
-        console.log(response);
+
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
 
         this.text = "";
         this.$emit("closeModal");
+
         this.reload();
+        this.reFetchProfileUser();
+
         this.isProcessing = false;
         toast.fireSuccess("推文成功");
       } catch (e) {
@@ -140,7 +149,7 @@ export default {
   margin: auto;
   border-radius: 10px;
   background-color: var(--primary-bg-color);
-  width: 50%;
+  width: 100%;
   > .close-button {
     width: 100%;
     padding: 0.5rem;
@@ -171,6 +180,7 @@ export default {
       font-size: 1rem;
       height: 18rem;
       width: 100%;
+      color: var(--primary-text-color);
       &::placeholder {
         font-size: 1rem;
         color: var(--share-placeholder-color);
@@ -190,10 +200,12 @@ export default {
     }
   }
 }
-
+textarea {
+  background: transparent;
+}
 .main-new-tweet {
   border-style: none;
-  width: 100%;
+  width: 100% !important;
   > .main-form {
     border: 1px solid var(--share-border-color);
     border-bottom: 0.6rem solid var(--share-border-color);
@@ -209,6 +221,11 @@ export default {
     > button {
       bottom: 1rem;
     }
+  }
+}
+@media screen and (min-width: 865px) {
+  .modal-container {
+    width: 50%;
   }
 }
 </style>

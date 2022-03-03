@@ -1,24 +1,36 @@
 # vue_twitter
 
 ## Project setup
+
+### 將專案從git複製到本地(複製到terminal執行)
+```
+git clone https://github.com/ZheAnZheng/vue_twitter.git
+```
+
+### 先選進專案資料夾
+```
+cd vue_twitter
+```
+
+### 安裝node_modules
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 啟動伺服器
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 出現網址即成功(複製網址貼到瀏覽器)
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+http://localhost:8080/
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 可以直接複製貼到terminal執行
+```
+git clone https://github.com/ZheAnZheng/vue_twitter.git
+cd vue_twitter
+npm install
+npm run serve
+```

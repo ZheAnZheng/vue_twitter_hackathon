@@ -84,7 +84,17 @@ export default {
       required: true,
     },
   },
-  inject: ["reload"],
+  inject: {
+    reload: {
+      from: "reload",
+    },
+    reFetchProfileUser: {
+      from: "reFetchProfileUser",
+      default: () => {
+        return function () {};
+      },
+    },
+  },
   methods: {
     async submitReply(tweetId) {
       try {
@@ -93,19 +103,12 @@ export default {
           this.isChecked = true;
           return;
         }
-        if (this.isReplyValid) {
-          const response = await tweetsAPI.createReply({
-            tweetId,
-            comment: this.reply,
-          });
-          console.log(response);
-          if (response.statusText !== "OK") {
-            throw Error(response.data.message);
-          }
-          this.$emit("closeModal");
-          this.reload();
-          toast.fireSuccess("回覆成功");
-        }
+
+        await this.trySubmitReply(tweetId);
+        this.$emit("closeModal");
+        this.reload();
+        this.reFetchProfileUser();
+        toast.fireSuccess("回覆成功");
       } catch (e) {
         console.log(e);
         toast.fireError("無法發送回覆");
@@ -117,6 +120,20 @@ export default {
       this.isChecked = false;
       this.reply = "";
       this.$emit("closeModal");
+    },
+    async trySubmitReply(tweetId) {
+      try {
+        const response = await tweetsAPI.createReply({
+          tweetId,
+          comment: this.reply,
+        });
+
+        if (response.statusText !== "OK") {
+          throw Error(response.data.message);
+        }
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   computed: {
@@ -233,6 +250,8 @@ export default {
   font-size: 18px;
   resize: none;
   border: unset;
+  background: transparent;
+  color: var(--parimary-text-color);
 }
 .button-group {
   position: relative;

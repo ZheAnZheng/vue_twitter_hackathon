@@ -212,6 +212,19 @@ export default {
           return;
         }
         this.isProcessing = true;
+        await this.tryUpLoad();
+        this.saveEdit(e);
+        this.isProcessing = false;
+        this.reFetchProfileUser();
+        toast.fireSuccess("修改成功");
+      } catch (e) {
+        console.log(e);
+        this.isProcessing = false;
+        toast.fireError("無法上傳修改");
+      }
+    },
+    async tryUpLoad(e) {
+      try {
         const formData = new FormData(e.target);
         formData.append("password", this.currentUser.password);
         formData.append("account", this.currentUser.account);
@@ -220,18 +233,11 @@ export default {
           userId: this.currentUser.id,
           formData,
         });
-        console.log(response);
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
-        this.saveEdit();
-        this.isProcessing = false;
-        this.reFetchProfileUser();
-        toast.fireSuccess("修改成功");
       } catch (e) {
         console.log(e);
-        this.isProcessing = false;
-        toast.fireError("無法上傳修改");
       }
     },
     saveEdit() {
@@ -290,6 +296,9 @@ export default {
   }
   .close {
     cursor: pointer;
+    path {
+      fill: var(--primary-color);
+    }
   }
   .save-button {
     flex-basis: 70px;
@@ -401,6 +410,9 @@ form {
     background: var(--input-bg-color);
     border-bottom: 2px solid var(--mute-color);
     border-radius: 3px;
+    input {
+      color: var(--primary-text-color);
+    }
     &.invalid {
       border-bottom: 2px solid var(--alert-message-color);
       div,

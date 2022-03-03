@@ -27,8 +27,7 @@
           </div>
           <div class="tweet-content">
             <p>
-
-            {{ reply.comment }}
+              {{ reply.comment }}
             </p>
           </div>
         </div>
@@ -71,6 +70,8 @@ export default {
     const { id } = this.$route.params;
     const routeName = this.$route.name;
 
+    //  若是tweetStory就打API撈取資料
+    //  若不是表示在profilePage頁面，使用profileUser提供的回覆資料
     if (routeName === "tweetStory") {
       this.replies = this.tweetReplies;
       this.isLoading = false;

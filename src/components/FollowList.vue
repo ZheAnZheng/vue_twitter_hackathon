@@ -17,14 +17,14 @@
       <template v-else>
         <li v-for="user in users" :key="user.id" class="list-item">
           <img class="image" :src="user.avatar | imageFilter" />
-          <div class="user-info" >
+          <div class="user-info">
             <base-button
               v-if="user.isFollowed"
               class="follow-button"
               :mode="'action'"
               :position="'right'"
               :isDisabled="isProcessing && processingUser === user.id"
-              v-show="currentUser.id!==user.id"
+              v-show="currentUser.id !== user.id"
               @handleClick="handleDeleteFollowing(user.id)"
               >正在跟隨</base-button
             >
@@ -34,7 +34,7 @@
               :mode="'actionOutline'"
               :position="'right'"
               :isDisabled="isProcessing && processingUser === user.id"
-               v-show="currentUser.id!==user.id"
+              v-show="currentUser.id !== user.id"
               @handleClick="handleAddFollowing(user.id)"
               >跟隨</base-button
             >
@@ -87,7 +87,6 @@ export default {
   },
   computed: {
     ...mapState(["currentUser"]),
-    //透過路由顯示對應 跟隨列表資料
   },
   methods: {
     setFollowList() {

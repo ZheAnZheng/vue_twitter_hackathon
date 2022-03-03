@@ -5,6 +5,10 @@
 export default {
   created() {
     this.$store.commit("loadState");
+    const theme = localStorage.getItem("THEME_KEY");
+    if (theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
   },
 };
 </script>

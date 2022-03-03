@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MobileNavbar />
+    <MobileNavbar @openModal="openModal('tweet')" />
     <Navbar @openModal="openModal('tweet')" />
     <Header :isReady="isHeaderReady" />
     <PopularList />
