@@ -118,8 +118,6 @@ export const modalController = {
       }
     },
     handleOpenModal(payload) {
-      console.log(payload.tweet);
-
       this.modalTweets = {
         ...payload.tweet,
       };
@@ -143,7 +141,7 @@ export const followshipHandler = {
         const { data } = await followshipAPI.addFollowing({
           userId,
         });
-        console.log(data);
+
         if (data.status !== "success") {
           throw Error(data.message);
         }
@@ -188,7 +186,6 @@ export const followshipHandler = {
     togglePopular(userId) {
       this.showedUsers = this.showedUsers.map((user) => {
         if (user.id === userId) {
-          console.log(user.isFollowed);
           return {
             ...user,
             isFollowed: !user.isFollowed,
@@ -200,9 +197,7 @@ export const followshipHandler = {
     },
     toggleFollowList(userId) {
       this.users = this.users.map((user) => {
-        console.log(user);
         if (user.id === userId) {
-          console.log(user.isFollowed);
           return {
             ...user,
             isFollowed: !user.isFollowed,

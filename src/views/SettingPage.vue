@@ -121,9 +121,10 @@ export default {
           this.formItems[3].isError = true;
           this.formItems[4].isError = true;
           return;
-        } else { // 將提示訊息還原
-          this.formItems[3].isError = false
-          this.formItems[4].isError = false
+        } else {
+          // 將提示訊息還原
+          this.formItems[3].isError = false;
+          this.formItems[4].isError = false;
         }
 
         if (this.formItems[1].value.length > 50) return;

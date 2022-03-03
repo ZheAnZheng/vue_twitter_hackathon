@@ -9,14 +9,13 @@
 
 <script>
 export default {
-    created(){
+  created() {
     const themeColor = localStorage.getItem("THEME_KEY");
     if (themeColor) {
       this.themeMode = themeColor;
       this.isSwitchOn = themeColor === "dark" ? true : false;
     }
-
-    },
+  },
   data() {
     return {
       isSwitchOn: false,
@@ -47,9 +46,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .theme-toggle {
-//   height: 75px;
   width: 100%;
-  
+  &:nth-of-type(1) {
+    cursor: default;
+  }
   .swtich-road {
     position: relative;
     width: 100px;

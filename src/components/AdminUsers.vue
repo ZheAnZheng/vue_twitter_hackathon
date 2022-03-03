@@ -33,7 +33,7 @@ export default {
         // toast.fireSuccess('成功登入')
         // 透過API向伺服器取得管理者的資訊
         const { data } = await adminAPI.users.getAll();
-        
+
         this.users = data.map((user) => {
           return {
             ...user,

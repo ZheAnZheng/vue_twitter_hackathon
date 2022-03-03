@@ -6,7 +6,11 @@
     <div v-show="isHeaderReady" class="header-content">
       <div class="header-nav">
         <label for="navbar">
-          <img class="header-img" v-show="isUserPage" :src="currentUser.avatar" />
+          <img
+            class="header-img"
+            v-show="isUserPage"
+            :src="currentUser.avatar"
+          />
         </label>
         <input type="checkbox" id="navbar" />
         <div class="nav-body">
@@ -78,7 +82,7 @@
           </ul>
         </div>
       </div>
-      <div class="arrow" v-show="isShowArrow" @click="handleBackArrow">
+      <div class="arrow" v-show="isShowArrow" @click="$router.back()">
         <svg
           width="17"
           height="14"
@@ -134,9 +138,9 @@ export default {
       "followed",
       "following",
     ];
-    const adminRoute=['admin-users',"admin-tweets"]
-    if(!adminRoute.includes(currentRouteName)){
-      this.isUserPage=true;
+    const adminRoute = ["admin-users", "admin-tweets"];
+    if (!adminRoute.includes(currentRouteName)) {
+      this.isUserPage = true;
     }
     if (!profileRoute.includes(currentRouteName)) {
       this.isHeaderReady = true;
@@ -159,7 +163,7 @@ export default {
       isSettingLayout: false,
       isLoading: true,
       isHeaderReady: false,
-      isUserPage:false
+      isUserPage: false,
     };
   },
   watch: {
@@ -205,9 +209,6 @@ export default {
         this.title = "推文";
       }
       this.isLoading = false;
-    },
-    handleBackArrow() {
-      this.$router.back();
     },
     logout() {
       this.$store.commit("revokeAuthentication");

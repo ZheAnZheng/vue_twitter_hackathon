@@ -17,7 +17,7 @@
         </svg>
         <span>{{ isAdmin ? "推文清單" : "首頁" }}</span>
       </router-link>
-      
+
       <router-link :to="isAdmin ? '/admin/users' : `/users/${currentUser.id}`">
         <svg
           width="18"
@@ -54,8 +54,7 @@
         <span>設定</span>
       </router-link>
       <div class="switch-wrapper">
-
-      <ThemeSwitch/>
+        <ThemeSwitch />
       </div>
       <div v-show="!isAdmin" class="button-wrapper">
         <base-button
@@ -95,7 +94,7 @@ import { mapState } from "vuex";
 export default {
   components: {
     BaseButton,
-    ThemeSwitch
+    ThemeSwitch,
   },
   created() {
     const routePath = this.$route.path;
@@ -109,7 +108,6 @@ export default {
   data() {
     return {
       isAdmin: false,
-
     };
   },
   methods: {
@@ -211,8 +209,8 @@ a.logOut {
   font-size: 18px;
 }
 
-.switch-wrapper{
-  margin-bottom:10%;
+.switch-wrapper {
+  margin-bottom: 10%;
 }
 @media screen and (min-width: 865px) {
   .container {

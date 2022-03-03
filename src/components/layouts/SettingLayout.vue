@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MobileNavbar/>
+    <MobileNavbar />
     <Navbar @openModal="openModal('tweet')" />
     <Header :isReady="true" />
     <transition name="fade">
@@ -28,7 +28,7 @@ export default {
     Navbar,
     Header,
     TweetModal,
-    MobileNavbar
+    MobileNavbar,
   },
 };
 </script>

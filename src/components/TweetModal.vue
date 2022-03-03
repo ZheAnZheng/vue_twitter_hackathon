@@ -74,6 +74,12 @@ export default {
         return () => {};
       },
     },
+    reFetchProfileUser: {
+      from: "reFetchProfileUser",
+      default: function () {
+        return () => {};
+      },
+    },
   },
   methods: {
     async addTweet() {
@@ -91,14 +97,17 @@ export default {
         const response = await tweetsAPI.createTweet({
           description: this.text,
         });
-        console.log(response);
+
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
 
         this.text = "";
         this.$emit("closeModal");
+
         this.reload();
+        this.reFetchProfileUser();
+
         this.isProcessing = false;
         toast.fireSuccess("推文成功");
       } catch (e) {
@@ -196,7 +205,7 @@ textarea {
 }
 .main-new-tweet {
   border-style: none;
-  width: 100%!important;
+  width: 100% !important;
   > .main-form {
     border: 1px solid var(--share-border-color);
     border-bottom: 0.6rem solid var(--share-border-color);
@@ -214,9 +223,9 @@ textarea {
     }
   }
 }
-@media screen and (min-width:865px){
-  .modal-container{
-    width:50%;
+@media screen and (min-width: 865px) {
+  .modal-container {
+    width: 50%;
   }
 }
 </style>

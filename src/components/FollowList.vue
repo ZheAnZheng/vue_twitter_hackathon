@@ -87,7 +87,6 @@ export default {
   },
   computed: {
     ...mapState(["currentUser"]),
-    //透過路由顯示對應 跟隨列表資料
   },
   methods: {
     setFollowList() {

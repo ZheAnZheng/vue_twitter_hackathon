@@ -2,7 +2,11 @@
   <ul class="container">
     <BaseSpinner v-if="isLoading" />
     <template v-else>
-      <li v-for="tweet in tweets" :key="tweet.id" class="tweet-item">
+      <li
+        v-for="tweet in tweets"
+        :key="`${Math.random() + tweet.id}`"
+        class="tweet-item"
+      >
         <router-link :to="{ name: 'userTweets', params: { id: tweet.UserId } }">
           <img class="image" :src="tweet.userAvatar | imageFilter" />
         </router-link>
@@ -108,43 +112,98 @@ export default {
   components: {
     BaseSpinner,
   },
+  created() {
+    const routeName = this.$route.name;
+    const { id } = this.$route.params;
+    if (routeName === "main") {
+      this.fetchIndexTweets();
+    } else if (routeName === "userTweets") {
+      this.fetchUserTweets(id);
+    } else if (routeName === "likeTweets") {
+      this.fetchUserLikeTweets(id);
+    }
+  },
   data() {
     return {
       tweets: [],
       isLoading: true,
       isProcessing: false,
-      activeTweetId: 0,
+      prcessingTweetId: 0,
     };
   },
-
   watch: {
     $route(to) {
+      const { id } = to.params;
+      this.isLoading = true;
       if (to.name === "userTweets") {
-        this.isLoading = true;
-        const { id } = to.params;
         this.fetchUserTweets(id);
       } else if (to.name === "likeTweets") {
-        this.isLoading = true;
-        const { id } = to.params;
         this.fetchUserLikeTweets(id);
       }
     },
   },
-  created() {
-    const routeName = this.$route.name;
-    if (routeName === "main") {
-      this.fetchIndexTweets();
-    } else if (routeName === "userTweets") {
-      const { id } = this.$route.params;
-      this.fetchUserTweets(id);
-    } else if (routeName === "likeTweets") {
-      const { id } = this.$route.params;
-      this.fetchUserLikeTweets(id);
-    }
-  },
-
   methods: {
     async fetchUserTweets(userId) {
+      try {
+        await this.tryFetchUserTweets(userId);
+        this.isLoading = false;
+      } catch (e) {
+        toast.fireError("無法存取資料");
+        console.log(e);
+      }
+    },
+    async fetchUserLikeTweets(userId) {
+      try {
+        await this.tryFetchUserLikeTweets(userId);
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法讀取喜歡過推文");
+      }
+    },
+    async fetchIndexTweets() {
+      try {
+        await this.tryFetchIndex();
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法讀取主頁");
+      }
+    },
+    async addLike(tweetId) {
+      try {
+        this.isProcessing = true;
+        this.prcessingTweetId = tweetId;
+        await this.tryAddLike(tweetId);
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法加入喜歡");
+      } finally {
+        this.isProcessing = false;
+        this.prcessingTweetId = 0;
+      }
+    },
+    async deleteLike(tweetId) {
+      try {
+        this.isProcessing = true;
+        this.prcessingTweetId = tweetId;
+        await this.tryDeleteLike(tweetId);
+      } catch (e) {
+        console.log(e);
+        toast.fireError("無法取消喜歡");
+      } finally {
+        this.isProcessing = false;
+        this.prcessingTweetId = 0;
+      }
+    },
+    isProcessingButton(tweetId) {
+      if (tweetId === this.prcessingTweetId) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    async tryFetchUserTweets(userId) {
       try {
         const response = await usersAPI.getTweets({ userId });
         if (response.statusText !== "OK") {
@@ -159,14 +218,13 @@ export default {
             ...tweet,
           };
         });
-        this.isLoading = false;
       } catch (e) {
         console.log(e);
-        toast.fireError("無法存取資料");
       }
     },
-    async fetchUserLikeTweets(userId) {
+    async tryFetchUserLikeTweets(userId) {
       try {
+        this.isLoading = true;
         const response = await usersAPI.getlikeTweets({ userId });
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
@@ -188,13 +246,11 @@ export default {
             isLiked: data.likedTweet,
           };
         });
-        this.isLoading = false;
       } catch (e) {
-        console.log(e);
-        toast.fireError("無法讀取喜歡過推文");
+        console.loge;
       }
     },
-    async fetchIndexTweets() {
+    async tryFetchIndex() {
       try {
         const response = await tweetsAPI.getAll();
         if (response.statusText !== "OK") {
@@ -210,18 +266,13 @@ export default {
             ...tweet,
           };
         });
-        this.isLoading = false;
       } catch (e) {
         console.log(e);
-        toast.fireError("無法讀取主頁");
       }
     },
-    async addLike(tweetId) {
+    async tryAddLike(tweetId) {
       try {
-        this.isProcessing = true;
-        this.activeTweetId = tweetId;
         const response = await tweetsAPI.addLike({ tweetId });
-
         if (response.statusText !== "OK") {
           throw Error(response.data.message);
         }
@@ -238,16 +289,10 @@ export default {
         });
       } catch (e) {
         console.log(e);
-        toast.fireError("無法加入喜歡");
-      } finally {
-        this.isProcessing = false;
-        this.activeTweetId = 0;
       }
     },
-    async deleteLike(tweetId) {
+    async tryDeleteLike(tweetId) {
       try {
-        this.isProcessing = true;
-        this.activeTweetId = tweetId;
         const response = await tweetsAPI.deleteLike({ tweetId });
 
         if (response.statusText !== "OK") {
@@ -266,17 +311,6 @@ export default {
         });
       } catch (e) {
         console.log(e);
-        toast.fireError("無法取消喜歡");
-      } finally {
-        this.isProcessing = false;
-        this.activeTweetId = 0;
-      }
-    },
-    isProcessingButton(tweetId) {
-      if (tweetId === this.activeTweetId) {
-        return true;
-      } else {
-        return false;
       }
     },
   },

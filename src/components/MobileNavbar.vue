@@ -14,7 +14,7 @@
         />
       </svg>
     </router-link>
-    <div v-show="isUserPage" @click="$emit('openModal')">
+    <div class="post-item" v-show="isUserPage" @click="$emit('openModal')">
       <svg
         width="24"
         height="22"
@@ -140,6 +140,9 @@ path[storke] {
   justify-content: space-around;
   align-items: center;
   z-index: 9999;
+}
+.post-item {
+  cursor: pointer;
 }
 // 計算出來手機版navbar要消失在865px=235+30+600
 @media screen and (min-width: 865px) {
