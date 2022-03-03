@@ -14,9 +14,6 @@ export default {
     getAll() {
       return apiHelper.get("/admin/users");
     },
-    login({ account, password }) {
-      return apiHelper.post("/users/login", { account, password });
-    },
   },
   tweets: {
     getAll() {
