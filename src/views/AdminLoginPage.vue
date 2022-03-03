@@ -20,7 +20,7 @@
 import LogoTitle from "../components/UI/LogoTile.vue";
 import BaseInput from "../components/UI/BaseInput.vue";
 import BaseButton from "../components/UI/BaseButton.vue";
-import adminAPI from "../apis/admin";
+import authorizationAPI from "../apis/authirozation"
 import { mapActions } from "vuex";
 import { toast } from "../utils/helper";
 
@@ -64,7 +64,7 @@ export default {
           return;
         }
 
-        const { data } = await adminAPI.users.login({
+        const { data } = await authorizationAPI.signIn({
           account,
           password,
         });
