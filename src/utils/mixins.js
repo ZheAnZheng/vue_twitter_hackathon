@@ -186,10 +186,15 @@ export const followshipHandler = {
     togglePopular(userId) {
       this.showedUsers = this.showedUsers.map((user) => {
         if (user.id === userId) {
-          return {
+          const userData = {
             ...user,
             isFollowed: !user.isFollowed,
           };
+          this.$store.commit("follow/update", {
+            userId: userData.id,
+            isFollowed: userData.isFollowed,
+          });
+          return userData;
         } else {
           return user;
         }

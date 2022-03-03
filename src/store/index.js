@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import usersAPI from "../apis/users.js";
+import followModule from "./follow/index.js";
 import { toast } from "../utils/helper.js";
 Vue.use(Vuex);
 
@@ -64,5 +65,7 @@ export default new Vuex.Store({
       return state.isAuthenticated;
     },
   },
-  modules: {},
+  modules: {
+    follow: followModule,
+  },
 });

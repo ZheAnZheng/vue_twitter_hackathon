@@ -186,7 +186,6 @@ export default {
       from: "turnHeaderShow",
     },
   },
-
   watch: {
     profileUser: {
       handler: function () {
@@ -197,9 +196,27 @@ export default {
       },
       deep: true,
     },
+    user: {
+      handler(val) {
+        this.$store.commit("follow/update", {
+          userId: val.id,
+          isFollowed: val.isFollowed,
+        });
+      },
+      deep: true,
+    },
+    followData(val) {
+      if (!val.userId) {
+        return;
+      }
+      if (val.userId && val.userId === this.user.id) {
+        this.user.isFollowed = val.isFollowed;
+      }
+    },
   },
   computed: {
     ...mapState(["currentUser"]),
+    ...mapState("follow", ["followData"]),
     userData() {
       return this.profileUser.data;
     },
