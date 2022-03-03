@@ -11,7 +11,10 @@
       </transition>
       <div class="tweet-info">
         <div class="user-info">
-          <img :src="tweet.userAvatar | imageFilter" />
+          <router-link :to="{name:'userTweets',params:{id:tweet.UserId}}">
+
+            <img :src="tweet.userAvatar | imageFilter" />
+          </router-link>
           <div class="name-wrapper">
             <div>{{ tweet.userName }}</div>
             <div>@{{ tweet.userAccount }}</div>
