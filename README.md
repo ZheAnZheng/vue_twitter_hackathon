@@ -2,6 +2,11 @@
 
 ## Project setup
 
+### 將專案從git複製到本地(複製到terminal執行)
+```
+git clone https://github.com/ZheAnZheng/vue_twitter.git
+```
+
 ### 先選進專案資料夾
 ```
 cd vue_twitter
@@ -24,6 +29,7 @@ http://localhost:8080/
 
 ### 可以直接複製貼到terminal執行
 ```
+git clone https://github.com/ZheAnZheng/vue_twitter.git
 cd vue_twitter
 npm install
 npm run serve
