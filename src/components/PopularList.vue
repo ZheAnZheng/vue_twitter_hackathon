@@ -108,7 +108,7 @@ export default {
       }
     },
     showAll() {
-      for (let i = 7; i < this.users.length; i++) {
+      for (let i = 6; i < this.users.length; i++) {
         this.showedUsers.push(this.users[i]);
       }
     },
