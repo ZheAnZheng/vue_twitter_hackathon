@@ -212,7 +212,7 @@ export default {
           return;
         }
         this.isProcessing = true;
-        await this.tryUpLoad();
+        await this.tryUpLoad(e);
         this.saveEdit(e);
         this.isProcessing = false;
         this.reFetchProfileUser();
@@ -233,6 +233,7 @@ export default {
           userId: this.currentUser.id,
           formData,
         });
+        console.log(response)
         if (response.statusText !== "OK") {
           throw new Error(response.data.message);
         }
