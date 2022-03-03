@@ -84,9 +84,22 @@ export default {
     $route() {
       this.setFollowList();
     },
+    followData(val){
+      this.users=this.users.map(user=>{
+        if(user.id===val.userId){
+          return {
+            ...user,
+            isFollowed:val.isFollowed
+          }
+        }else{
+          return user
+        }
+      })
+    }
   },
   computed: {
     ...mapState(["currentUser"]),
+    ...mapState('follow',['followData'])
   },
   methods: {
     setFollowList() {

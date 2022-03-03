@@ -203,10 +203,15 @@ export const followshipHandler = {
     toggleFollowList(userId) {
       this.users = this.users.map((user) => {
         if (user.id === userId) {
-          return {
+          const userData = {
             ...user,
             isFollowed: !user.isFollowed,
           };
+          this.$store.commit("follow/update", {
+            userId: userData.id,
+            isFollowed: userData.isFollowed
+          });
+          return userData
         } else {
           return user;
         }
