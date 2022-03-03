@@ -134,6 +134,14 @@ export const followshipHandler = {
       isProcessing: false,
     };
   },
+  inject:{
+    reFetchUser:{
+      from:"reFetchUser",
+      default:()=>{
+        return function(){}
+      }
+    }
+  },
   methods: {
     async addFollowing(userId, mode) {
       try {
@@ -194,6 +202,7 @@ export const followshipHandler = {
             userId: userData.id,
             isFollowed: userData.isFollowed,
           });
+          this.reFetchUser();
           return userData;
         } else {
           return user;
@@ -211,6 +220,7 @@ export const followshipHandler = {
             userId: userData.id,
             isFollowed: userData.isFollowed
           });
+          this.reFetchUser();
           return userData
         } else {
           return user;
