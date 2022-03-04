@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :class="{ hackathon: isHackathon }">
     <img src="../assets/Logo@X2.png" />
     <div class="navbar">
       <router-link :to="isAdmin ? '/admin/tweets' : '/main'">
@@ -17,7 +17,21 @@
         </svg>
         <span>{{ isAdmin ? "推文清單" : "首頁" }}</span>
       </router-link>
-
+      <router-link v-show="!isAdmin" :to="{ name: 'public-chatroom' }">
+        <svg
+          width="20"
+          height="18"
+          viewBox="0 0 20 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.25 0H2.75C1.233 0 0 1.234 0 2.752V15.247C0 16.765 1.233 18 2.75 18H17.25C18.767 18 20 16.765 20 15.247V2.752C20 1.234 18.767 0 17.25 0ZM2.75 1.5H17.25C17.94 1.5 18.5 2.06 18.5 2.75V3.464L10.45 8.831C10.177 9.011 9.824 9.013 9.55 8.829L1.5 3.464V2.75C1.5 2.06 2.06 1.5 2.75 1.5V1.5ZM17.25 16.498H2.75C2.06 16.498 1.5 15.938 1.5 15.248V5.222L8.74 10.052C9.123 10.308 9.562 10.436 10 10.436C10.44 10.436 10.877 10.308 11.26 10.053L18.5 5.223V15.245C18.5 15.935 17.94 16.495 17.25 16.495V16.498Z"
+            fill="black"
+          />
+        </svg>
+        <span>公開聊天室</span>
+      </router-link>
       <router-link :to="isAdmin ? '/admin/users' : `/users/${currentUser.id}`">
         <svg
           width="18"
@@ -97,9 +111,14 @@ export default {
     ThemeSwitch,
   },
   created() {
+    const hackathonRoute = ["public-chatroom"];
+    const routeNmae = this.$route.name;
     const routePath = this.$route.path;
     if (routePath.includes("/admin")) {
       this.isAdmin = true;
+    }
+    if (hackathonRoute.includes(routeNmae)) {
+      this.isHackathon = true;
     }
   },
   computed: {
@@ -108,6 +127,7 @@ export default {
   data() {
     return {
       isAdmin: false,
+      isHackathon: false,
     };
   },
   methods: {
@@ -135,7 +155,10 @@ export default {
   background-color: var(--white-text-color);
   border-right: 1px solid var(--share-border-color);
 }
-
+.hackathon {
+  width: 17%;
+  padding-left: calc(100% - 98%);
+}
 .navbar {
   display: flex;
   width: 100%;
@@ -216,11 +239,16 @@ a.logOut {
   .container {
     display: block;
   }
+
 }
 
 @media screen and (min-width: 1100px) {
   .container {
     padding-left: calc(100% - 93%);
+  }
+  .hackathon {
+    width: 17%;
+    padding-left: calc(100% - 98%);
   }
 }
 </style>
