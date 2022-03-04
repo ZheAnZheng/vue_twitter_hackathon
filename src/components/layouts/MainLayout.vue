@@ -13,7 +13,7 @@
       />
     </transition>
     <div class="slot" v-if="isRouteAlive">
-      <slot></slot>
+      <slot ></slot>
     </div>
   </div>
 </template>
