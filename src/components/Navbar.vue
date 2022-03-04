@@ -46,7 +46,7 @@
           />
         </svg>
         <span>公開聊天室</span>
-      </router-link>
+      </router-link >
       <router-link
         v-show="!isAdmin"
         :to="{ name: 'private-lobby', params: { id: currentUser.id } }"
