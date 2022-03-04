@@ -143,11 +143,11 @@ export default {
 .chatroom-body {
   background: var(--white-text-color);
   position: relative;
-
+  
   padding: 75px 16px 0 16px;
   border: 1px solid var(--border-stroke-color);
   padding-bottom: 64px;
-  height: 100%;
+  height:calc(100% - 50px) ;
   width: 100%;
   ::-webkit-scrollbar {
     display: none;
@@ -241,6 +241,11 @@ export default {
     background: var(--border-stroke-color);
     border: 1px solid var(--border-stroke-color);
     border-radius: 50px;
+  }
+}
+@media screen and (min-width:865px){
+  .chatroom-body{
+    height:100%;
   }
 }
 </style>

@@ -2,6 +2,7 @@
   <div>
     <Navbar />
     <PopularList />
+    <MobileNavbar/>
     <div class="notify-container">
       <header class="notify-header">通知</header>
       <form>
@@ -18,10 +19,13 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import PopularList from "../components/PopularList.vue";
+import MobileNavbar from "../components/MobileNavbar.vue";
+
 export default {
   components: {
     Navbar,
     PopularList,
+    MobileNavbar
   },
   data() {
     return {

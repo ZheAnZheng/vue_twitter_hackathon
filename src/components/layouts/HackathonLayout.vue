@@ -1,6 +1,7 @@
 <template>
   <div class="hachathon-container">
     <Navbar />
+    <MobileNavbar/>
     <div class="middle-slot">
       <slot></slot>
     </div>
@@ -11,9 +12,11 @@
 </template>
 <script>
 import Navbar from "../Navbar.vue";
+import MobileNavbar from "../MobileNavbar.vue"
 export default {
   components: {
     Navbar,
+    MobileNavbar
   },
 };
 </script>
