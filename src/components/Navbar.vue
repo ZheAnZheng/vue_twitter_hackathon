@@ -17,6 +17,21 @@
         </svg>
         <span>{{ isAdmin ? "推文清單" : "首頁" }}</span>
       </router-link>
+      <router-link v-show="!isAdmin" to="/notify">
+        <svg
+          width="20"
+          height="21"
+          viewBox="0 0 20 21"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.697 15.4679C19.677 15.4519 17.557 13.8279 17.594 9.43793C17.614 6.90593 16.782 4.65593 15.247 3.10293C13.872 1.70993 12.01 0.939932 10.005 0.929932H9.99197C7.98798 0.939932 6.12597 1.70993 4.74997 3.10393C3.21597 4.65693 2.38197 6.90593 2.40397 9.43793C2.44097 13.7679 0.383975 15.4049 0.301975 15.4679C0.0419748 15.6609 -0.0640253 15.9979 0.0369747 16.3059C0.138975 16.6139 0.426975 16.8209 0.748975 16.8209H5.66897C5.77098 19.1309 7.66597 20.9809 9.99897 20.9809C12.332 20.9809 14.225 19.1309 14.326 16.8209H19.248C19.57 16.8209 19.858 16.6149 19.958 16.3069C20.061 15.9999 19.955 15.6619 19.695 15.4689L19.697 15.4679ZM9.99998 19.4779C8.49498 19.4779 7.26997 18.3009 7.17197 16.8199H12.828C12.728 18.2999 11.505 19.4799 9.99998 19.4799V19.4779ZM2.37997 15.3199C3.11997 14.1879 3.92797 12.2919 3.90397 9.42393C3.88597 7.26393 4.54797 5.44193 5.81697 4.15693C6.90997 3.04993 8.39698 2.43693 9.99998 2.42993C11.603 2.43793 13.087 3.04993 14.18 4.15793C15.45 5.44293 16.113 7.26393 16.095 9.42493C16.071 12.2929 16.88 14.1899 17.62 15.3209H2.37997V15.3199Z"
+            fill="#171725"
+          />
+        </svg>
+        <span>通知</span>
+      </router-link>
       <router-link v-show="!isAdmin" :to="{ name: 'public-chatroom' }">
         <svg
           width="20"
@@ -32,7 +47,28 @@
         </svg>
         <span>公開聊天室</span>
       </router-link>
-      <router-link :to="isAdmin ? '/admin/users' : `/users/${currentUser.id}`">
+      <router-link
+        v-show="!isAdmin"
+        :to="{ name: 'private-lobby', params: { id: currentUser.id } }"
+      >
+        <svg
+          width="20"
+          height="18"
+          viewBox="0 0 20 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.25 0H2.75C1.233 0 0 1.234 0 2.752V15.247C0 16.765 1.233 18 2.75 18H17.25C18.767 18 20 16.765 20 15.247V2.752C20 1.234 18.767 0 17.25 0ZM2.75 1.5H17.25C17.94 1.5 18.5 2.06 18.5 2.75V3.464L10.45 8.831C10.177 9.011 9.824 9.013 9.55 8.829L1.5 3.464V2.75C1.5 2.06 2.06 1.5 2.75 1.5V1.5ZM17.25 16.498H2.75C2.06 16.498 1.5 15.938 1.5 15.248V5.222L8.74 10.052C9.123 10.308 9.562 10.436 10 10.436C10.44 10.436 10.877 10.308 11.26 10.053L18.5 5.223V15.245C18.5 15.935 17.94 16.495 17.25 16.495V16.498Z"
+            fill="black"
+          />
+        </svg>
+        <span>私人訊息</span>
+      </router-link>
+      <router-link
+        :class="{ profile: isProfilePage }"
+        :to="isAdmin ? '/admin/users' : `/users/${currentUser.id}`"
+      >
         <svg
           width="18"
           height="21"
@@ -111,13 +147,29 @@ export default {
     ThemeSwitch,
   },
   created() {
-    const hackathonRoute = ["public-chatroom"];
-    const routeNmae = this.$route.name;
+    const hackathonRoute = [
+      "public-chatroom",
+      "private-lobby",
+      "private-chatroom",
+      "notify"
+    ];
+    const profileRoute = [
+      "userTweets",
+      "likeTweets",
+      "replyTweets",
+      "followed",
+      "following",
+    ];
+
+    const routeName = this.$route.name;
     const routePath = this.$route.path;
+    if (profileRoute.includes(routeName)) {
+      this.isProfilePage = true;
+    }
     if (routePath.includes("/admin")) {
       this.isAdmin = true;
     }
-    if (hackathonRoute.includes(routeNmae)) {
+    if (hackathonRoute.includes(routeName)) {
       this.isHackathon = true;
     }
   },
@@ -128,6 +180,7 @@ export default {
     return {
       isAdmin: false,
       isHackathon: false,
+      isProfilePage: false,
     };
   },
   methods: {
@@ -173,7 +226,6 @@ img {
   margin: 14px 0 24px 8px;
 }
 
-// router-link
 a {
   padding: 16px 10px;
   display: flex;
@@ -207,7 +259,7 @@ a {
   }
 }
 
-a.router-link-active {
+a.router-link-exact-active {
   span {
     color: var(--primary-color);
   }
@@ -219,6 +271,17 @@ a.router-link-active {
   }
 }
 
+.profile.router-link-active {
+  span {
+    color: var(--primary-color);
+  }
+  path[fill] {
+    fill: var(--primary-color);
+  }
+  path[stroke] {
+    stroke: var(--primary-color);
+  }
+}
 a.logOut {
   position: absolute;
   bottom: 17px;
@@ -239,7 +302,6 @@ a.logOut {
   .container {
     display: block;
   }
-
 }
 
 @media screen and (min-width: 1100px) {

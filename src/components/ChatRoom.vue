@@ -1,12 +1,13 @@
 <template>
-  <div class="container">
+  <div class="container" >
     <header class="header">公開聊天室</header>
-    <div class="chatroom-body">
+    <div  class="chatroom-body">
       <ul class="message-list">
         <li
           v-for="message in messageData"
           :key="message.id"
           class="message-item"
+          
         >
           <div
             :class="{
@@ -73,6 +74,12 @@ export default {
   computed: {
     ...mapState(["currentUser"]),
   },
+  mounted(){
+
+      var div=document.querySelector('.message-list');
+      div.lastElementChild.scrollIntoView()
+    
+  },
   data() {
     return {
       messageData: [
@@ -111,6 +118,7 @@ export default {
     isCurrentUser(userId) {
       return this.currentUser.id === userId;
     },
+
   },
 };
 </script>
@@ -133,14 +141,17 @@ export default {
   z-index: 9999;
 }
 .chatroom-body {
-  background: var(--primary-bg-color);
+  background: var(--white-text-color);
   position: relative;
-  //   padding-top: 75px;
+
   padding: 75px 16px 0 16px;
   border: 1px solid var(--border-stroke-color);
   padding-bottom: 64px;
   height: 100%;
   width: 100%;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 .message-list {
   display: flex;
@@ -212,7 +223,7 @@ export default {
 .message-bar {
   position: absolute;
   display: flex;
-  justify-contents: space-between;
+  justify-content: space-between;
   align-items: center;
   padding: 16px;
   bottom: 0;
@@ -220,7 +231,7 @@ export default {
   width: 100%;
   height: 64px;
   column-gap: 16px;
-  background: var(--input-bg-color);
+  background: var(--primay-bg-color);
   border: 1px solid var(--border-stroke-color);
   z-index: 999;
   .message-input {
