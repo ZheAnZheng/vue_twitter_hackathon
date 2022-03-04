@@ -108,6 +108,9 @@ export default {
         if (account.includes('@') === false) {
           toast.fireWarning('帳號開頭必需有"@"')
           return
+        } else if (account.length === 1) {
+          toast.fireWarning('帳號空白，請填寫帳號')
+          return
         }
 
         formData.append("account", account.slice(1));
