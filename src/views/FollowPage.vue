@@ -22,6 +22,11 @@ export default {
     const { id } = this.$route.params;
     this.fetchUser(id);
   },
+  provide(){
+    return {
+      reFetchUser:this.reFetchUser
+    }
+  },
   methods: {
     async fetchUser(userId) {
       try {
@@ -35,6 +40,10 @@ export default {
         toast.fireError("無法讀取用戶");
       }
     },
+    reFetchUser(){
+      const { id } = this.$route.params;
+      this.fetchUser(id);
+    }
   },
 };
 </script>

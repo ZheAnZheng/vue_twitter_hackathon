@@ -88,16 +88,11 @@ export default {
     },
     // 將currentUser的資料放入input中的函式
     setUser() {
-      try {
         this.isAuthenticated = true;
 
         this.formItems[0].value = "@" + this.currentUser.account;
         this.formItems[1].value = this.currentUser.name;
         this.formItems[2].value = this.currentUser.email;
-      } catch (error) {
-        console.log("Error", error);
-        toast.fireError("目前無法取得個人資料，請稍後再試");
-      }
     },
     // 透過伺服器更新個人資訊的函式
     async updateUserInfo() {
@@ -112,6 +107,9 @@ export default {
         // 防止使用者刪除@
         if (account.includes('@') === false) {
           toast.fireWarning('帳號開頭必需有"@"')
+          return
+        } else if (account.length === 1) {
+          toast.fireWarning('帳號空白，請填寫帳號')
           return
         }
 

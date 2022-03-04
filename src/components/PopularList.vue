@@ -78,11 +78,30 @@ export default {
   },
   computed: {
     ...mapState(["currentUser"]),
+    ...mapState("follow", ["followData"]),
     notOverSix() {
       if (this.users.length > 7) {
         return true;
       } else {
         return false;
+      }
+    },
+  },
+  watch: {
+    followData(val) {
+      if (val.userId) {
+        this.showedUsers = this.showedUsers.map((user) => {
+          if (user.id === val.userId) {
+            return {
+              ...user,
+              isFollowed: val.isFollowed,
+            };
+          } else {
+            return {
+              ...user,
+            };
+          }
+        });
       }
     },
   },

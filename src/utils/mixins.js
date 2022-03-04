@@ -134,6 +134,14 @@ export const followshipHandler = {
       isProcessing: false,
     };
   },
+  inject:{
+    reFetchUser:{
+      from:"reFetchUser",
+      default:()=>{
+        return function(){}
+      }
+    }
+  },
   methods: {
     async addFollowing(userId, mode) {
       try {
@@ -186,10 +194,16 @@ export const followshipHandler = {
     togglePopular(userId) {
       this.showedUsers = this.showedUsers.map((user) => {
         if (user.id === userId) {
-          return {
+          const userData = {
             ...user,
             isFollowed: !user.isFollowed,
           };
+          this.$store.commit("follow/update", {
+            userId: userData.id,
+            isFollowed: userData.isFollowed,
+          });
+          this.reFetchUser();
+          return userData;
         } else {
           return user;
         }
@@ -198,10 +212,16 @@ export const followshipHandler = {
     toggleFollowList(userId) {
       this.users = this.users.map((user) => {
         if (user.id === userId) {
-          return {
+          const userData = {
             ...user,
             isFollowed: !user.isFollowed,
           };
+          this.$store.commit("follow/update", {
+            userId: userData.id,
+            isFollowed: userData.isFollowed
+          });
+          this.reFetchUser();
+          return userData
         } else {
           return user;
         }
