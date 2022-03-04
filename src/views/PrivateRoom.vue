@@ -7,7 +7,7 @@
         </template>
         <template v-slot:right-side >
             
-                <div v-if="isInLobby">點選私訊的對象</div>
+                <div v-if="isInLobby" class="lobby">點選私訊的對象</div>
 
                <router-view v-else/>
             
@@ -35,6 +35,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.lobby{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    width: 100%;
+    height:100%;
+    background:var(--input-bg-color);
+    
+}
 .online-bar{
     background-color:rgba(0,255,0,0.3);
     width:100%;

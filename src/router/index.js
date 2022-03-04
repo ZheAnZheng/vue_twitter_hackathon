@@ -40,6 +40,11 @@ const routes = [
     component: () => import("../views/SettingPage.vue"),
   },
   {
+    path: "/notify",
+    name: "notify",
+    component: () => import("../views/NotifySettingPage.vue"),
+  },
+  {
     path: "/users/:id",
     component: () => import("../views/ProfilePage.vue"),
     children: [
