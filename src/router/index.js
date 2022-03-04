@@ -33,6 +33,7 @@ const routes = [
     name: "public-chatroom",
     component: () => import("../views/PublicRoom.vue"),
   },
+
   {
     path: "/setting",
     name: "setting",
@@ -79,6 +80,18 @@ const routes = [
         path: "followed",
         name: "followed",
         component: () => import("../components/FollowList.vue"),
+      },
+    ],
+  },
+  {
+    path: "/users/:id/chatroom",
+    name: "private-lobby",
+    component: () => import("../views/PrivateRoom.vue"),
+    children: [
+      {
+        path: ":userId",
+        name: "private-chatroom",
+        component: () => import("../components/ChatRoom.vue"),
       },
     ],
   },

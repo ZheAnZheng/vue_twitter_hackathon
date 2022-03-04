@@ -32,7 +32,28 @@
         </svg>
         <span>公開聊天室</span>
       </router-link>
-      <router-link :to="isAdmin ? '/admin/users' : `/users/${currentUser.id}`">
+      <router-link
+        v-show="!isAdmin"
+        :to="{ name: 'private-lobby', params: { id: currentUser.id } }"
+      >
+        <svg
+          width="20"
+          height="18"
+          viewBox="0 0 20 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.25 0H2.75C1.233 0 0 1.234 0 2.752V15.247C0 16.765 1.233 18 2.75 18H17.25C18.767 18 20 16.765 20 15.247V2.752C20 1.234 18.767 0 17.25 0ZM2.75 1.5H17.25C17.94 1.5 18.5 2.06 18.5 2.75V3.464L10.45 8.831C10.177 9.011 9.824 9.013 9.55 8.829L1.5 3.464V2.75C1.5 2.06 2.06 1.5 2.75 1.5V1.5ZM17.25 16.498H2.75C2.06 16.498 1.5 15.938 1.5 15.248V5.222L8.74 10.052C9.123 10.308 9.562 10.436 10 10.436C10.44 10.436 10.877 10.308 11.26 10.053L18.5 5.223V15.245C18.5 15.935 17.94 16.495 17.25 16.495V16.498Z"
+            fill="black"
+          />
+        </svg>
+        <span>私人訊息</span>
+      </router-link>
+      <router-link
+        :class="{'profile':isProfilePage}"
+        :to="isAdmin ? '/admin/users' : `/users/${currentUser.id}`"
+      >
         <svg
           width="18"
           height="21"
@@ -111,13 +132,28 @@ export default {
     ThemeSwitch,
   },
   created() {
-    const hackathonRoute = ["public-chatroom"];
-    const routeNmae = this.$route.name;
+    const hackathonRoute = [
+      "public-chatroom",
+      "private-lobby",
+      "private-chatroom",
+    ];
+    const profileRoute=[
+      "userTweets",
+      "likeTweets",
+      "replyTweets",
+      "followed",
+      "following"
+    ]
+    
+    const routeName = this.$route.name;
     const routePath = this.$route.path;
+    if(profileRoute.includes(routeName)){
+      this.isProfilePage=true;
+    }
     if (routePath.includes("/admin")) {
       this.isAdmin = true;
     }
-    if (hackathonRoute.includes(routeNmae)) {
+    if (hackathonRoute.includes(routeName)) {
       this.isHackathon = true;
     }
   },
@@ -128,6 +164,7 @@ export default {
     return {
       isAdmin: false,
       isHackathon: false,
+      isProfilePage:false
     };
   },
   methods: {
@@ -173,7 +210,6 @@ img {
   margin: 14px 0 24px 8px;
 }
 
-// router-link
 a {
   padding: 16px 10px;
   display: flex;
@@ -207,7 +243,7 @@ a {
   }
 }
 
-a.router-link-active {
+a.router-link-exact-active {
   span {
     color: var(--primary-color);
   }
@@ -219,6 +255,17 @@ a.router-link-active {
   }
 }
 
+.profile.router-link-active {
+  span {
+    color: var(--primary-color);
+  }
+  path[fill] {
+    fill: var(--primary-color);
+  }
+  path[stroke] {
+    stroke: var(--primary-color);
+  }
+}
 a.logOut {
   position: absolute;
   bottom: 17px;
@@ -239,7 +286,6 @@ a.logOut {
   .container {
     display: block;
   }
-
 }
 
 @media screen and (min-width: 1100px) {
